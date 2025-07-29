@@ -1,0 +1,41 @@
+;; ===============================================================
+;; SECOND SIMPLE LIBRARY - Basic Validations
+;; FILE: simple_validation.clib (LIBRARY - NOT EXECUTABLE)
+;; 
+;; This library complements simple_math.clib
+;; Shows how to create specialized libraries by topic
+;; ===============================================================
+
+(
+;; === SIMPLE VALIDATIONS ===
+
+;; Function 1: Check if positive
+(defun-inline is_positive (n)
+  (> n 0))
+
+;; Function 2: Check if in range
+(defun-inline is_in_range (value min_val max_val)
+  (logand (not (> min_val value)) (not (> value max_val))))
+
+;; Function 3: Check if valid (not zero)
+(defun-inline is_valid_number (n)
+  (not (= n 0)))
+
+;; Function 4: Classify number
+(defun classify_number (n)
+  (if (> n 0)
+    "positive"
+    (if (= n 0)
+      "zero"
+      "negative")))
+
+;; === DESIGN NOTES ===
+;; 
+;; 🎯 SPECIALIZATION: This library focuses only on validations
+;; 🔗 COMPLEMENTARY: Works well together with simple_math.clib
+;; 📦 MODULAR: You can include only the libraries you need
+;; 🎨 CLEAN: Each library has a clear purpose
+;;
+;; 🎯 SEE NEXT: includes_03_multiple_libraries.clsp
+;;    To use both libraries together
+)

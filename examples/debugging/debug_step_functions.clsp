@@ -1,0 +1,39 @@
+;; Step In/Step Out Debugging
+;; Practice using step in/step out with functions
+;; ⚠️ DEBUGGING LIMITATION: Step operations may be inaccurate with macros.
+;; Macros are expanded during compilation and don't maintain precise source location mapping.
+;; You may notice:
+;; - Steps jumping to unexpected locations  
+;; - Breakpoints not hitting exactly where expected
+;; - Some macro-generated code showing as "*macros*" in stack traces
+;; This is a known limitation pending future compiler improvements.
+
+(mod (a)
+  (include *standard-cl-24*)
+  
+  ;; Simple calculation function - returns just the value
+  (defun calculate (num)
+    ;; Step 1: Double the input
+    (* num 2)
+    ;; Step 2: Add 5 to the result
+    (+ (* num 2) 5))
+  
+  ;; Process with nested function calls - returns values  
+  (defun process-data (num)
+    ;; Step 1: Calculate with original number
+    (calculate num)
+    ;; Step 2: Calculate with doubled number
+    (calculate (* num 2))
+    ;; Step 3: Add both results
+    (+ (calculate num) (calculate (* num 2))))
+  
+  ;; Main execution - handles all labels
+  (list 
+    (list "Starting debug:" "initialized")
+    (list "Input value:" a)
+    (list "First calculation:" (calculate a))
+    (list "Second calculation:" (calculate (* a 2)))
+    (list "Process result:" (process-data a))
+    (list "Direct calculation:" (calculate (+ a 1)))
+    (list "Another calculation:" (calculate (* a 3)))
+    (list "Debug complete:" "finished")))

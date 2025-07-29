@@ -1,0 +1,66 @@
+;; Defmac - Modern Macro System
+;; Create custom syntax and code generation
+(mod (condition value)
+  (include *standard-cl-24*)
+  
+  ;; defmac: modern macro definition
+  ;; Generates code at compile time
+  
+  ;; Simple macro: when (like if but only for true case)
+  (defmac when (test . body)
+    (qq (if (unquote test) 
+          (unquote (f body))
+          ())))
+  
+  ;; Unless macro (opposite of when)
+  (defmac unless (test . body)
+    (qq (if (unquote test)
+          ()
+          (unquote (f body)))))
+  
+  ;; Safe division macro
+  (defmac safe-div (numerator denominator)
+    (qq (if (= (unquote denominator) 0)
+          "Division by zero error"
+          (/ (unquote numerator) (unquote denominator)))))
+  
+  ;; Debug macro - prints value and returns it
+  (defmac debug (expr)
+    (qq (let ((result (unquote expr)))
+          (list "Debug:" (unquote expr) "=" result))))
+  
+  (list
+    (list "Input condition:" condition)
+    (list "Input value:" value)
+    
+    (list "When example:" 
+      (when condition "Condition was true"))
+    
+    (list "Unless example:" 
+      (unless condition "Condition was false"))
+    
+    (list "When positive:" 
+      (when (> value 0) "Value is positive"))
+    
+    (list "Unless zero:" 
+      (unless (= value 0) "Value is not zero"))
+    
+    (list "Safe division:" 
+      (safe-div 10 value))
+    
+    (list "Debug example:" 
+      (debug (* value 2)))
+    
+    (list "Another debug:" 
+      (debug (+ value 5)))
+    
+    (list "Defmac syntax:" "(defmac name (params) body)")
+    (list "Quasiquote:" "qq creates template")
+    (list "Unquote:" "unquote inserts values")
+    (list "Key feature:" "Custom syntax creation")
+    (list "Compile time:" "Code generated before execution")
+    (list "Use cases:" "Control flow, safety, debugging")
+    (list "Concept:" "Metaprogramming - code that writes code")
+    (list "Similar To:" "Macros in Rust, C preprocessor")
+  )
+)

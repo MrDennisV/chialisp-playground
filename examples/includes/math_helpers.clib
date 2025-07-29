@@ -1,0 +1,86 @@
+;; Math Helper Functions Library
+;; Common mathematical operations for reuse across projects
+;; Usage: (include "math_helpers.clib")
+;; 
+;; This is a library file (.clib) - contains only function definitions
+;; without a module wrapper. It's designed to be included in other programs.
+
+(
+  ;; Basic mathematical functions
+  (defun-inline square (n) 
+    (* n n)
+  )
+
+  (defun-inline cube (n) 
+    (* n n n)
+  )
+
+  (defun-inline absolute (n) 
+    (if (> 0 n) (- 0 n) n)
+  )
+
+  (defun-inline is_positive (n) 
+    (> n 0)
+  )
+
+  (defun-inline is_negative (n) 
+    (> 0 n)
+  )
+
+  (defun-inline is_zero (n) 
+    (= n 0)
+  )
+
+  (defun-inline max2 (a b) 
+    (if (> a b) a b)
+  )
+
+  (defun-inline min2 (a b) 
+    (if (> b a) a b)
+  )
+
+  (defun power_of_2 (n)
+    (if (= n 0) 
+      1 
+      (* 2 (power_of_2 (- n 1)))
+    )
+  )
+
+  (defun factorial (n)
+    (if (= n 0) 
+      1 
+      (* n (factorial (- n 1)))
+    )
+  )
+
+  (defun sum_range (start end)
+    (if (> start end) 
+      0 
+      (+ start (sum_range (+ start 1) end))
+    )
+  )
+
+  ;; Mathematical constants
+  (defconstant PI 314159265359) ; PI * 10^11 for integer representation
+  (defconstant E 271828182846)  ; E * 10^11 for integer representation
+
+  ;; Utility predicates
+  (defun-inline is_even (n) 
+    (= (logand n 1) 0)
+  )
+
+  (defun-inline is_odd (n) 
+    (= (logand n 1) 1)
+  )
+
+  (defun gcd (a b)
+    (if (= b 0) 
+      a 
+      (gcd b (% a b))
+    )
+  )
+
+  ;; Note: This is a library file (.clib)
+  ;; Functions use defun-inline for better performance when included
+  ;; Include this file in your .clsp programs using: (include "math_helpers.clib") 
+)

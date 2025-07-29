@@ -1,0 +1,29 @@
+;; Bitwise NOT - Flip all bits
+;; Learn lognot for bit inversion
+(mod (number)
+  (include *standard-cl-24*)
+  
+  ;; lognot performs bitwise NOT: flips all bits (1 becomes 0, 0 becomes 1)
+  ;; Result is usually negative due to two's complement representation
+  
+  (list
+    (list "Input:" number)
+    (list "NOT Input:" (lognot number))
+    (list "NOT NOT Input:" (lognot (lognot number)))
+    (list "NOT 5:" (lognot 5))
+    (list "NOT 0:" (lognot 0))
+    (list "Clear Bit 0:" (logand number (lognot 1)))
+    (list "Clear Bit 1:" (logand number (lognot 2)))
+    (list "Clear Bit 2:" (logand number (lognot 4)))
+    (list "Clear Last 4 Bits:" (logand number (lognot 15)))
+    (list "Remove READ:" (logand number (lognot 1)))
+    (list "Remove WRITE:" (logand number (lognot 2)))
+    (list "Remove EXECUTE:" (logand number (lognot 4)))
+    (list "Remove All Perms:" (logand number (lognot 7)))
+    (list "Double NOT:" "Returns to original")
+    (list "Two's Complement:" "Results often negative")
+    (list "Concept:" "Flip all bits (1 to 0, 0 to 1)")
+    (list "Use Cases:" "Create masks, clear bits")
+    (list "Similar To:" "Bitwise NOT (~) in other languages")
+  )
+)

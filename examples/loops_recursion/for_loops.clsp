@@ -1,0 +1,50 @@
+;; For Loop Equivalents - How to simulate for loops with recursion
+;; Learn how ChiaLisp replaces for loops with recursive functions
+
+(mod (n)
+  (include *standard-cl-24*)
+  
+  ;; Equivalent to: for(i=1; i<=n; i++) print(i)
+  (defun count_up (start end)
+    (if (> start end)
+      ()                              ; Stop when start > end
+      (c start (count_up (+ start 1) end)))) ; Add start, continue with start+1
+  
+  ;; Equivalent to: for(i=n; i>=1; i--) print(i)
+  (defun count_down (current)
+    (if (= current 0)
+      ()                              ; Stop at 0
+      (c current (count_down (- current 1))))) ; Add current, continue with current-1
+  
+  ;; Equivalent to: for(i=0; i<n; i++) sum += i*2
+  (defun sum_doubles (i max_val)
+    (if (= i max_val)
+      0                               ; Stop when i reaches max
+      (+ (* i 2) (sum_doubles (+ i 1) max_val)))) ; Add i*2, continue with i+1
+  
+  ;; Equivalent to: for(i=1; i<=n; i++) if(i%2==0) collect(i)
+  (defun collect_evens (current max_val)
+    (if (> current max_val)
+      ()                              ; Stop when current > max
+      (if (= (% current 2) 0)
+        (c current (collect_evens (+ current 1) max_val)) ; Collect even, continue
+        (collect_evens (+ current 1) max_val))))          ; Skip odd, continue
+  
+  ;; Equivalent to: for(i=1; i<=n; i++) array[i] = i*i
+  (defun build_squares (i max_val)
+    (if (> i max_val)
+      ()                              ; Stop when i > max
+      (c (* i i) (build_squares (+ i 1) max_val)))) ; Add i^2, continue with i+1
+  
+  (list
+    (list "Input n:" n)
+    (list "Count up 1 to n:" (count_up 1 n))
+    (list "Count down n to 1:" (count_down n))
+    (list "Sum of doubles 0 to n-1:" (sum_doubles 0 n))
+    (list "Even numbers 1 to n:" (collect_evens 1 n))
+    (list "Squares 1 to n:" (build_squares 1 n))
+    (list "Pattern:" "for(i=start; i<=end; i++) becomes recursive function")
+    (list "How:" "Counter (i) becomes function parameter, call with i+1")
+    (list "Stop:" "Return () for lists, 0 for sums, 1 for products")
+  )
+)

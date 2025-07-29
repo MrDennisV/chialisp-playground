@@ -1,0 +1,33 @@
+;; Logical Shift - Unsigned bit shifting
+;; Learn lsh for unsigned bit operations
+(mod (number shift_amount)
+  (include *standard-cl-24*)
+  
+  ;; lsh performs logical shift: always fills with zeros
+  ;; Treats numbers as unsigned (no sign bit preservation)
+  ;; Different from ash for negative numbers
+  
+  (list
+    (list "Input Number:" number)
+    (list "Shift Amount:" shift_amount)
+    (list "Result:" (lsh number shift_amount))
+    (list "Left Shift 1:" (lsh number 1))
+    (list "Left Shift 2:" (lsh number 2))
+    (list "Left Shift 3:" (lsh number 3))
+    (list "Right Shift 1:" (lsh number -1))
+    (list "Right Shift 2:" (lsh number -2))
+    (list "Right Shift 3:" (lsh number -3))
+    (list "LSH vs ASH (+):" (list (lsh number -1) (ash number -1)))
+    (list "LSH -8 >> 1:" (lsh -8 -1))
+    (list "ASH -8 >> 1:" (ash -8 -1))
+    (list "Unsigned Div by 2:" (lsh number -1))
+    (list "Unsigned Mul by 4:" (lsh number 2))
+    (list "Bit Field Extract:" (logand (lsh number -4) 15))
+    (list "Clear High Bits:" (lsh (lsh number 8) -8))
+    (list "Zero Fill:" "LSH always fills with zeros")
+    (list "vs ASH:" "ASH preserves sign bit")
+    (list "Concept:" "Unsigned bit shifting")
+    (list "Use Cases:" "Bit fields, unsigned math, masks")
+    (list "Similar To:" "Logical shift (>>>) in other languages")
+  )
+)

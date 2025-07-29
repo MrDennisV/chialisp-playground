@@ -1,0 +1,28 @@
+;; Why Include Libraries?
+;; Demonstrates the problem that includes solve - code reuse
+
+(mod (number)
+  (include *standard-cl-24*)
+  
+  ;; Common functions that we might want to reuse
+  (defun square (n) 
+    (* n n))
+    
+  (defun is-even (n) 
+    (= (logand n 1) 0))
+    
+  (defun abs-value (n) 
+    (if (> 0 n) (- 0 n) n))
+  
+  ;; Problem: Without includes, these functions must be copied to every file
+  ;; Solution: Put them in a .clib file and include it
+  
+  (list
+    (list "Input:" number)
+    (list "Square:" (square number))
+    (list "Is even:" (is-even number))
+    (list "Absolute:" (abs-value number))
+    (list "Problem:" "These functions are copied in every program")
+    (list "Solution:" "Use includes to share common functions")
+    (list "Next:" "See how to create .clib files"))
+)

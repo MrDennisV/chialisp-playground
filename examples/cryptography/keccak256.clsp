@@ -1,0 +1,19 @@
+;; Keccak256 Hashing
+;; Learn the Ethereum-compatible hash function
+
+(mod (message)
+  (include *standard-cl-24*)
+  
+  (list
+    (list "Message:" message)
+    (list "Keccak256:" (keccak256 message)) ;; NOTE: In web playground, keccak256 with variables has a WASM bug. Works fine in CLI.
+    (list "Keccak256 number hardcoded:" (keccak256 3141516))
+    (list "SHA256:" (sha256 message))
+    (list "SHA256 number hardcoded:" (sha256 3141516))
+    (list "Same result:" (= (keccak256 3141516) (sha256 3141516)))
+    (list "Section:" "Comparison with hello")
+    (list "hello Keccak256:" (keccak256 "hello"))
+    (list "hello SHA256:" (sha256 "hello"))
+    (list "Key difference:" "Different algorithms produce different results")
+  )
+)

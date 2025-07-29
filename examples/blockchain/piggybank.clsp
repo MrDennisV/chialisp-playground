@@ -1,0 +1,29 @@
+;; Piggybank - Time-locked savings account
+;; Learn how to create a coin that can only be spent after a certain time
+;; This puzzle creates a "piggybank" that locks funds until time expires
+
+(mod (TIME_LOCK_SECONDS recipient_puzzle_hash amount)
+  (include *standard-cl-24*)
+  (include "includes/condition_codes.clib")
+  
+  ;; Smart contract execution flow:
+  ;; 1. ASSERT_SECONDS_RELATIVE enforces minimum time since coin creation
+  ;; 2. If time has passed: return conditions to unlock the piggybank
+  ;; 3. If time hasn't passed: consensus method rejects the spend
+  ;; 4. Common time locks: 1 hour=3600, 1 day=86400, 1 week=604800
+  
+  ;; Time-locked piggybank: must wait specified seconds before spending
+  (list
+    ;; Enforce time lock - must wait TIME_LOCK_SECONDS since coin creation
+    (list ASSERT_SECONDS_RELATIVE TIME_LOCK_SECONDS)
+    
+    ;; Create new coin with the saved amount
+    (list CREATE_COIN recipient_puzzle_hash amount)
+    
+    ;; Pay network fee
+    (list RESERVE_FEE 1000000)
+    
+    ;; Record piggybank unlock
+    (list REMARK "Piggybank unlocked after time lock")
+  )
+)

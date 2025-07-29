@@ -1,0 +1,23 @@
+;; Basic Comparisons
+;; Simple comparison operators in ChiaLisp
+(mod (a b)
+  (include *standard-cl-24*)
+  
+  (list
+    ;; Test inputs
+    (list "variable a:" a)
+    (list "variable b:" b)
+    
+    ;; Basic comparisons
+    (list "a equals b:" (= a b))
+    (list "a greater than b:" (> a b))
+    (list "b greater than a:" (> b a))
+    
+    ;; Not operator
+    (list "a not equal to b:" (not (= a b)))
+    (list "a not greater than b:" (not (> a b)))
+    
+    ;; Simulate less than using >
+    (list "a less than b:" (> b a))
+  )
+)

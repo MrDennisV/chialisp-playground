@@ -1,0 +1,45 @@
+;; @ Destructuring - At-Capture Patterns
+;; Compare normal destructuring vs @ destructuring
+(mod (data)
+  (include *standard-cl-24*)
+  
+  ;; Normal destructuring - you LOSE the original list
+  (defun normal_way ((first . rest))
+    (list
+      (list "Original list:" "LOST! Can't access it")
+      (list "First element:" first)
+      (list "Rest elements:" rest)
+    ))
+  
+  ;; @ destructuring - you KEEP the original AND get the parts
+  (defun at_way ((@ original (first . rest)))
+    (list
+      (list "Original list:" original)
+      (list "First element:" first)
+      (list "Rest elements:" rest)
+      (list "List length:" (+ 1 (if rest (+ (if (r rest) 1 0) (if (r (r rest)) 1 0)) 0)))
+    ))
+  
+  (list
+    (list "Input:" data)
+    (list "Problem:" "Normal destructuring loses original")
+    
+    (list "Normal Result:" 
+      (if data 
+        (normal_way data) 
+        "Need data"))
+    
+    (list "Solution:" "@ destructuring keeps original")
+    
+    (list "@ Result:" 
+      (if data 
+        (at_way data) 
+        "Need data"))
+    
+    (list "Key Difference:" "@ gives you BOTH original AND parts")
+    (list "Why Important:" "Validation, logging, debugging")
+    (list "Example Use:" "Check if list is valid AND process it")
+    (list "@ Syntax:" "@ variable (pattern)")
+    (list "Concept:" "Keep container while accessing contents")
+  )
+)

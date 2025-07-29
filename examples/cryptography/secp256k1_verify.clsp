@@ -1,0 +1,27 @@
+;; SECP256K1 Signature Verification for Ethereum Compatibility
+;; Learn Bitcoin/Ethereum-style signature verification in ChiaLisp
+
+(mod (pubkey message message_hash signature)
+  (include *standard-cl-24*)
+  
+  (list
+    (list "Purpose:" "Bitcoin/Ethereum signature verification")
+    (list "Your message:" message)
+    (list "Expected hash:" message_hash)
+    (list "Your public key:" pubkey)
+    (list "Your signature:" signature)
+    
+    (list "Section:" "Verification process")
+    (list "Step 1 - Hash message:" (keccak256 message));; NOTE: In web playground, keccak256 with variables has a WASM bug. Works fine in CLI.
+    (list "Hash matches expected:" (= message_hash (keccak256 message)))
+    (list "Step 2 - Verify signature:" (if (secp256k1_verify pubkey message_hash signature) "invalid" "valid"))
+    
+    (list "Section:" "Hash sensitivity")
+    (list "Original message hash:" (keccak256 message))
+    (list "Modified message hash:" (keccak256 (concat message "!")))
+    (list "Small change breaks signature:" (not (= (keccak256 message) (keccak256 (concat message "!")))))
+    
+    (list "Info:" "SECP256K1 is used by Bitcoin and Ethereum")
+    (list "Usage:" "Cross-chain interoperability with other blockchains")
+  )
+)

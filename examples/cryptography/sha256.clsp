@@ -1,0 +1,18 @@
+;; Basic SHA256 Hashing
+;; Learn the fundamental cryptographic hash function
+
+(mod (message)
+  (include *standard-cl-24*)
+  
+  (list
+    (list "Message:" message)
+    (list "SHA256 hash:" (sha256 message))
+    (list "Hash length:" (strlen (sha256 message)))
+    (list "Section:" "Different inputs")
+    (list "hello:" (sha256 "hello"))
+    (list "world:" (sha256 "world"))
+    (list "Concept:" "Small change = big difference")
+    (list "Original:" (sha256 message))
+    (list "Modified:" (sha256 (concat message "!")))
+  )
+)

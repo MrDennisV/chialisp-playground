@@ -1,0 +1,8 @@
+;; Hello World
+(mod ()
+  (list
+    (list "Message:" "Hello, CLSP World!")
+    (list "Language:" "ChiaLisp")
+    (list "Status:" "Ready to learn!")
+  )
+) 

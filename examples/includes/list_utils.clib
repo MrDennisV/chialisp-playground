@@ -1,0 +1,123 @@
+;; List Utility Functions Library
+;; Common list operations for reuse across projects
+;; Usage: (include "list_utils.clib")
+;; 
+;; This is a library file (.clib) - contains only function definitions
+;; without a module wrapper. It's designed to be included in other programs.
+
+(
+  ;; Basic list operations
+  (defun length (lst)
+    (if lst
+      (+ 1 (length (r lst)))
+      0
+    )
+  )
+  (defun reverse_helper (lst acc)
+    (if lst
+      (reverse_helper (r lst) (c (f lst) acc))
+      acc
+    )
+  )
+
+  (defun reverse_list (lst)
+    (reverse_helper lst ())
+  )
+
+  (defun nth (lst n)
+    (if (= n 0) 
+      (f lst) 
+      (nth (r lst) (- n 1))
+    )
+  )
+
+  (defun append (lst1 lst2)
+    (if lst1
+      (c (f lst1) (append (r lst1) lst2))
+      lst2
+    )
+  )
+
+  (defun member (item lst)
+    (if lst
+      (if (= item (f lst)) 
+        1 
+        (member item (r lst)))
+      0
+    )
+  )
+
+  (defun filter_positive (lst)
+    (if lst
+      (if (> (f lst) 0)
+        (c (f lst) (filter_positive (r lst)))
+        (filter_positive (r lst)))
+      ()
+    )
+  )
+
+  (defun map_double (lst)
+    (if lst
+      (c (* 2 (f lst)) (map_double (r lst)))
+      ()
+    )
+  )
+
+  (defun sum_list (lst)
+    (if lst
+      (+ (f lst) (sum_list (r lst)))
+      0
+    )
+  )
+
+  (defun max_list (lst)
+    (if (r lst)
+      (max2 (f lst) (max_list (r lst)))
+      (f lst)
+    )
+  )
+
+  (defun min_list (lst)
+    (if (r lst)
+      (min2 (f lst) (min_list (r lst)))
+      (f lst)
+    )
+  )
+
+  (defun take (lst n)
+    (if (logand lst (> n 0))
+      (c (f lst) (take (r lst) (- n 1)))
+      ()
+    )
+  )
+
+  (defun drop (lst n)
+    (if (logand lst (> n 0))
+      (drop (r lst) (- n 1))
+      lst
+    )
+  )
+
+  (defun flatten (lst)
+    (if lst
+      (if (l (f lst))
+        (append (flatten (f lst)) (flatten (r lst)))
+        (c (f lst) (flatten (r lst))))
+      ()
+    )
+  )
+
+  (defun contains_all (lst required)
+    (if required
+      (if (member (f required) lst)
+        (contains_all lst (r required))
+        0)
+      1
+    )
+  )
+
+  ;; Note: This is a library file (.clib)
+  ;; Functions use defun for better performance when included
+  ;; Requires max2 and min2 from math_helpers.clib
+  ;; Include this file in your .clsp programs using: (include "list_utils.clib") 
+)

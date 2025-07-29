@@ -1,0 +1,81 @@
+;; Complete Chia Condition Codes Reference
+;; Demonstrates all major types of blockchain conditions
+;; This shows the full spectrum of smart contract capabilities
+
+(mod (puzzle_hash amount message public_key coin_id timestamp height parent_id birth_seconds birth_height)
+  (include *standard-cl-24*)
+  (include "includes/condition_codes.clib")
+  
+  ;; Complete demonstration of ALL Chia condition codes
+  ;; This shows every available condition type for reference
+  
+  (list
+    ;; === BASIC CONDITIONS ===
+    ;; Always succeeds, adds arbitrary data
+    (list REMARK message)
+    
+    ;; === SIGNATURE CONDITIONS (v2.0) ===
+    ;; New signature conditions available after 2.0 hard fork
+    (list AGG_SIG_PARENT public_key message)
+    (list AGG_SIG_PUZZLE public_key message)
+    (list AGG_SIG_AMOUNT public_key message)
+    (list AGG_SIG_PUZZLE_AMOUNT public_key message)
+    (list AGG_SIG_PARENT_AMOUNT public_key message)
+    (list AGG_SIG_PARENT_PUZZLE public_key message)
+    
+    ;; === SIGNATURE CONDITIONS (Classic) ===
+    ;; Standard signature verification
+    (list AGG_SIG_UNSAFE public_key "unsafe_message")
+    (list AGG_SIG_ME public_key message)
+    
+    ;; === COIN CREATION & FEES ===
+    ;; Core economic operations
+    (list CREATE_COIN puzzle_hash amount)
+    (list RESERVE_FEE 1000000)
+    
+    ;; === ANNOUNCEMENTS ===
+    ;; Inter-coin communication and coordination
+    (list CREATE_COIN_ANNOUNCEMENT "coin_announcement")
+    (list ASSERT_COIN_ANNOUNCEMENT "coin_announcement_id")
+    (list CREATE_PUZZLE_ANNOUNCEMENT "puzzle_announcement")
+    (list ASSERT_PUZZLE_ANNOUNCEMENT "puzzle_announcement_id")
+    
+    ;; === CONCURRENCY CONTROL ===
+    ;; Ensure specific coins/puzzles are spent together
+    (list ASSERT_CONCURRENT_SPEND coin_id)
+    (list ASSERT_CONCURRENT_PUZZLE puzzle_hash)
+    
+    ;; === MESSAGE PASSING ===
+    ;; Inter-coin message communication
+    (list SEND_MESSAGE "message_data")
+    (list RECEIVE_MESSAGE "expected_message")
+    
+    ;; === SELF-ASSERTIONS ===
+    ;; Coin verifies its own properties
+    (list ASSERT_MY_COIN_ID coin_id)
+    (list ASSERT_MY_PARENT_ID parent_id)
+    (list ASSERT_MY_PUZZLEHASH puzzle_hash)
+    (list ASSERT_MY_AMOUNT amount)
+    (list ASSERT_MY_BIRTH_SECONDS birth_seconds)
+    (list ASSERT_MY_BIRTH_HEIGHT birth_height)
+    (list ASSERT_EPHEMERAL)
+    
+    ;; === TIME CONDITIONS (Future) ===
+    ;; Ensure we're "far enough" in the future
+    (list ASSERT_SECONDS_RELATIVE 3600) ; 1 hour from now
+    (list ASSERT_SECONDS_ABSOLUTE timestamp)
+    (list ASSERT_HEIGHT_RELATIVE 100) ; 100 blocks from now
+    (list ASSERT_HEIGHT_ABSOLUTE height)
+    
+    ;; === TIME CONDITIONS (Past) ===
+    ;; Ensure we're "not too far" in the future
+    (list ASSERT_BEFORE_SECONDS_RELATIVE 7200) ; within 2 hours
+    (list ASSERT_BEFORE_SECONDS_ABSOLUTE timestamp)
+    (list ASSERT_BEFORE_HEIGHT_RELATIVE 200) ; within 200 blocks
+    (list ASSERT_BEFORE_HEIGHT_ABSOLUTE height)
+    
+    ;; === SPECIAL CONDITIONS ===
+    ;; For future soft forks
+    (list SOFTFORK 100 "future_feature")
+  )
+)

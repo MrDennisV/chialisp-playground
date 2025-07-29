@@ -1,0 +1,23 @@
+;; List Operations - Basic list manipulation
+(mod (lst)
+  (include *standard-cl-24*)
+  
+  (list
+    ;; Input
+    (list "Original list:" lst)
+    
+    ;; Basic list operations
+    (list "First element (f):" (f lst))          ; Get first item
+    (list "Rest of list (r):" (r lst))           ; Get remaining items
+    (list "Is it a list (l):" (l lst))           ; Check if it's a list
+    
+    ;; Building lists
+    (list "Add 99 to front (c):" (c 99 lst))     ; Cons operation
+    (list "Create new list:" (list 1 2 3))      ; List constructor
+    (list "Nested list:" (list lst (list 4 5))) ; Lists within lists
+    
+    ;; List properties
+    (list "Empty list check:" (not lst))         ; Check if empty
+    (list "Empty list:" ())                      ; Show empty list
+  )
+) 

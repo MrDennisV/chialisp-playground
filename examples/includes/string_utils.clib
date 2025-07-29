@@ -1,0 +1,122 @@
+;; String Utility Functions Library
+;; Common string operations for reuse across projects
+;; Usage: (include "string_utils.clib")
+;; 
+;; This is a library file (.clib) - contains only function definitions
+;; without a module wrapper. It's designed to be included in other programs.
+
+(
+;; String length calculation
+(defun string_length (str)
+  (if str
+    (+ 1 (string_length (r str)))
+    0))
+
+;; String concatenation
+(defun concat_strings (str1 str2)
+  (if str1
+    (c (f str1) (concat_strings (r str1) str2))
+    str2))
+
+;; String comparison
+(defun string_equal (str1 str2)
+  (if (logand str1 str2)
+    (if (= (f str1) (f str2))
+      (string_equal (r str1) (r str2))
+      0)
+    (logand (not str1) (not str2))))
+
+;; Check if string starts with prefix
+(defun starts_with (str prefix)
+  (if prefix
+    (if str
+      (if (= (f str) (f prefix))
+        (starts_with (r str) (r prefix))
+        0)
+      0)
+    1))
+
+;; Check if string ends with suffix
+(defun ends_with (str suffix)
+  (starts_with (reverse_string str) (reverse_string suffix)))
+
+;; Reverse a string
+(defun reverse_string (str)
+  (defun reverse_helper (str acc)
+    (if str
+      (reverse_helper (r str) (c (f str) acc))
+      acc))
+  (reverse_helper str ""))
+
+;; Convert string to uppercase (basic ASCII)
+(defun to_uppercase_char (char)
+  (if (logand (not (> 97 char)) (not (> char 122)))  ; a-z range
+    (- char 32)  ; Convert to A-Z
+    char))
+
+(defun to_uppercase (str)
+  (if str
+    (c (to_uppercase_char (f str)) (to_uppercase (r str)))
+    ""))
+
+;; Convert string to lowercase (basic ASCII)
+(defun to_lowercase_char (char)
+  (if (logand (not (> 65 char)) (not (> char 90)))  ; A-Z range
+    (+ char 32)  ; Convert to a-z
+    char))
+
+(defun to_lowercase (str)
+  (if str
+    (c (to_lowercase_char (f str)) (to_lowercase (r str)))
+    ""))
+
+;; Check if character is alphabetic
+(defun is_alpha (char)
+  (logor 
+    (logand (not (> 65 char)) (not (> char 90)))   ; A-Z
+    (logand (not (> 97 char)) (not (> char 122)))))  ; a-z
+
+;; Check if character is numeric
+(defun is_digit (char)
+  (logand (not (> 48 char)) (not (> char 57))))  ; 0-9
+
+;; Check if character is alphanumeric
+(defun is_alnum (char)
+  (logor (is_alpha char) (is_digit char)))
+
+;; String trimming (remove spaces from start and end)
+(defun is_space (char)
+  (logor (= char 32) (= char 9)))  ; space or tab
+
+(defun trim_left (str)
+  (if (logand str (is_space (f str)))
+    (trim_left (r str))
+    str))
+
+(defun trim_right (str)
+  (reverse_string (trim_left (reverse_string str))))
+
+(defun trim (str)
+  (trim_right (trim_left str)))
+
+;; String contains substring
+(defun contains (str substr)
+  (if str
+    (if (starts_with str substr)
+      1
+      (contains (r str) substr))
+    0))
+
+;; Count occurrences of character in string
+(defun count_char (str char)
+  (if str
+    (if (= (f str) char)
+      (+ 1 (count_char (r str) char))
+      (count_char (r str) char))
+    0))
+
+;; Note: This is a library file (.clib)
+;; Functions use defun for better performance when included
+;; Requires reverse_string function which uses helper
+;; Include this file in your .clsp programs using: (include "string_utils.clib") 
+)

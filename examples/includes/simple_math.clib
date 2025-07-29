@@ -1,0 +1,39 @@
+;; ===============================================================
+;; FIRST SIMPLE LIBRARY - Basic Mathematical Functions
+;; FILE: simple_math.clib (LIBRARY - NOT EXECUTABLE)
+;; 
+;; This is your first .clib library
+;; Contains only function definitions, no (mod ...)
+;; Designed to be included in other programs
+;; ===============================================================
+
+(
+;; === SIMPLE MATHEMATICAL FUNCTIONS ===
+
+;; Function 1: Square of a number
+(defun-inline square (n) 
+  (* n n))
+  
+;; Function 2: Check if even
+(defun-inline is_even (n) 
+  (= (logand n 1) 0))
+  
+;; Function 3: Absolute value
+(defun-inline absolute (n) 
+  (if (> 0 n) (- 0 n) n))
+
+;; Function 4: Maximum of two numbers
+(defun-inline max2 (a b)
+  (if (> a b) a b))
+
+;; === IMPORTANT NOTES ===
+;; 
+;; 1. This file has NO (mod ...) - it's just a library
+;; 2. Uses defun-inline for simple functions (better performance)
+;; 3. Functions are documented with strings
+;; 4. Include with: (include "includes/simple_math.clib")
+;; 5. Remember to use flag: run -i ./examples/ your_program.clsp
+;;
+;; 🎯 SEE NEXT: includes_02_using_library.clsp
+;;    To learn how to use this library
+)

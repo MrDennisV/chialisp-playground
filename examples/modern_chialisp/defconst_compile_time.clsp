@@ -1,0 +1,71 @@
+;; Defconst - Compile-Time Constants
+;; Modern ChiaLisp feature for computed constants
+(mod (input)
+  (include *standard-cl-24*)
+  
+  ;; defconst: computed at COMPILE TIME (not runtime)
+  ;; vs defconstant: simple value assignment
+  
+  ;; Helper functions (defined before use)
+  (defun length (lst)
+    (if lst 
+      (+ 1 (length (r lst))) 
+      0))
+  
+  (defun factorial_helper (n)
+    (if (= n 1) 
+      1 
+      (* n (factorial_helper (- n 1)))))
+  
+  (defun simple_tree_hash (left right)
+    (sha256 "tree" left right))
+  
+  ;; Simple compile-time computations
+  (defconst LARGE_NUMBER (* 1000 1000))
+  (defconst TWO_TIMES_TEN (* 10 2))
+  (defconst POWER_OF_TWO (* 2 2 2 2 2))  ; 2^5 = 32
+  
+  ;; Hash computations at compile time
+  (defconst HELLO_HASH (sha256 "hello" "world"))
+  (defconst INPUT_HASH (sha256 "input" "example"))
+  
+  ;; Complex computations at compile time
+  (defconst FACTORIAL_5 (factorial_helper 5))  ; 5! = 120
+  (defconst FACTORIAL_4 (factorial_helper 4))  ; 4! = 24
+  
+  ;; List operations at compile time
+  (defconst PRESET_LIST (list 1 2 3 4 5))
+  (defconst LIST_LENGTH (length PRESET_LIST))  ; = 5
+  (defconst DOUBLED_LIST (list (* 2 1) (* 2 2) (* 2 3)))  ; (2 4 6)
+  
+  ;; Tree operations at compile time
+  (defconst TREE_HASH (simple_tree_hash "left_branch" "right_branch"))
+  
+  (list
+    (list "Input:" input)
+    (list "Runtime vs Compile:" "These computed at compile time")
+    
+    (list "Large Number:" LARGE_NUMBER)
+    (list "Two Times Ten:" TWO_TIMES_TEN)
+    (list "Power of Two:" POWER_OF_TWO)
+    
+    (list "Hello Hash:" HELLO_HASH)
+    (list "Input Hash:" INPUT_HASH)
+    
+    (list "Factorial 5:" FACTORIAL_5)
+    (list "Factorial 4:" FACTORIAL_4)
+    
+    (list "Preset List:" PRESET_LIST)
+    (list "List Length:" LIST_LENGTH)
+    (list "Doubled List:" DOUBLED_LIST)
+    
+    (list "Tree Hash:" TREE_HASH)
+    
+    (list "Key Concept:" "defconst runs at compile time")
+    (list "vs defconstant:" "defconstant is simple assignment")
+    (list "vs runtime:" "Runtime would recalculate each time")
+    (list "Benefit:" "Complex calculations done once")
+    (list "Use Cases:" "Hashes, math constants, precomputed data")
+    (list "Trade-off:" "Slower compile, faster runtime")
+  )
+)

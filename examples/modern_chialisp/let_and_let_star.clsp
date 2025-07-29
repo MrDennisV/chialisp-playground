@@ -1,0 +1,61 @@
+;; Let and Let* - Local Variables
+;; Learn to use local variables in modern ChiaLisp
+(mod (value)
+  (include *standard-cl-24*)
+  
+  ;; let: parallel binding (variables can't reference each other)
+  ;; let*: sequential binding (later variables can use earlier ones)
+  
+  (list
+    (list "Input:" value)
+    (list "Let Binding:" "Parallel - variables independent")
+    
+    (list "Let Doubled:" 
+      (let ((doubled (* value 2))) 
+        doubled))
+    
+    (list "Let Tripled:" 
+      (let ((tripled (* value 3))) 
+        tripled))
+    
+    (list "Let Squared:" 
+      (let ((squared (* value value))) 
+        squared))
+    
+    (list "Let Sum:" 
+      (let ((doubled (* value 2)) 
+            (tripled (* value 3))) 
+        (+ doubled tripled)))
+    
+    (list "Let* Binding:" "Sequential - can reference previous")
+    
+    (list "Let* Step 1:" 
+      (let* ((doubled (* value 2))) 
+        doubled))
+    
+    (list "Let* Step 2:" 
+      (let* ((doubled (* value 2)) 
+             (from_doubled (/ (* doubled 3) 2))) 
+        from_doubled))
+    
+    (list "Let* Chain:" 
+      (let* ((doubled (* value 2)) 
+             (tripled (* doubled 3)) 
+             (final (+ doubled tripled))) 
+        final))
+    
+    (list "Let* Complete:" 
+      (let* ((a (* value 2)) 
+             (b (+ a 5)) 
+             (c (* b 2))) 
+        (list a b c)))
+    
+    (list "Key Difference:" "let = parallel, let* = sequential")
+    (list "Let Variables:" "Cannot reference each other")
+    (list "Let* Variables:" "Can use previous variables")
+    (list "Use Let When:" "Independent calculations")
+    (list "Use Let* When:" "Dependent calculations")
+    (list "Concept:" "Local variable scoping")
+    (list "Similar To:" "let/const in JavaScript, variables in Python")
+  )
+)

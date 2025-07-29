@@ -1,0 +1,26 @@
+;; Atoms and Nil
+;; Basic data types in ChiaLisp
+(mod (number string hex_value)
+  (include *standard-cl-24*)
+  
+  (list
+    ;; Show different atom types
+    (list "Number:" number)
+    (list "String:" string)
+    (list "Hex:" hex_value)
+    
+    ;; Test for nil (empty/zero)
+    (list "Is number nil:" (= number ()))
+    (list "Is zero nil:" (= 0 ()))
+    (list "Is empty string nil:" (= "" ()))
+    
+    ;; Check if values are lists or atoms
+    (list "Is number a list:" (l number))
+    (list "Is string a list:" (l string))
+    (list "Is (1 2 3) a list:" (l (list 1 2 3)))
+    
+    ;; Show that atoms are immutable
+    (list "Original number:" number)
+    (list "After adding 10:" (+ number 10))
+  )
+)

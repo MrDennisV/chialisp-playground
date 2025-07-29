@@ -1,0 +1,70 @@
+;; Assign Forms - Advanced Assignment with Dependency Resolution
+;; Modern ChiaLisp feature for complex variable assignments
+(mod (value)
+  (include *standard-cl-24*)
+  
+  ;; assign: dependency-aware assignment
+  ;; Variables can be defined in any order, automatically resolved
+  
+  (list
+    (list "Input:" value)
+    (list "Assign Feature:" "Dependencies auto-resolved")
+    
+    (list "Order Independent:" 
+      (assign 
+        final (+ doubled tripled) 
+        doubled (* value 2) 
+        tripled (/ (* doubled 3) 2) 
+        final))
+    
+    (list "Dependency Chain:" 
+      (assign 
+        result (+ a b c) 
+        c (* b 2) 
+        b (* a 3) 
+        a value 
+        result))
+    
+    (list "Destructure Pair:" 
+      (assign 
+        (first second) (list value (+ value 5)) 
+        sum (+ first second) 
+        sum))
+    
+    (list "Destructure Result:" 
+      (assign 
+        (x y) (list (* value 2) (* value 3)) 
+        product (* x y) 
+        product))
+    
+    (list "Complex Example:" 
+      (assign 
+        final (+ doubled squared) 
+        squared (* value value) 
+        doubled (* value 2) 
+        final))
+    
+    (list "Out of Order:" 
+      (assign 
+        c (+ a b) 
+        a (* value 2) 
+        b (* value 3) 
+        c))
+    
+    (list "Multi Destructure:" 
+      (assign 
+        (a b) (list value 10) 
+        (c d) (list (* a 2) (* b 2)) 
+        sum (+ a b c d) 
+        sum))
+    
+    (list "Key Feature:" "Order doesn't matter")
+    (list "vs Let:" "let requires proper order")
+    (list "vs Let*:" "let* requires sequential order") 
+    (list "Assign Advantage:" "Automatic dependency resolution")
+    (list "Destructuring:" "Unpack lists into variables")
+    (list "Use Case:" "Complex interdependent calculations")
+    (list "Concept:" "Declarative variable binding")
+    (list "Similar To:" "Pattern matching in functional languages")
+  )
+)

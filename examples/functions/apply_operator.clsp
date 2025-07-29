@@ -1,0 +1,31 @@
+;; Apply Operator (a) - Calling Functions with Lists
+;; Learn the fundamental 'a' operator for function calls
+
+(mod (number operation)
+  (include *standard-cl-24*)
+  
+  ;; 'a' operator: applies a function to a list of arguments
+  ;; Syntax: (a function_name (list arg1 arg2 ...))
+  
+  ;; Helper functions to demonstrate 'a'
+  (defun add_two (x y) (+ x y))
+  (defun multiply_three (x y z) (* x y z))
+  (defun square (x) (* x x))
+  (defun is_greater (x y) (> x y))
+  
+  (list
+    (list "Input Number:" number)
+    (list "Operation:" operation)
+    (list "Square Result:" (a square (list number)))
+    (list "Add 5 Result:" (a add_two (list number 5)))
+    (list "Multiply by 2,3:" (a multiply_three (list number 2 3)))
+    (list "Conditional Square:" (if (= operation "square") (a square (list number)) 0))
+    (list "Conditional Double:" (if (= operation "double") (a multiply_three (list number 2 1)) 0))
+    (list "Function as Value:" (a square (list number)))
+    (list "Key Rule:" "a function_name (list args)")
+    (list "Normal Call:" "(function_name arg1 arg2)")
+    (list "Apply Call:" "(a function_name (list arg1 arg2))")
+    (list "Use When:" "Function is a value or parameter")
+    (list "Similar To:" "Function.apply() in JavaScript")
+  )
+)

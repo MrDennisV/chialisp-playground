@@ -1,0 +1,163 @@
+;; Validation Helper Functions Library
+;; Common validation functions for reuse across projects
+;; Usage: (include "validation_helpers.clib")
+;; 
+;; This is a library file (.clib) - contains only function definitions
+;; without a module wrapper. It's designed to be included in other programs.
+
+(
+;; Helper functions (simplified versions to avoid dependencies)
+(defun simple_length (lst)
+  (if lst
+    (+ 1 (simple_length (r lst)))
+    0))
+
+(defun simple_string_length (str)
+  (if str
+    (+ 1 (simple_string_length (r str)))
+    0))
+
+;; Basic type validations
+(defun is_list (obj)
+  (l obj))
+
+(defun is_atom (obj)
+  (not (l obj)))
+
+(defun is_nil (obj)
+  (not obj))
+
+(defun is_not_nil (obj)
+  (obj))
+
+;; Number validations
+(defun is_number (obj)
+  (if (is_atom obj)
+    (if (> obj 0) 1 (> 0 obj))  ; Check if it behaves like a number
+    0))
+
+(defun is_valid_amount (amount)
+  (logand (is_number amount) (not (> 0 amount))))
+
+(defun is_in_range (value min_val max_val)
+  (logand (not (> min_val value)) (not (> value max_val))))
+
+(defun is_positive_integer (n)
+  (logand (is_number n) (> n 0)))
+
+(defun is_non_negative (n)
+  (logand (is_number n) (not (> 0 n))))
+
+;; List validations
+(defun is_empty_list (lst)
+  (logand (is_list lst) (not lst)))
+
+(defun is_non_empty_list (lst)
+  (logand (is_list lst) lst))
+
+(defun has_length (lst expected_length)
+  (= (simple_length lst) expected_length))
+
+(defun has_min_length (lst min_length)
+  (not (> min_length (simple_length lst))))
+
+(defun has_max_length (lst max_length)
+  (not (> (simple_length lst) max_length)))
+
+;; Hash and address validations (simplified)
+(defun is_valid_hash_length (hash expected_length)
+  (= (simple_string_length hash) expected_length))
+
+(defun is_sha256_hash (hash)
+  (is_valid_hash_length hash 64))  ; 32 bytes = 64 hex chars
+
+(defun is_valid_coin_id (coin_id)
+  (is_sha256_hash coin_id))
+
+;; Puzzle hash validation (32 bytes)
+(defun is_valid_puzzle_hash (puzzle_hash)
+  (is_sha256_hash puzzle_hash))
+
+;; Amount validations for Chia
+(defun is_valid_coin_amount (amount)
+  (logand 
+    (is_positive_integer amount)
+    (> amount 0)  ; Must be positive
+    (not (> amount 18446744073709551615))))  ; Max uint64
+
+;; Signature validations
+(defun is_valid_signature_length (sig expected_length)
+  (= (simple_string_length sig) expected_length))
+
+(defun is_bls_signature (sig)
+  (is_valid_signature_length sig 192))  ; 96 bytes = 192 hex chars
+
+(defun is_secp256k1_signature (sig)
+  (is_valid_signature_length sig 128))  ; 64 bytes = 128 hex chars
+
+;; Condition code validations
+(defun is_valid_condition_code (code)
+  (is_in_range code 50 73))  ; Valid range for Chia condition codes
+
+;; Multi-field validations
+(defun validate_coin_creation (puzzle_hash amount)
+  (logand 
+    (is_valid_puzzle_hash puzzle_hash)
+    (is_valid_coin_amount amount)))
+
+(defun validate_spend_conditions (conditions)
+  (logand 
+    (is_non_empty_list conditions)
+    (has_min_length conditions 1)))
+
+;; String validations
+(defun is_valid_string (str min_length max_length)
+  (logand 
+    str
+    (has_min_length str min_length)
+    (has_max_length str max_length)))
+
+(defun is_non_empty_string (str)
+  (logand str (> (simple_string_length str) 0)))
+
+;; Helper function for digit validation
+(defun is_digit (char)
+  (logand (not (> 48 char)) (not (> char 57))))   ; 48='0', 57='9'
+
+;; Hex string validation
+(defun is_hex_char (char)
+  (logor 
+    (is_digit char)
+    (logand (not (> 65 char)) (not (> char 70)))   ; A-F
+    (logand (not (> 97 char)) (not (> char 102)))))  ; a-f
+
+(defun is_hex_string (str)
+  (if str
+    (if (is_hex_char (f str))
+      (is_hex_string (r str))
+      0)
+    1))
+
+;; Complex validation combining multiple checks
+(defun validate_transaction_output (puzzle_hash amount conditions)
+  (logand 
+    (validate_coin_creation puzzle_hash amount)
+    (validate_spend_conditions conditions)))
+
+;; Error throwing for validation failures
+(defun assert_valid (condition error_msg)
+  (if condition 
+    1 
+    (x error_msg)))
+
+(defun require_positive (value error_msg)
+  (assert_valid (> value 0) error_msg))
+
+(defun require_non_empty (lst error_msg)
+  (assert_valid (is_non_empty_list lst) error_msg))
+
+;; Note: This is a library file (.clib)
+;; Functions use defun for better performance when included
+;; Requires length and string_length functions from other libraries
+;; Include this file in your .clsp programs using: (include "validation_helpers.clib") 
+)

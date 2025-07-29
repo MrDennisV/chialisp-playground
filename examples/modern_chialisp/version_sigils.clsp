@@ -1,0 +1,30 @@
+;; Version Sigils - Language Version Control
+;; Modern ChiaLisp feature for reproducible compilation
+(mod (mode)
+  (include *standard-cl-24*)
+  
+  ;; Version sigils ensure reproducible compilation across compiler versions
+  ;; *standard-cl-24* = Latest modern features
+  ;; *standard-cl-23* = Previous version
+  ;; *standard-cl-21* = Older compatibility
+  
+  (list
+    (list "Input:" mode)
+    (list "Current Version:" "*standard-cl-24*")
+    (list "Purpose:" "Reproducible compilation")
+    
+    (list "Example Calculation:" 
+      (let* ((doubled (* mode 2)) 
+             (result (+ doubled 10))) 
+        result))
+    
+    (list "Key Benefit:" "Same source = same compiled output")
+    (list "Future-proof:" "Code won't break in new compilers")
+    (list "Stability:" "Puzzle hashes remain unchanged")
+    
+    (list "Best Practice:" "Always specify version sigil")
+    (list "Latest Version:" "*standard-cl-24*")
+    (list "Concept:" "Version control for language features")
+    (list "Similar To:" "Package.json versions, Cargo.toml editions")
+  )
+)

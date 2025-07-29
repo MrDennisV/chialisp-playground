@@ -1,0 +1,24 @@
+;; Condition Codes - Fundamental Chia blockchain conditions
+;; Learn the basic condition codes by returning actual conditions
+;; Reference: https://chialisp.com/conditions/
+
+(mod (puzzle_hash amount message)
+  (include *standard-cl-24*)
+  (include "includes/condition_codes.clib")
+  
+  ;; Smart contract execution flow:
+  ;; 1. Code runs and returns list of conditions
+  ;; 2. Consensus method verifies these condition codes
+  ;; 3. Blockchain processes valid conditions
+  
+  (list
+    ;; CREATE_COIN (51) - Create a new coin
+    (list CREATE_COIN puzzle_hash amount)
+    
+    ;; RESERVE_FEE (52) - Reserve fee for transaction
+    (list RESERVE_FEE 1000000)
+    
+    ;; REMARK (1) - Add a message to the blockchain (always valid)
+    (list REMARK message)
+  )
+)

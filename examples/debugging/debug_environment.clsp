@@ -1,0 +1,26 @@
+;; Environment Access - @ Operator
+;; Learn to use `@` operator to access environment for debugging
+;; NOTE: `@` accesses the current environment - useful for debugging
+
+(mod (a b c)
+  (include *standard-cl-24*)
+  
+  ;; Function to demonstrate environment in different contexts
+  (defun show-environment (first second)
+    (+ first second))
+  
+  ;; Demonstrate environment access with @
+  (list 
+    (list "Module parameters:" (list a b c))
+    (list "Full environment:" @)
+    (list "Environment structure:" (list "Parent:" (f @) "Args:" (r @)))
+    (list "First argument:" (f (r @)))
+    (list "Second argument:" (f (r (r @))))
+    (list "Third argument:" (f (r (r (r @)))))
+    (list "Function result:" (show-environment a b))
+    (list "Comparison result:" (> a 10))
+    (list "Parameter sum:" (+ a b c))
+    (list "Environment is list:" (l @))
+    (list "Environment length:" (+ 1 (if (r @) 1 0)))
+  )
+)

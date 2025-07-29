@@ -1,0 +1,22 @@
+;; Named Constants
+;; Using defconstant to create named values
+(mod ()
+  (include *standard-cl-24*)
+  
+  ;; Define some constants
+  (defconstant PI 314)
+  (defconstant MAX_SIZE 100)
+  (defconstant GREETING "Hello")
+  
+  (list
+    ;; Show the constants
+    (list "PI value:" PI)
+    (list "Max size:" MAX_SIZE)
+    (list "Greeting:" GREETING)
+    
+    ;; Use constants in calculations
+    (list "Double PI:" (* PI 2))
+    (list "Half max:" (/ MAX_SIZE 2))
+    (list "Full greeting:" (list GREETING "World"))
+  )
+)

@@ -1,0 +1,13 @@
+;; Conditional Logic
+(mod (number)
+  (include *standard-cl-24*)
+  (list
+    (list "Input:" number)
+    (list "Greater than 10:" (if (> number 10) "Yes, it is" "No, it is not"))
+    (list "Equal to 10:" (if (= number 10) "Yes, it is" "No, it is not"))
+    (list "Less than 10:" (if (> 10 number) "Yes, it is" "No, it is not"))
+    (list "Category:" 
+      (if (> number 10) "High number"
+        (if (= number 10) "Medium number" "Low number")))
+  )
+) 

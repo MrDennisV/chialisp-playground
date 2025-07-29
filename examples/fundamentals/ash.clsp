@@ -1,0 +1,30 @@
+;; Arithmetic Shift - Multiply or divide by powers of 2
+;; Learn ash for efficient multiplication/division
+(mod (number shift_amount)
+  (include *standard-cl-24*)
+  
+  ;; ash performs arithmetic shift: preserves sign bit
+  ;; Positive shift = left shift (multiply by 2^n)
+  ;; Negative shift = right shift (divide by 2^n)
+  
+  (list
+    (list "Input Number:" number)
+    (list "Shift Amount:" shift_amount)
+    (list "Result:" (ash number shift_amount))
+    (list "Left Shift 1:" (ash number 1))
+    (list "Left Shift 2:" (ash number 2))
+    (list "Left Shift 3:" (ash number 3))
+    (list "Right Shift 1:" (ash number -1))
+    (list "Right Shift 2:" (ash number -2))
+    (list "Right Shift 3:" (ash number -3))
+    (list "Fast Multiply by 8:" (ash number 3))
+    (list "Fast Divide by 4:" (ash number -2))
+    (list "Double Value:" (ash number 1))
+    (list "Half Value:" (ash number -1))
+    (list "Concept:" "ash shifts bits left/right")
+    (list "Left Shift:" "Multiplies by powers of 2")
+    (list "Right Shift:" "Divides by powers of 2")
+    (list "Use Case:" "Fast math operations")
+    (list "Similar To:" "Bit shifting in other languages")
+  )
+)

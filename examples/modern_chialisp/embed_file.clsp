@@ -1,0 +1,19 @@
+;; Embed File - Include External Files at Compile Time
+;; Modern ChiaLisp feature for embedding foreign data
+
+(mod (suffix)
+  (include *standard-cl-24*)
+  
+  ;; embed-file: includes external file content at compile time
+  (embed-file hello-data bin "includes/hello.txt")
+  
+  (list
+    (list "Embedded data:" hello-data)
+    (list "SHA256 hash:" (sha256 hello-data suffix))
+    (list "File path:" "includes/hello.txt")
+    (list "Format:" "bin (binary as hex)")
+    (list "Syntax:" "(embed-file name format \"path\")")
+    (list "Benefit:" "Data included at compile time")
+    (list "Like:" "#include in C, import in Python")
+  )
+)

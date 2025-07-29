@@ -1,0 +1,15 @@
+;; Variables and Parameters
+;; This example shows how to work with variables and parameters in ChiaLisp
+(mod (name age)
+  (include *standard-cl-24*)
+  (list
+    (list "Name:" name)
+    (list "Age:" age)
+    (list "Adult:" (if (> age 18) "Yes" "No"))
+    (list "Category:" 
+      (if (> 13 age) "Child"
+        (if (> 20 age) "Teen" "Adult")
+      )
+    )
+  )
+) 

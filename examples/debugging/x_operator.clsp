@@ -1,0 +1,13 @@
+;; X Operator - Program Termination
+;; Simple demonstration of x operator raising exception
+
+(mod (value)
+  (include *standard-cl-24*)
+  
+  ;; x operator terminates program immediately
+  (if (= value 0)
+      (x "Cannot be zero!")  ; This will raise exception
+      (list 
+        (list "Value is:" value)
+        (list "Program continues:" "normally")))
+) 

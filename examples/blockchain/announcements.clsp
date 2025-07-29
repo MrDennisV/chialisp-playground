@@ -1,0 +1,35 @@
+;; Announcements - Coordinating multiple coin spends
+;; Learn how to use announcements for communication between puzzles
+;; Announcements allow multiple coins to coordinate their spending
+
+(mod (mode message puzzle_hash amount)
+  (include *standard-cl-24*)
+  (include "includes/condition_codes.clib")
+  
+  ;; Announcement concept:
+  ;; - CREATE_COIN_ANNOUNCEMENT: Broadcast a message
+  ;; - ASSERT_COIN_ANNOUNCEMENT: Verify a message was broadcast
+  ;; - Used for atomic multi-coin transactions
+  ;; - Example: Atomic swaps, escrow systems, multi-sig wallets
+  
+  ;; Mode 1: Create an announcement (sender)
+  ;; Mode 2: Assert an announcement exists (receiver)
+  
+  (if (= mode 1)
+    ;; Mode 1: Create announcement and spend normally
+    (list
+      (list CREATE_COIN_ANNOUNCEMENT message)
+      (list CREATE_COIN puzzle_hash amount)
+      (list RESERVE_FEE 1000000)
+      (list REMARK "Announcement to be created")
+    )
+    
+    ;; Mode 2: Assert announcement exists before spending
+    (list
+      (list ASSERT_COIN_ANNOUNCEMENT message)
+      (list CREATE_COIN puzzle_hash amount)
+      (list RESERVE_FEE 1000000)
+      (list REMARK "Announcement to be verified")
+    )
+  )
+)

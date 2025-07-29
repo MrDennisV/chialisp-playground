@@ -1,0 +1,16 @@
+;; Apply Operator - Dynamic Evaluation
+;; Learn to use `a` operator for dynamic evaluation in debugging
+;; NOTE: `a` evaluates a value as a program with an environment
+
+(mod (value)
+  (include *standard-cl-24*)
+  
+  ;; Simple demonstration without complex apply usage
+  (list 
+    "Input value:" value
+    "Basic math:" (+ value 5)
+    "Simple quote:" (q . "This is quoted")
+    "Environment access:" @
+    "Conditional:" (if (> value 10) "big" "small")
+    "Final result:" (* value 2))
+)

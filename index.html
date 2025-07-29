@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChiaLisp Playground</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css">
+    <link rel="stylesheet" href="css/playground.css">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+</head>
+<body>
+    <header style="background: #2d2d30; border-bottom: 1px solid #3e3e42; padding: 8px 16px; color: #cccccc; font-size: 14px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <img src="images/MrDennis.png" style="width: 24px; height: 24px; border-radius: 4px;">
+            <span style="font-weight: 600;">ChiaLisp Playground</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #969696;">
+            <i class="fab fa-twitter" style="color: #1da1f2;"></i>
+            <a href="https://x.com/MrDennisV" target="_blank" style="color: #969696; text-decoration: none; transition: color 0.2s ease;" onmouseover="this.style.color='#cccccc'" onmouseout="this.style.color='#969696'">@MrDennisV</a>
+        </div>
+    </header>
+
+    <main style="height: calc(100vh - 45px);">
+        <div class="vscode-container">
+            <div class="activity-bar">
+                <div class="activity-buttons">
+                    <button class="activity-btn active" id="explorerBtn" title="Explorer" data-view="explorer">
+                        <i class="fas fa-folder"></i>
+                    </button>
+                    <button class="activity-btn" id="debugViewBtn" title="Run and Debug" data-view="debug">
+                        <i class="fas fa-bug"></i>
+                    </button>
+                </div>
+                <div class="activity-actions">
+                    <button class="activity-btn" id="saveFileBtn" title="Save File (Ctrl+S)" onclick="playground?.saveFile()">
+                        <i class="fas fa-save"></i>
+                    </button>
+                    <button class="activity-btn" id="downloadFileBtn" title="Download File" onclick="playground?.downloadCurrentFile()">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="sidebar-left" id="sidebarLeft">
+                <div class="sidebar-view active" id="explorerView">
+                    <div class="sidebar-toolbar">
+                        <div class="toolbar-group">
+                            <button class="sidebar-btn sidebar-btn-success" id="compileBtn" title="Build (Ctrl+Shift+B)" onclick="playground?.compileCode()">
+                                <i class="fas fa-hammer"></i>
+                                <span>Build</span>
+                            </button>
+                            <button class="sidebar-btn sidebar-btn-warning" id="debugStartBtn" title="Debug (Shift+F9)" onclick="playground?.handleStartDebugging()">
+                                <i class="fas fa-bug"></i>
+                                <span>Debug</span>
+                            </button>
+                            <button class="sidebar-btn sidebar-btn-primary" id="runBtn" title="Run (F9)" onclick="playground?.runCode()">
+                                <i class="fas fa-play"></i>
+                                <span>Run</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="open-file-row">
+                        <button id="newFileBtn" class="open-file-btn" title="Create New File">
+                            <i class="fas fa-file-plus me-2"></i>
+                            New File
+                        </button>
+                    </div>
+                    
+                    <div class="open-file-row">
+                        <button id="openFileBtn" class="open-file-btn" title="Open File">
+                            <i class="fas fa-file-import me-2"></i>
+                            Open File
+                        </button>
+                    </div>
+                    
+                    <div class="opened-files-section" id="openedFilesSection" style="display: none;">
+                        <div class="sidebar-header collapsible-header" data-target="openedFilesList">
+                            <div class="header-left">
+                                <i class="fas fa-chevron-down header-chevron"></i>
+                                <i class="fas fa-file-import me-2"></i>
+                                <span class="sidebar-header-text">OPENED FILES</span>
+                            </div>
+                            <button id="clearOpenedFilesBtn" class="clear-folder-btn" title="Clear Opened Files">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="opened-files-list collapsible-content" id="openedFilesList">
+                        </div>
+                    </div>
+                    
+                    <div class="open-folder-row">
+                        <button id="selectFolderBtn" class="open-folder-btn" title="Open Folder" style="display: none;">
+                            <i class="fas fa-folder-open me-2"></i>
+                            Open Folder
+                        </button>
+                    </div>
+                    
+                    <div class="local-files-section" id="localFilesSection" style="display: none;">
+                        <div class="sidebar-header collapsible-header" data-target="localFilesList">
+                            <div class="header-left">
+                                <i class="fas fa-chevron-down header-chevron"></i>
+                                <i class="fas fa-folder-open me-2"></i>
+                                <span class="sidebar-header-text">LOCAL FOLDER</span>
+                            </div>
+                            <button id="clearLocalFolderBtn" class="clear-folder-btn" title="Clear Local Folder">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="local-files-tree collapsible-content" id="localFilesList">
+                        </div>
+                    </div>
+                    
+                    <div class="examples-section">
+                        <div class="sidebar-header collapsible-header" data-target="examplesContent">
+                            <div class="header-left">
+                                <i class="fas fa-chevron-down header-chevron"></i>
+                                <i class="fas fa-folder me-2"></i>
+                                <span class="sidebar-header-text">EXAMPLES</span>
+                            </div>
+                        </div>
+                        
+                        <div class="examples-content collapsible-content" id="examplesContent">
+                            
+                            <div class="examples-tree" id="examplesList">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sidebar-view" id="debugView" style="display: none;">
+                    <div class="sidebar-header">
+                        <i class="fas fa-bug me-2"></i>
+                        <span class="sidebar-header-text">RUN AND DEBUG</span>
+                    </div>
+                    
+                    <div class="debug-sidebar-content">
+                        <div class="debug-variables">
+                            <h6>Variables</h6>
+                            <div class="debug-variables-content" id="variablesView">
+                                Not debugging
+                            </div>
+                        </div>
+                        
+                        <div class="debug-output">
+                            <h6>Call Stack</h6>
+                            <div class="debug-log" id="callStackView">
+                                Not debugging
+                            </div>
+                        </div>
+                        
+                        <div class="debug-output">
+                            <h6>Breakpoints</h6>
+                            <div class="debug-log" id="breakpointsList">
+                                No breakpoints
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <div id="debugToolbar" class="debug-toolbar" style="display: none;">
+                    <div class="debug-toolbar-content">
+                        <button class="debug-toolbar-action" id="debugContinueToolbar" title="Continue (Shift+F9)" onclick="playground?.handleContinueDebugging()">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button class="debug-toolbar-action" id="debugStepOverToolbar" title="Step Over (F10)" onclick="playground?.handleStepOver()">
+                            <i class="fas fa-step-forward"></i>
+                        </button>
+                        <button class="debug-toolbar-action" id="debugStepIntoToolbar" title="Step Into (F11)" onclick="playground?.handleStepInto()">
+                            <i class="fas fa-arrow-down"></i>
+                        </button>
+                        <button class="debug-toolbar-action" id="debugStepOutToolbar" title="Step Out (Shift+F11)" onclick="playground?.handleStepOut()">
+                            <i class="fas fa-arrow-up"></i>
+                        </button>
+                        <button class="debug-toolbar-action debug-stop" id="debugStopToolbar" title="Stop (Shift+F9)" onclick="playground?.handleStopDebugging()">
+                            <i class="fas fa-stop"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="editor-area">
+                    <div class="tab-bar" id="fileTabs">
+                    </div>
+                    
+                    <div class="editor-container">
+                        <div id="monaco-editor"></div>
+                    </div>
+                </div>
+                
+                <div class="bottom-panel">
+                    <div class="panel-resize-handle" id="panelResizeHandle">
+                        <div class="resize-grip"></div>
+                    </div>
+                    <div class="panel-tabs">
+                        <div class="panel-tab active" data-panel="output">
+                            <i class="fas fa-terminal me-1"></i>
+                            OUTPUT
+                        </div>
+                        <div class="panel-tab" data-panel="educational">
+                            <i class="fas fa-graduation-cap me-1"></i>
+                            EXAMPLES PARSER
+                        </div>
+                        <div class="panel-actions">
+                            <button class="clear-output-btn" onclick="playground?.clearOutput()" title="Clear Output">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <button class="collapse-btn" id="collapseBtn" title="Collapse/Expand Panel">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="panel-content">
+                        <div class="panel-section active" id="outputPanel">
+                            <div id="output-editor" style="width: 100%; height: 100%; min-height: 200px;"></div>
+                        </div>
+                        
+                        <div class="panel-section" id="educationalPanel">
+                            <div id="educational-output" class="educational-output">
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <div class="modal fade" id="argsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-play me-2"></i>
+                        Execute Program
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="curriedParamsInput" class="form-label">Curried Parameters (optional):</label>
+                        <input type="text" class="form-control bg-dark text-white" id="curriedParamsInput" placeholder="()" style="font-family: 'Courier New', monospace;">
+                        <div class="form-text text-muted">
+                            Parameters to curry into the program. Leave empty if not needed.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="solutionParamsInput" class="form-label">Solution Parameters:</label>
+                        <input type="text" class="form-control bg-dark text-white" id="solutionParamsInput" placeholder="()" style="font-family: 'Courier New', monospace;">
+                        <div class="form-text text-muted">
+                            Solution arguments to pass to the program
+                        </div>
+                    </div>
+
+                    <div class="mt-3 p-3 border border-warning rounded" id="debugWarningSection" style="display: none; background-color: rgba(255, 193, 7, 0.1);">
+                        <div class="d-flex align-items-start">
+                            <i class="fas fa-exclamation-triangle text-warning me-2 mt-1"></i>
+                            <div>
+                                <strong class="text-warning">Debug Limitations</strong>
+                                <p class="mb-0 small text-white">
+                                    The debugging feature currently has limitations due to compiler symbol table and macro handling. This may cause inaccurate step operations and may improve in future versions.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <small class="text-muted">Examples:</small>
+                        <div class="args-examples">
+                            <div class="example-section">
+                                <strong>Simple execution:</strong><br>
+                                <small class="text-muted">Curried:</small> <code>(empty)</code><br>
+                                <small class="text-muted">Solution:</small> <code>(42)</code> - Direct program argument<br>
+                            </div>
+                            <div class="example-section mt-2">
+                                <strong>Curry + Solution:</strong><br>
+                                <small class="text-muted">Curried:</small> <code>(10)</code> - Fixed value<br>
+                                <small class="text-muted">Solution:</small> <code>(32)</code> - Variable input<br>
+                                <small class="text-muted">Result:</small> Program receives both parameters
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Loading state (hidden by default) -->
+                <div class="modal-loading" id="argumentsModalLoading" style="display: none;">
+                    <div class="d-flex align-items-center justify-content-center p-4">
+                        <div class="spinner-border text-primary me-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div>
+                            <div class="fw-bold" id="argumentsLoadingTitle">Executing ChiaLisp program...</div>
+                            <small class="text-muted" id="argumentsLoadingMessage">This may take a few seconds</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer" id="argumentsModalFooter">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                        <i class="fas fa-times me-1"></i>
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" id="executeBtn">
+                        <i class="fas fa-play me-1"></i>
+                        Execute
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="buildModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-hammer me-2"></i>
+                        Build Program
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="buildCurriedParamsInput" class="form-label">Curried Parameters (optional):</label>
+                        <input type="text" class="form-control bg-dark text-white" id="buildCurriedParamsInput" placeholder="()" style="font-family: 'Courier New', monospace;">
+                        <div class="form-text text-muted">
+                            Parameters to curry into the program during compilation. This will generate the puzzle hash for the curried program.
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <small class="text-muted">Examples:</small>
+                        <div class="args-examples">
+                            <div class="example-section">
+                                <strong>Basic compilation:</strong><br>
+                                <small class="text-muted">Curried:</small> <code>(empty)</code><br>
+                                <small class="text-muted">Result:</strong> Raw program puzzle hash<br>
+                            </div>
+                            <div class="example-section mt-2">
+                                <strong>Curried compilation:</strong><br>
+                                <small class="text-muted">Curried:</small> <code>(10 "fixed_value")</code><br>
+                                <small class="text-muted">Result:</strong> Curried program puzzle hash<br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Loading state (hidden by default) -->
+                <div class="modal-loading" id="buildModalLoading" style="display: none;">
+                    <div class="d-flex align-items-center justify-content-center p-4">
+                        <div class="spinner-border text-success me-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div>
+                            <div class="fw-bold" id="buildLoadingTitle">Compiling ChiaLisp program...</div>
+                            <small class="text-muted" id="buildLoadingMessage">This may take a few seconds</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer" id="buildModalFooter">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                        <i class="fas fa-times me-1"></i>
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-success" id="buildBtn">
+                        <i class="fas fa-hammer me-1"></i>
+                        Build
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New File Modal -->
+    <div class="modal fade" id="newFileModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title text-white">
+                        <i class="fas fa-file-plus me-2"></i>
+                        Create New File
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="newFileNameInput" class="form-label text-white">File Name:</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-dark text-white" id="newFileNameInput" placeholder="myfile" style="font-family: 'Courier New', monospace;">
+                            <span class="input-group-text bg-secondary text-white">.clsp</span>
+                        </div>
+                        <div class="form-text text-white">
+                            Enter the filename without extension. The .clsp extension will be added automatically.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                        <i class="fas fa-times me-1"></i>
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" id="createFileBtn">
+                        <i class="fas fa-plus me-1"></i>
+                        Create File
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="status-bar">
+        <div class="status-left">
+            <span class="status-item" id="statusBarInfo">
+                <i class="fas fa-circle"></i>
+                Ready
+            </span>
+            <span class="status-item" id="statusBarLanguage">
+                <i class="fas fa-code"></i>
+                ChiaLisp
+            </span>
+        </div>
+        <div class="status-right">
+            <span class="status-item" id="statusBarPosition">
+                Ln 1, Col 1
+            </span>
+            <span class="status-item" id="statusBarEncoding">
+                UTF-8
+            </span>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.js"></script>
+    <script src="js/Debugger.js"></script>
+    <script src="js/services/StorageService.js"></script>
+    <script src="js/services/EditorService.js"></script>
+    <script src="js/services/CompilationService.js"></script>
+    <script src="js/services/ConditionsService.js"></script>
+    <script src="js/services/ExamplesService.js"></script>
+    <script src="js/services/DebugService.js"></script>
+    <script src="js/ChialispPlayground.js"></script>
+</body>
+</html>

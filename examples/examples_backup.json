@@ -1,0 +1,171 @@
+{
+  "welcome": {
+    "name": "Welcome",
+    "icon": "fas fa-home",
+    "description": "Welcome page with instructions",
+    "solutionArgs": "()",
+    "isWelcome": true
+  },
+  "hello": {
+    "name": "Hello World",
+    "icon": "fas fa-smile", 
+    "file": "examples/hello.clsp",
+    "description": "Simple greeting program - your first ChiaLisp program",
+    "solutionArgs": "()"
+  },
+  "variables": {
+    "name": "Variables & Parameters",
+    "icon": "fas fa-tag",
+    "file": "examples/variables.clsp",
+    "description": "Learn how to work with variables and parameters",
+    "solutionArgs": "('Alice' 25)"
+  },
+  "operators": {
+    "name": "Operators",
+    "icon": "fas fa-calculator",
+    "file": "examples/operators.clsp",
+    "description": "All basic operators: arithmetic, comparison, and logical",
+    "solutionArgs": "(10 3)"
+  },
+  "math": {
+    "name": "Math Operations",
+    "icon": "fas fa-calculator",
+    "file": "examples/math.clsp", 
+    "description": "Basic arithmetic operations",
+    "solutionArgs": "(15 5)"
+  },
+  "conditions": {
+    "name": "Conditional Logic",
+    "icon": "fas fa-code-branch",
+    "file": "examples/conditions.clsp",
+    "description": "If-else conditional statements and decision making", 
+    "solutionArgs": "(12)"
+  },
+  "strings": {
+    "name": "String Operations",
+    "icon": "fas fa-quote-left",
+    "file": "examples/strings.clsp",
+    "description": "Working with strings and text manipulation",
+    "solutionArgs": "('hello')"
+  },
+  "list": {
+    "name": "Basic Lists",
+    "icon": "fas fa-list",
+    "file": "examples/list.clsp",
+    "description": "Working with lists - first, rest, cons operations",
+    "solutionArgs": "((1 2 3 4 5))"
+  },
+  "list_advanced": {
+    "name": "Advanced Lists",
+    "icon": "fas fa-list-ol",
+    "file": "examples/list_advanced.clsp",
+    "description": "Complex list operations: length, reverse, find maximum",
+    "solutionArgs": "((5 2 8 1 9 3))"
+  },
+  "function": {
+    "name": "Function Definition", 
+    "icon": "fas fa-cog",
+    "file": "examples/function.clsp",
+    "description": "Defining and using recursive functions",
+    "solutionArgs": "(5)"
+  },
+  "loops": {
+    "name": "Loops & Recursion",
+    "icon": "fas fa-sync-alt",
+    "file": "examples/loops.clsp",
+    "description": "Using recursion for loops and iteration",
+    "solutionArgs": "(5)"
+  },
+  "pattern_matching": {
+    "name": "Pattern Matching",
+    "icon": "fas fa-search",
+    "file": "examples/pattern_matching.clsp",
+    "description": "Destructuring and analyzing data patterns",
+    "solutionArgs": "(('Alice' 25))"
+  },
+  "data_structures": {
+    "name": "Data Structures",
+    "icon": "fas fa-database",
+    "file": "examples/data_structures.clsp",
+    "description": "Creating and working with custom data structures",
+    "solutionArgs": "(('Alice' 25 'New York'))"
+  },
+  "error_handling": {
+    "name": "Error Handling",
+    "icon": "fas fa-exclamation-triangle",
+    "file": "examples/error_handling.clsp",
+    "description": "Safe operations with error checking and validation",
+    "solutionArgs": "(10 2)"
+  },
+  "higher_order": {
+    "name": "Higher Order Functions",
+    "icon": "fas fa-layer-group",
+    "file": "examples/higher_order.clsp",
+    "description": "Functions that work with other functions - map, filter, fold",
+    "solutionArgs": "((1 -2 3 -4 5))"
+  },
+  "curry": {
+    "name": "Curry Example", 
+    "icon": "fas fa-layer-group",
+    "file": "examples/curry.clsp",
+    "description": "Curry demonstration - partial function application",
+    "curriedArgs": "(2)",
+    "solutionArgs": "(32)"
+  },
+  "nested_functions": {
+    "name": "Nested Functions",
+    "icon": "fas fa-sitemap", 
+    "file": "examples/nested_functions.clsp",
+    "description": "Functions defined inside other functions",
+    "solutionArgs": "(7)"
+  },
+  "debug_step": {
+    "name": "Debug Stepping",
+    "icon": "fas fa-bug",
+    "file": "examples/debug_step.clsp",
+    "description": "Example designed for step-by-step debugging",
+    "solutionArgs": "(10)"
+  },
+  "debug_x_operator": {
+    "name": "Debug X Operator",
+    "icon": "fas fa-search-plus",
+    "file": "examples/debug_x_operator.clsp",
+    "description": "Shows how to use x operator for debugging sha256 errors",
+    "solutionArgs": "('test')"
+  },
+  "validate": {
+    "name": "Input Validation",
+    "icon": "fas fa-check-circle", 
+    "file": "examples/validate.clsp",
+    "description": "Validating input data and constraints",
+    "solutionArgs": "((15 23 45 67 89))"
+  },
+  "puzzle": {
+    "name": "Simple Puzzle",
+    "icon": "fas fa-puzzle-piece",
+    "file": "examples/puzzle.clsp", 
+    "description": "Simple puzzle validation logic",
+    "solutionArgs": "(42)"
+  },
+  "coin": {
+    "name": "Coin Puzzle",
+    "icon": "fas fa-coins",
+    "file": "examples/coin.clsp",
+    "description": "Cryptocurrency coin validation puzzle", 
+    "solutionArgs": "(((1 . 0x1234567890abcdef)) (1 . 0x1234567890abcdef))"
+  },
+  "list_to_bitmap": {
+    "name": "List to Bitmap",
+    "icon": "fas fa-th",
+    "file": "examples/list_to_bitmap.clsp",
+    "description": "Convert list of positions to bitmap representation",
+    "solutionArgs": "((0 1 2 3 4))"
+  },
+  "test": {
+    "name": "Basic Test",
+    "icon": "fas fa-file-code",
+    "file": "examples/test.clsp",
+    "description": "Basic ChiaLisp test program",
+    "solutionArgs": "(5)"
+  }
+}

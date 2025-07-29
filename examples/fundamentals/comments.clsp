@@ -1,0 +1,11 @@
+;; Comments - Different comment styles in ChiaLisp
+(mod (data)
+  (include *standard-cl-24*)
+  
+  ;;; Main processing section
+  (list
+    ;; Simple processing
+    (list "Input:" data)
+    (list "Type:" (if (l data) "list" "atom"))
+  )
+)

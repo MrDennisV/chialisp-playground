@@ -1,0 +1,35 @@
+;; Advanced List Operations
+;; Working with multiple lists and combining operations
+(mod (list1 list2)
+  (include *standard-cl-24*)
+  
+  (defun get-length (lst)
+    (if lst
+        (+ 1 (get-length (r lst)))
+        0
+    )
+  )
+  
+  (defun get-nth (lst n)
+    (if (= n 0)
+        (f lst)
+        (get-nth (r lst) (- n 1))
+    )
+  )
+  
+  (defun combine-lists (lst1 lst2)
+    (if lst1
+        (c (f lst1) (combine-lists (r lst1) lst2))
+        lst2
+    )
+  )
+  
+  (list
+    (list "List1:" list1)
+    (list "List2:" list2)
+    (list "Length of List1:" (get-length list1))
+    (list "Length of List2:" (get-length list2))
+    (list "Second element of List1:" (get-nth list1 1))
+    (list "Combined lists:" (combine-lists list1 list2))
+  )
+) 

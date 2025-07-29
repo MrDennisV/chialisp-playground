@@ -1,0 +1,36 @@
+;; Inline Functions - When to use each type
+(mod (number)
+  (include *standard-cl-24*)
+  
+  ;; GOOD for defun-inline (simple, non-recursive)
+  (defun-inline square (x) (* x x))
+  (defun-inline double (x) (* x 2))
+  (defun-inline is_positive (x) (> x 0))
+  
+  ;; MUST use defun (recursive function)
+  (defun factorial (x)
+    (if (= x 1)
+      1
+      (* x (factorial (- x 1)))))
+  
+  ;; MUST use defun (calls itself multiple times)
+  (defun complex_calc (x)
+    (+ (square x) (double x)))
+  
+  (list
+    (list "Input:" number)
+    (list "Square (inline):" (square number))
+    (list "Double (inline):" (double number))
+    (list "Is Positive:" (is_positive number))
+    (list "Factorial (defun):" (factorial number))
+    (list "Complex Calc:" (complex_calc number))
+    (list "Inline vs Regular:" "defun-inline optimizes simple functions")
+    (list "Defun-inline:" "Simple, fast, no recursion")
+    (list "Defun:" "Complex, recursive, reusable")
+    (list "When Inline:" "Math operations, simple checks")
+    (list "When Regular:" "Recursion, complex logic")
+    (list "Performance:" "Inline is faster for simple operations")
+    (list "Concept:" "Choose right tool for the task")
+    (list "Similar To:" "inline functions in C++/JS")
+  )
+)

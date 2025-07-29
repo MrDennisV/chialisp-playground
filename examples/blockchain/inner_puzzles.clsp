@@ -1,0 +1,25 @@
+;; Inner Puzzles - Composable puzzle architecture
+;; Learn how to create puzzles that wrap other puzzles for composability
+;; Reference: https://chialisp.com/chialisp-inner-puzzles
+
+(mod (PUBLIC_KEY INNER_PUZZLE inner_solution)
+  (include *standard-cl-24*)
+  (include "includes/condition_codes.clib")
+  (include "includes/sha256tree.clib")
+  
+  ;; Inner puzzle concept:
+  ;; - Outer puzzle enforces rules (like signature requirement)
+  ;; - Inner puzzle determines spending conditions (like amount, recipient)
+  ;; - This allows code reuse and composability
+  ;; - Example: CAT tokens use inner puzzles for standard transactions
+  
+  ;; This outer puzzle requires a signature, then runs the inner puzzle
+  (c
+    ;; Require signature from PUBLIC_KEY for the inner_solution
+    (list AGG_SIG_ME PUBLIC_KEY (sha256tree inner_solution))
+    
+    ;; Execute the inner puzzle with its solution and include its conditions
+    ;; The 'a' operator applies the inner puzzle to the inner solution
+    (a INNER_PUZZLE inner_solution)
+  )
+)

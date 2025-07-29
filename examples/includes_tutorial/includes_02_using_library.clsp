@@ -1,0 +1,22 @@
+;; Using Your First Library
+;; Learn to include and use functions from .clib files
+
+(mod (number)
+  (include *standard-cl-24*)
+  
+  ;; Include functions from simple_math.clib
+  (include "includes/simple_math.clib")
+  
+  ;; Now we can use functions from the library without defining them
+  ;; Available functions: square, is_even, absolute, max2
+  
+  (list
+    (list "Input:" number)
+    (list "Square:" (square number))
+    (list "Is even:" (is_even number))
+    (list "Absolute:" (absolute number))
+    (list "Max with 10:" (max2 number 10))
+    (list "Library:" "simple_math.clib")
+    (list "Benefit:" "No need to copy function definitions")
+    (list "Next:" "Learn to use multiple libraries"))
+)

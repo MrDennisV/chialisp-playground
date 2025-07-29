@@ -1,0 +1,30 @@
+;; Bitwise OR - Set bits and combine flags
+;; Learn logior for bit manipulation
+(mod (number1 number2)
+  (include *standard-cl-24*)
+  
+  ;; logior performs bitwise OR: 0 | 0 = 0, everything else = 1
+  ;; Useful for setting specific bits and combining flags
+  
+  (list
+    (list "Input A:" number1)
+    (list "Input B:" number2)
+    (list "A OR B:" (logior number1 number2))
+    (list "5 OR 3:" (logior 5 3))
+    (list "8 OR 4:" (logior 8 4))
+    (list "Set Bit 0:" (logior number1 1))
+    (list "Set Bit 1:" (logior number1 2))
+    (list "Set Bit 2:" (logior number1 4))
+    (list "Set Multiple:" (logior number1 15))
+    (list "READ Flag:" 1)
+    (list "WRITE Flag:" 2)
+    (list "EXECUTE Flag:" 4)
+    (list "READ + WRITE:" (logior 1 2))
+    (list "ALL Permissions:" (logior 1 (logior 2 4)))
+    (list "Add READ to A:" (logior number1 1))
+    (list "Binary Logic:" "0 | 0 = 0, all others = 1")
+    (list "Concept:" "Set specific bits to 1")
+    (list "Use Cases:" "Combine flags, set bit patterns")
+    (list "Similar To:" "Bitwise OR (|) in other languages")
+  )
+)

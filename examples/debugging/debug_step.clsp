@@ -1,0 +1,25 @@
+;; Step-by-Step Debugging
+;; Simple operations with labels to practice debugging step-by-step
+;; ⚠️ DEBUGGING LIMITATION: Step operations may be inaccurate with macros.
+;; Macros are expanded during compilation and don't maintain precise source location mapping.
+;; You may notice:
+;; - Steps jumping to unexpected locations  
+;; - Breakpoints not hitting exactly where expected
+;; - Some macro-generated code showing as "*macros*" in stack traces
+;; This is a known limitation pending future compiler improvements.
+
+(mod (a)
+  (include *standard-cl-24*)
+  (list 
+    (list "Addition:" (+ a 1))    
+    (list "Subtraction:" (- a 2))    
+    (list "Multiplication:" (* a 3))    
+    (list "Division:" (/ a 4))    
+    (list "Modulus:" (% a 5))    
+    (list "Greater than:" (> a 6))    
+    (list "Equals:" (= a 7))    
+    (list "Bitwise AND:" (logand a 8))    
+    (list "Bitwise OR:" (logior a 9))    
+    (list "Final result:" (+ a 10))    
+  )
+) 

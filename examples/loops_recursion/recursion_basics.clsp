@@ -1,0 +1,41 @@
+;; Recursion Basics - Functions that call themselves
+;; Learn the fundamental concept of recursion with classic examples
+
+(mod (n)
+  (include *standard-cl-24*)
+  
+  ;; Classic factorial function
+  (defun factorial (x)
+    (if (= x 1)
+      1                           ; Base case: stop recursion
+      (* x (factorial (- x 1))))) ; Recursive case: call itself
+  
+  ;; Classic fibonacci function
+  (defun fibonacci (x)
+    (if (> 2 x)
+      x                           ; Base case: fib(0)=0, fib(1)=1
+      (+ (fibonacci (- x 1))      ; Recursive case: fib(n-1) + fib(n-2)
+         (fibonacci (- x 2)))))
+  
+  ;; Sum from 1 to n
+  (defun sum_range (x)
+    (if (= x 1)
+      1                           ; Base case: sum(1) = 1
+      (+ x (sum_range (- x 1))))) ; Recursive case: n + sum(n-1)
+  
+  ;; Count down to 1
+  (defun countdown (x)
+    (if (= x 1)
+      (list 1)                    ; Base case: return [1]
+      (c x (countdown (- x 1))))) ; Recursive case: add x to countdown(x-1)
+  
+  (list
+    (list "Input:" n)
+    (list "Factorial:" (factorial n))
+    (list "Fibonacci:" (fibonacci n))
+    (list "Sum 1 to n:" (sum_range n))
+    (list "Countdown:" (countdown n))
+    (list "Pattern:" "All functions call themselves with smaller input")
+    (list "Key:" "Always need base case to stop recursion")
+  )
+)

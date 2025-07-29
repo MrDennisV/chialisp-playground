@@ -1,0 +1,66 @@
+;; List Processing Patterns - Manual map, filter, reduce implementations
+;; Learn fundamental functional programming patterns using recursion
+
+(mod (input_list)
+  (include *standard-cl-24*)
+  
+  ;; MAP: Apply function to each element (like Array.map in JS)
+  (defun map_double (lst)
+    (if lst
+      (c (* (f lst) 2) (map_double (r lst))) ; Apply *2 to first, recurse on rest
+      ()))                                   ; Empty list → empty result
+  
+  ;; FILTER: Keep elements that match condition (like Array.filter in JS)
+  (defun filter_positive (lst)
+    (if lst
+      (if (> (f lst) 0)
+        (c (f lst) (filter_positive (r lst))) ; Keep positive, continue
+        (filter_positive (r lst)))            ; Skip negative, continue
+      ()))                                    ; Empty list → empty result
+  
+  ;; REDUCE: Combine all elements into single value (like Array.reduce in JS)
+  (defun reduce_sum (lst acc)
+    (if lst
+      (reduce_sum (r lst) (+ acc (f lst)))    ; Add first to accumulator, continue
+      acc))                                   ; Empty list → return accumulator
+  
+  ;; FIND: Get first element that matches condition
+  (defun find_greater_than_3 (lst)
+    (if lst
+      (if (> (f lst) 3)
+        (f lst)                              ; Found it, return element
+        (find_greater_than_3 (r lst)))       ; Not found, continue searching
+      ()))                                   ; Empty list → not found
+  
+  ;; LENGTH: Count elements in list
+  (defun list_length (lst)
+    (if lst
+      (+ 1 (list_length (r lst)))            ; Count 1 + length of rest
+      0))                                     ; Empty list → 0
+  
+  ;; REVERSE: Reverse list order
+  (defun reverse_list (lst acc)
+    (if lst
+      (reverse_list (r lst) (c (f lst) acc)) ; Move first to accumulator, continue
+      acc))                                   ; Empty list → return accumulator
+  
+  ;; APPEND: Join two lists
+  (defun append_lists (lst1 lst2)
+    (if lst1
+      (c (f lst1) (append_lists (r lst1) lst2)) ; Add first of lst1, continue
+      lst2))                                    ; lst1 empty → return lst2
+  
+  (list
+    (list "Input list:" input_list)
+    (list "Map (double each):" (map_double input_list))
+    (list "Filter (positive only):" (filter_positive input_list))
+    (list "Reduce (sum all):" (reduce_sum input_list 0))
+    (list "Find (first > 3):" (find_greater_than_3 input_list))
+    (list "Length:" (list_length input_list))
+    (list "Reverse:" (reverse_list input_list ()))
+    (list "Append with (10 20):" (append_lists input_list (list 10 20)))
+    (list "Pattern:" "Process list recursively: first + process(rest)")
+    (list "Base:" "Empty list () stops recursion")
+    (list "Like:" "Built-in functions in other languages")
+  )
+)

@@ -1,0 +1,20 @@
+;; SHA256 Tree - Hash complex data structures
+;; Learn sha256tree for hashing lists and nested structures
+
+(mod (data)
+  (include *standard-cl-24*)
+  (include "includes/sha256tree.clib")
+  
+  ;; sha256tree vs sha256:
+  ;; - sha256: Only works with atoms (strings, numbers, bytes)
+  ;; - sha256tree: Works with any data structure (lists, nested lists)
+  ;; - sha256tree recursively hashes the structure into a single hash
+  
+  (list
+    (list "Input data:" data)
+    (list "sha256tree hash:" (sha256tree data))
+    (list "Atom example:" (sha256tree "hello"))
+    (list "vs sha256:" (sha256 "hello"))
+    (list "Use case:" "Hash any data structure for signatures")
+  )
+)

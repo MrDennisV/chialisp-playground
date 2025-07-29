@@ -1,0 +1,30 @@
+;; Condition Morphing - Auto-fee enforcement
+;; Learn how to automatically add fees to any transaction
+;; This puzzle intercepts conditions and adds a mandatory fee
+
+(mod (INNER_PUZZLE inner_solution)
+  (include *standard-cl-24*)
+  (include "includes/condition_codes.clib")
+  
+  ;; Condition morphing concept:
+  ;; - Run inner puzzle to get its conditions
+  ;; - Automatically add a mandatory fee condition
+  ;; - Return the modified conditions to blockchain
+  ;; - Use case: Automatic fee collection, service charges
+  
+  ;; INNER_PUZZLE examples:
+  ;; - 2 = simple passthrough (returns conditions as-is)
+  ;; - (mod (conditions) conditions) compiles to 2
+  ;; - For testing: use 2 with conditions like ((51 puzzle_hash amount))
+  
+  ;; Execute inner puzzle and add mandatory fee
+  (c
+    ;; Add mandatory fee of 10 million mojos (0.01 XCH)
+    (list RESERVE_FEE 10000000)
+    
+    ;; Include all conditions from inner puzzle
+    ;; 'a' operator applies INNER_PUZZLE to inner_solution
+    ;; If INNER_PUZZLE=2, this returns inner_solution unchanged
+    (a INNER_PUZZLE inner_solution)
+  )
+)

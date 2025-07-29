@@ -1,0 +1,26 @@
+;; SECP256R1 Signature Verification for NIST P-256 Standard
+;; Learn government/enterprise-grade signature verification in ChiaLisp
+
+(mod (pubkey message signature)
+  (include *standard-cl-24*)
+  
+  (list
+    (list "Purpose:" "NIST P-256 (government standard) signature verification")
+    (list "Your message:" message)
+    (list "Your public key:" pubkey)
+    (list "Your signature:" signature)
+    
+    (list "Section:" "Verification process")
+    (list "Step 1 - Hash message:" (sha256 message))
+    (list "Step 2 - Verify signature:" (if (secp256r1_verify pubkey (sha256 message) signature) "invalid" "valid"))
+    
+    (list "Section:" "Hash sensitivity")
+    (list "Original message hash:" (sha256 message))
+    (list "Modified message hash:" (sha256 (concat message "X")))
+    (list "Small change breaks signature:" (not (= (sha256 message) (sha256 (concat message "X")))))
+    
+    (list "Info:" "SECP256R1 (P-256) is NIST standard used by governments")
+    (list "Usage:" "Enterprise systems and government applications")
+    (list "Difference:" "More regulated than SECP256K1, uses SHA256 instead of Keccac256")
+  )
+)

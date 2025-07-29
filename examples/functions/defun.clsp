@@ -1,0 +1,24 @@
+;; Basic Function Definition with defun
+(mod (number)
+  (include *standard-cl-24*)
+  
+  ;; Simple function
+  (defun double (x)
+    (* x 2))
+  
+  ;; Multi-parameter function  
+  (defun add_numbers (a b)
+    (+ a b))
+  
+  ;; Function with condition
+  (defun is_positive (x)
+    (if (> x 0) "Yes" "No"))
+  
+  (list
+    (list "Input:" number)
+    (list "Double:" (double number))
+    (list "Add with 10:" (add_numbers number 10))
+    (list "Is positive:" (is_positive number))
+    (list "Functions can call others:" (double (add_numbers number 5)))
+  )
+)

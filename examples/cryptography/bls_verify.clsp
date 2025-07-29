@@ -1,0 +1,26 @@
+;; BLS Signature Verification for Chia Native Cryptography
+;; Learn Chia's native signature verification system
+
+(mod (pubkey message signature)
+  (include *standard-cl-24*)
+  
+  (list
+    (list "Purpose:" "Chia-native BLS signature verification")
+    (list "Your message:" message)
+    (list "Your public key (G1):" pubkey)
+    (list "Your signature (G2):" signature)
+    
+    (list "Section:" "Verification process")
+    (list "Step 1 - Hash message:" (sha256 message))
+    (list "Step 2 - Verify signature:" (if (bls_verify signature pubkey (sha256 message)) "invalid" "valid"))
+    
+    (list "Section:" "Hash sensitivity")
+    (list "Original message hash:" (sha256 message))
+    (list "Modified message hash:" (sha256 (concat message "*")))
+    (list "Small change breaks signature:" (not (= (sha256 message) (sha256 (concat message "*")))))
+    
+    (list "Info:" "BLS is Chia's native signature scheme")
+    (list "Usage:" "Optimal for blockchain transactions and smart contracts")
+    (list "Advantage:" "Signature aggregation and efficient verification")
+  )
+)

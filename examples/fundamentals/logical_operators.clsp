@@ -1,0 +1,29 @@
+;; Logical Operators
+;; not, all, any for combining conditions
+(mod (flag1 flag2)
+  (include *standard-cl-24*)
+  
+  (list
+    ;; Input values
+    (list "flag1:" flag1)
+    (list "flag2:" flag2)
+    
+    ;; NOT operator - inverts truthiness (0 becomes true, non-zero becomes false)
+    (list "not flag1:" (not flag1))
+    (list "not flag2:" (not flag2))
+    
+    ;; ALL operator - AND logic (true only if ALL arguments are non-zero)
+    (list "all(flag1, flag2):" (all flag1 flag2))
+    (list "all(1, 1):" (all 1 1))       ; Both true = true
+    (list "all(1, 0):" (all 1 0))       ; One false = false
+    
+    ;; ANY operator - OR logic (true if ANY argument is non-zero)
+    (list "any(flag1, flag2):" (any flag1 flag2))
+    (list "any(0, 0):" (any 0 0))       ; Both false = false
+    (list "any(0, 1):" (any 0 1))       ; One true = true
+    
+    ;; Combining operators - shows composition
+    (list "all(flag1, not flag2):" (all flag1 (not flag2)))  ; flag1 AND (NOT flag2)
+    (list "any(not flag1, flag2):" (any (not flag1) flag2))  ; (NOT flag1) OR flag2
+  )
+)

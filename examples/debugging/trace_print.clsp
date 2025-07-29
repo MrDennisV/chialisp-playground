@@ -1,0 +1,44 @@
+;; Trace Print - Debug Output with cldb
+;; Modern ChiaLisp debugging feature
+
+(mod (number)
+  (include *standard-cl-24*)
+  
+  ;; Trace printing: diagnostic output during execution
+  ;; Only works with cldb debugger using -p flag
+  
+  (defun print_debug (label value) 
+    (i (all "$print$" label value) value value))
+  
+  (defun collatz_with_trace (n steps)
+    (if (> 2 (print_debug (list "collatz step" steps) n)) 
+      steps 
+      (let ((next_step (+ steps 1)))
+        (if (logand 1 n)
+          (collatz_with_trace (+ 1 (* 3 n)) next_step)
+          (collatz_with_trace (/ n 2) next_step)
+        ))))
+  
+  (defun factorial_with_trace (n)
+    (if (= n 0)
+      (print_debug "factorial base case" 1)
+      (let ((result (* n (factorial_with_trace (- n 1)))))
+        (print_debug (list "factorial" n) result))))
+  
+  (defun fibonacci_with_trace (n)
+    (if (> 2 n)
+      (print_debug (list "fib base" n) n)
+      (let ((result (+ (fibonacci_with_trace (- n 1)) 
+                       (fibonacci_with_trace (- n 2)))))
+        (print_debug (list "fib" n) result))))
+  
+  (list
+    (list "Collatz steps:" (collatz_with_trace number 0))
+    (list "Factorial:" (factorial_with_trace number))
+    (list "Fibonacci:" (fibonacci_with_trace number))
+    (list "Usage:" "Run with 'cldb -p file.clsp args'")
+    (list "Print function:" "(i (all \"$print$\" label value) value value)")
+    (list "Debug output:" "Shows intermediate values during execution")
+    (list "Like:" "console.log in JS, print() in Python")
+  )
+)

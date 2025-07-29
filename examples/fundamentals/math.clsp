@@ -1,0 +1,11 @@
+;; Math Operations
+(mod (a b)
+  (include *standard-cl-24*)
+  (list 
+    (list "Addition:" (+ a b))
+    (list "Subtraction:" (- a b))
+    (list "Multiplication:" (* a b))
+    (list "Division:" (/ a b))
+    (list "Modulo:" (% a b))
+  )
+) 

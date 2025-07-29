@@ -1,0 +1,29 @@
+;; Curry - Data Solidification in Contracts
+;; Learn how curry transforms parameters into immutable contract data
+
+(mod (OPERATION BASE_VALUE input)
+  (include *standard-cl-24*)
+  
+  ;; This program demonstrates curry's core concept
+  ;; Parameters: OPERATION, BASE_VALUE (curried), input (solution)
+  ;; If curried with (OPERATION BASE_VALUE), only 'input' remains as parameter
+  
+  (defun calculate (op base val)
+    (if (= op "add")
+        (+ base val)
+        (if (= op "multiply")
+            (* base val)
+            0)))
+  
+  (list
+    (list "Current parameters:" (list OPERATION BASE_VALUE input))
+    (list "Calculation result:" (calculate OPERATION BASE_VALUE input))
+    (list "Before curry:" "3 parameters (OPERATION, BASE_VALUE, input)")
+    (list "After curry:" "1 parameter (input) - others solidified")
+    (list "Curry convention:" "UPPERCASE params are meant to be curried")
+    (list "Puzzle hash:" "Changes when curried - creates new contract")
+    (list "Contract security:" "Curried parameters cannot be modified")
+    (list "Example use:" "curry('add', 10) creates specialized add-10 contract")
+    (list "Benefit:" "General program becomes specialized contract")
+    (list "Key concept:" "Data solidification for blockchain immutability"))
+)

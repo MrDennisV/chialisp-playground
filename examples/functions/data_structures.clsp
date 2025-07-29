@@ -1,0 +1,31 @@
+;; Data Structures - Organizing data with custom functions
+;; Learn how to create "objects" using lists and accessor functions
+;; Like structs in C or objects in JavaScript
+
+(mod (person_data)
+  (include *standard-cl-24*)
+  
+  ;; Constructor function - creates a "person object"
+  (defun make-person (name age city)
+    (list name age city))
+  
+  ;; Accessor functions - get specific fields
+  (defun get-name (person) (f person))
+  (defun get-age (person) (f (r person)))
+  (defun get-city (person) (f (r (r person))))
+  
+  ;; Predicate function - check properties
+  (defun is-adult (person)
+    (> (get-age person) 18))
+  
+  ;; Formatter function - display data nicely
+  (defun person-info (person)
+    (list
+      (list "Name:" (get-name person))
+      (list "Age:" (get-age person))
+      (list "City:" (get-city person))
+      (list "Adult:" (if (is-adult person) "Yes" "No"))))
+  
+  ;; person_data should be like ("Alice" 25 "New York")
+  (person-info person_data)
+) 

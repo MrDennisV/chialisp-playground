@@ -1,0 +1,26 @@
+;; Quote Operator (q) - Code vs Data
+;; Learn the fundamental difference between code and data in ChiaLisp
+
+(mod (value)
+  (include *standard-cl-24*)
+  
+  ;; q operator: treats expression as DATA, not code
+  ;; This is fundamental to understanding ChiaLisp
+  
+  (list
+    (list "Input Value:" value)
+    (list "Normal Math:" (+ 2 3))              ; Evaluates to 5
+    (list "Quoted Number:" (q . 5))            ; Just the number 5 as data
+    (list "Quoted Symbol:" (q . hello))        ; Symbol 'hello' as data  
+    (list "Quoted List:" (q . (1 2 3)))        ; List (1 2 3) as data
+    (list "Evaluated List:" (list 1 2 3))      ; Constructs list [1,2,3]
+    (list "Quoted Addition:" (q . (+ 10 20)))  ; Data: (+ 10 20), not 30
+    (list "Check Symbol:" (= value (q . hello))) ; Compare with quoted symbol
+    (list "Check Number:" (= value (q . 42)))    ; Compare with quoted number
+    (list "Key Concept:" "q treats code as literal data")
+    (list "Normal Code:" "Gets evaluated and executed")
+    (list "Quoted Code:" "Becomes data structure") 
+    (list "Use Case:" "Compare symbols and store patterns")
+    (list "Similar To:" "Strings/literals in other languages")
+  )
+)

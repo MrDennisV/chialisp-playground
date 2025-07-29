@@ -1,0 +1,29 @@
+;; Bitwise AND - Extract bits and check conditions
+;; Learn logand for bit manipulation
+(mod (number1 number2)
+  (include *standard-cl-24*)
+  
+  ;; logand performs bitwise AND: 1 & 1 = 1, everything else = 0
+  ;; Useful for extracting specific bits and checking conditions
+  
+  (list
+    (list "Input A:" number1)
+    (list "Input B:" number2)
+    (list "A AND B:" (logand number1 number2))
+    (list "255 AND 15:" (logand 255 15))
+    (list "5 AND 3:" (logand 5 3))
+    (list "Last Bit A:" (logand number1 1))
+    (list "Last 4 Bits A:" (logand number1 15))
+    (list "Last 8 Bits A:" (logand number1 255))
+    (list "Is A Even:" (= (logand number1 1) 0))
+    (list "Is A Odd:" (= (logand number1 1) 1))
+    (list "A Has Bit 0:" (> (logand number1 1) 0))
+    (list "A Has Bit 1:" (> (logand number1 2) 0))
+    (list "A Has Bit 2:" (> (logand number1 4) 0))
+    (list "Mask Example:" (logand number1 7))
+    (list "Binary Logic:" "1 & 1 = 1, all others = 0")
+    (list "Concept:" "Extract specific bits from numbers")
+    (list "Use Cases:" "Check even/odd, extract bit patterns")
+    (list "Similar To:" "Bitwise AND (&) in other languages")
+  )
+)

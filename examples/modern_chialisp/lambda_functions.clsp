@@ -1,0 +1,61 @@
+;; Lambda Functions - Anonymous Functions
+;; Learn to create and use anonymous functions
+(mod (numbers)
+  (include *standard-cl-24*)
+  
+  ;; lambda: anonymous functions (functions as values)
+  ;; Apply with 'a' operator like any function
+  
+  ;; Simple map function to apply lambda to list
+  (defun simple_map (func lst)
+    (if lst
+      (c (a func (list (f lst))) (simple_map func (r lst)))
+      ()))
+  
+  (list
+    (list "Input:" numbers)
+    (list "Lambda Concept:" "Anonymous functions as values")
+    
+    (list "Double Lambda:" 
+      (let ((double_func (lambda (num) (* num 2)))) 
+        (if numbers 
+          (a double_func (list (f numbers))) 
+          "Need numbers")))
+    
+    (list "Square Lambda:" 
+      (let ((square_func (lambda (num) (* num num)))) 
+        (if numbers 
+          (a square_func (list (f numbers))) 
+          "Need numbers")))
+    
+    (list "Add One Lambda:" 
+      (let ((add_one (lambda (num) (+ num 1)))) 
+        (if numbers 
+          (a add_one (list (f numbers))) 
+          "Need numbers")))
+    
+    (list "Map Double:" 
+      (if numbers 
+        (simple_map (lambda (num) (* num 2)) numbers)
+        "Need numbers"))
+    
+    (list "Map Square:" 
+      (if numbers 
+        (simple_map (lambda (num) (* num num)) numbers)
+        "Need numbers"))
+    
+    (list "Map Add 10:" 
+      (if numbers 
+        (simple_map (lambda (num) (+ num 10)) numbers)
+        "Need numbers"))
+    
+    (list "Lambda Syntax:" "(lambda (params) body)")
+    (list "Apply Lambda:" "Use 'a' operator to call")
+    (list "Key Feature:" "Functions as first-class values")
+    (list "vs Defun:" "lambda is anonymous, defun is named")
+    (list "Use Cases:" "Map, filter, transform data")
+    (list "Map Pattern:" "Apply function to every list element")
+    (list "Concept:" "Functional programming basics")
+    (list "Similar To:" "Arrow functions in JavaScript, lambdas in Python")
+  )
+)

@@ -1,0 +1,653 @@
+{
+  "metadata": {
+    "version": "4.0.0",
+    "title": "ChiaLisp Academy",
+    "description": "Learn ChiaLisp step by step - From basics to advanced with pedagogical progression",
+    "lastUpdated": "2025-01-17"
+  },
+  "welcome": {
+    "name": "🎓 Welcome",
+    "file": "examples/welcome.clsp",
+    "icon": "fas fa-graduation-cap",
+    "description": "Welcome to ChiaLisp Academy - Start your journey here",
+    "solutionArgs": "()",
+    "isWelcome": true
+  },
+  "modules": {
+    "fundamentals": {
+      "name": "🌱 Fundamentals",
+      "description": "Core concepts, basic syntax, and bitwise operations",
+      "level": 1,
+      "icon": "fas fa-seedling",
+      "examples": {
+        "hello": {
+          "name": "Hello World",
+          "file": "examples/fundamentals/hello.clsp",
+          "description": "Your first ChiaLisp program",
+          "solutionArgs": "()",
+          "icon": "fas fa-smile",
+          "order": 1
+        },
+        "comments": {
+          "name": "Comments",
+          "file": "examples/fundamentals/comments.clsp",
+          "description": "Document your code like any language",
+          "solutionArgs": "('example')",
+          "icon": "fas fa-comment",
+          "order": 2
+        },
+        "variables": {
+          "name": "Variables",
+          "file": "examples/fundamentals/variables.clsp",
+          "description": "Parameters and data (like function parameters)",
+          "solutionArgs": "('Alice' 25)",
+          "icon": "fas fa-tag",
+          "order": 3
+        },
+        "atoms_and_nil": {
+          "name": "Basic Types",
+          "file": "examples/fundamentals/atoms_and_nil.clsp",
+          "description": "Numbers, strings, nil (like null/None)",
+          "solutionArgs": "(42 'hello' 0xFF)",
+          "icon": "fas fa-atom",
+          "order": 4
+        },
+        "math": {
+          "name": "Math Operations",
+          "file": "examples/fundamentals/math.clsp",
+          "description": "Basic arithmetic: +, -, *, /, % (like any language)",
+          "solutionArgs": "(15 5)",
+          "icon": "fas fa-calculator",
+          "order": 5
+        },
+        "strings": {
+          "name": "Strings",
+          "file": "examples/fundamentals/strings.clsp",
+          "description": "Text handling - concat, substr, strlen, >s (like strings in other languages)",
+          "solutionArgs": "('ChiaLisp' 5)",
+          "icon": "fas fa-quote-left",
+          "order": 6
+        },
+        "conditions": {
+          "name": "Conditions",
+          "file": "examples/fundamentals/conditions.clsp",
+          "description": "If-else (like any language)",
+          "solutionArgs": "(12)",
+          "icon": "fas fa-code-branch",
+          "order": 7
+        },
+        "comparison_real": {
+          "name": "Comparisons",
+          "file": "examples/fundamentals/comparison_real.clsp",
+          "description": "Operators: =, >, < (like ==, >, <)",
+          "solutionArgs": "(10 20)",
+          "icon": "fas fa-balance-scale",
+          "order": 8
+        },
+        "logical_operators": {
+          "name": "Logic Operators",
+          "file": "examples/fundamentals/logical_operators.clsp",
+          "description": "AND, OR, NOT (like &&, ||, !)",
+          "solutionArgs": "(1 0)",
+          "icon": "fas fa-project-diagram",
+          "order": 9
+        },
+        "lists": {
+          "name": "Basic Lists",
+          "file": "examples/fundamentals/list.clsp",
+          "description": "Lists (like arrays/lists but functional)",
+          "solutionArgs": "((1 2 3 4 5))",
+          "icon": "fas fa-list",
+          "order": 10
+        },
+        "constants_defconstant": {
+          "name": "Constants",
+          "file": "examples/fundamentals/constants_defconstant.clsp",
+          "description": "Constants (like const/final)",
+          "solutionArgs": "()",
+          "icon": "fas fa-anchor",
+          "order": 11
+        },
+        "quote_operator": {
+          "name": "Quote Operator (q)",
+          "file": "examples/fundamentals/quote_operator.clsp",
+          "description": "Code vs data - treat expressions as literal data",
+          "solutionArgs": "('foo')",
+          "icon": "fas fa-quote-left",
+          "order": 12
+        },
+        "ash": {
+          "name": "Arithmetic Shift",
+          "file": "examples/fundamentals/ash.clsp",
+          "description": "Arithmetic shift - multiply/divide by powers of 2",
+          "solutionArgs": "(8 2)",
+          "icon": "fas fa-arrows-alt-h",
+          "order": 13
+        },
+        "logand": {
+          "name": "Bitwise AND",
+          "file": "examples/fundamentals/logand.clsp",
+          "description": "Bitwise AND - extract bits and check conditions",
+          "solutionArgs": "(255 15)",
+          "icon": "fas fa-circle",
+          "order": 14
+        },
+        "logior": {
+          "name": "Bitwise OR",
+          "file": "examples/fundamentals/logior.clsp",
+          "description": "Bitwise OR - set bits and combine flags",
+          "solutionArgs": "(5 3)",
+          "icon": "fas fa-circle",
+          "order": 15
+        },
+        "lognot": {
+          "name": "Bitwise NOT",
+          "file": "examples/fundamentals/lognot.clsp",
+          "description": "Bitwise NOT - flip bits and create masks",
+          "solutionArgs": "(7)",
+          "icon": "fas fa-circle",
+          "order": 16
+        },
+        "logxor": {
+          "name": "Bitwise XOR",
+          "file": "examples/fundamentals/logxor.clsp",
+          "description": "Bitwise XOR - toggle bits and find differences",
+          "solutionArgs": "(5 3)",
+          "icon": "fas fa-circle",
+          "order": 17
+        },
+        "lsh": {
+          "name": "Logical Shift",
+          "file": "examples/fundamentals/lsh.clsp",
+          "description": "Logical shift - unsigned bit operations",
+          "solutionArgs": "(8 2)",
+          "icon": "fas fa-arrows-alt-h",
+          "order": 18
+        }
+      }
+    },
+    "functions": {
+      "name": "⚙️ Functions",
+      "description": "Function definition and programming",
+      "level": 2,
+      "icon": "fas fa-cogs",
+      "examples": {
+        "defun": {
+          "name": "Function Definition",
+          "file": "examples/functions/defun.clsp",
+          "description": "Basic function definition with defun",
+          "solutionArgs": "(5)",
+          "icon": "fas fa-cog",
+          "order": 1
+        },
+        "defun_inline": {
+          "name": "Inline Functions",
+          "file": "examples/functions/defun_inline.clsp",
+          "description": "Performance optimization (like inline in C++)",
+          "solutionArgs": "(10)",
+          "icon": "fas fa-tachometer-alt",
+          "order": 2
+        },
+        "data_structures": {
+          "name": "Data Structures",
+          "file": "examples/functions/data_structures.clsp",
+          "description": "Organizing data with custom functions (like structs/objects)",
+          "solutionArgs": "(('Alice' 25 'New York'))",
+          "icon": "fas fa-database",
+          "order": 3
+        },
+        "apply_operator": {
+          "name": "Apply Operator (a)",
+          "file": "examples/functions/apply_operator.clsp",
+          "description": "Call functions with argument lists (like Function.apply)",
+          "solutionArgs": "(5 'square')",
+          "icon": "fas fa-play-circle",
+          "order": 4
+        }
+      }
+    },
+    "loops_recursion": {
+      "name": "🔄 Loops & Recursion",
+      "description": "Recursion patterns and loop equivalencies",
+      "level": 2.5,
+      "icon": "fas fa-sync-alt",
+      "examples": {
+        "recursion_basics": {
+          "name": "Recursion Basics",
+          "file": "examples/loops_recursion/recursion_basics.clsp",
+          "description": "Basic recursive functions (factorial, fibonacci)",
+          "solutionArgs": "(5)",
+          "icon": "fas fa-sync",
+          "order": 1
+        },
+        "for_loops": {
+          "name": "For Loop Equivalents",
+          "file": "examples/loops_recursion/for_loops.clsp",
+          "description": "How to simulate for loops with recursion",
+          "solutionArgs": "(5)",
+          "icon": "fas fa-repeat",
+          "order": 2
+        },
+        "while_loops": {
+          "name": "While Loop Equivalents",
+          "file": "examples/loops_recursion/while_loops.clsp",
+          "description": "How to simulate while loops with recursion",
+          "solutionArgs": "(10)",
+          "icon": "fas fa-redo-alt",
+          "order": 3
+        },
+        "list_processing": {
+          "name": "List Processing Patterns",
+          "file": "examples/loops_recursion/list_processing.clsp",
+          "description": "Manual map, filter, reduce patterns",
+          "solutionArgs": "((1 2 3 4 5))",
+          "icon": "fas fa-list",
+          "order": 4
+        }
+      }
+    },
+    "modern": {
+      "name": "🚀 Modern Syntax",
+      "description": "Modern ChiaLisp features",
+      "level": 3,
+      "icon": "fas fa-rocket",
+      "examples": {
+        "let_bindings": {
+          "name": "Local Variables (let)",
+          "file": "examples/modern_chialisp/let_and_let_star.clsp",
+          "description": "Local variables (like let/const in JS, variables in Python)",
+          "solutionArgs": "(10)",
+          "icon": "fas fa-code",
+          "order": 1
+        },
+        "assign_forms": {
+          "name": "Assign Forms",
+          "file": "examples/modern_chialisp/assign_forms.clsp",
+          "description": "Advanced assignment with dependency resolution",
+          "solutionArgs": "(15)",
+          "icon": "fas fa-equals",
+          "order": 2
+        },
+        "at_destructuring": {
+          "name": "@ Destructuring",
+          "file": "examples/modern_chialisp/at_destructuring.clsp",
+          "description": "At-capture patterns - bind container and contents",
+          "solutionArgs": "((1 2 3))",
+          "icon": "fas fa-at",
+          "order": 3
+        },
+        "lambda_functions": {
+          "name": "Lambda Functions",
+          "file": "examples/modern_chialisp/lambda_functions.clsp",
+          "description": "Anonymous functions with closures",
+          "solutionArgs": "((1 -2 3 -4 5))",
+          "icon": "fas fa-function",
+          "order": 4
+        },
+        "defmac_basics": {
+          "name": "Defmac Basics",
+          "file": "examples/modern_chialisp/defmac_basics.clsp",
+          "description": "Modern macro system for custom syntax",
+          "solutionArgs": "(1 10)",
+          "icon": "fas fa-magic",
+          "order": 5
+        },
+        "defconst_compile_time": {
+          "name": "Defconst (Compile-Time)",
+          "file": "examples/modern_chialisp/defconst_compile_time.clsp",
+          "description": "Compile-time constants with computation",
+          "solutionArgs": "(42)",
+          "icon": "fas fa-clock",
+          "order": 6
+        },
+        "version_sigils": {
+          "name": "Version Sigils",
+          "file": "examples/modern_chialisp/version_sigils.clsp",
+          "description": "Language version control for reproducible compilation",
+          "solutionArgs": "('production')",
+          "icon": "fas fa-code-branch",
+          "order": 7
+        },
+        "embed_file": {
+          "name": "Embed File",
+          "file": "examples/modern_chialisp/embed_file.clsp",
+          "description": "Include external files at compile time",
+          "solutionArgs": "('binary')",
+          "icon": "fas fa-file-import",
+          "order": 8
+        }
+      }
+    },
+    "debugging": {
+      "name": "🐛 Debugging",
+      "description": "Debugging techniques and program inspection",
+      "level": 4,
+      "icon": "fas fa-bug",
+      "examples": {
+        "x_operator": {
+          "name": "X Operator",
+          "file": "examples/debugging/x_operator.clsp",
+          "description": "Program termination with x operator",
+          "solutionArgs": "(10)",
+          "icon": "fas fa-times-circle",
+          "order": 1
+        },
+        "debug_step": {
+          "name": "Step-by-Step Debug",
+          "file": "examples/debugging/debug_step.clsp",
+          "description": "Basic step-by-step debugging",
+          "solutionArgs": "(10)",
+          "icon": "fas fa-step-forward",
+          "order": 2
+        },
+        "debug_step_functions": {
+          "name": "Step In/Out Functions",
+          "file": "examples/debugging/debug_step_functions.clsp",
+          "description": "Step in/out debugging with functions",
+          "solutionArgs": "(5)",
+          "icon": "fas fa-arrow-down",
+          "order": 3
+        },
+        "debug_step_next": {
+          "name": "Step Next/Over",
+          "file": "examples/debugging/debug_step_next.clsp",
+          "description": "Step next/over debugging",
+          "solutionArgs": "(8)",
+          "icon": "fas fa-arrow-right",
+          "order": 4
+        },
+        "debug_environment": {
+          "name": "Environment Access",
+          "file": "examples/debugging/debug_environment.clsp",
+          "description": "Environment debugging with @ operator",
+          "solutionArgs": "(15 25 35)",
+          "icon": "fas fa-eye",
+          "order": 5
+        },
+        "debug_evaluation": {
+          "name": "Dynamic Evaluation",
+          "file": "examples/debugging/debug_evaluation.clsp",
+          "description": "Dynamic evaluation with apply operator",
+          "solutionArgs": "(42)",
+          "icon": "fas fa-play-circle",
+          "order": 6
+        },
+        "trace_print": {
+          "name": "Trace Print",
+          "file": "examples/debugging/trace_print.clsp",
+          "description": "Debug output with cldb -p flag",
+          "solutionArgs": "(5)",
+          "icon": "fas fa-print",
+          "order": 7
+        }
+      }
+    },
+    "libraries": {
+      "name": "📚 Libraries",
+      "description": "Using and creating code libraries",
+      "level": 4.5,
+      "icon": "fas fa-book",
+      "examples": {
+        "why_includes": {
+          "name": "Why Libraries?",
+          "file": "examples/includes_tutorial/includes_01_why_includes.clsp",
+          "description": "Understanding the problem that libraries solve",
+          "solutionArgs": "(42)",
+          "icon": "fas fa-question-circle",
+          "order": 1
+        },
+        "using_library": {
+          "name": "Using a Library",
+          "file": "examples/includes_tutorial/includes_02_using_library.clsp",
+          "description": "Basic library usage with include",
+          "solutionArgs": "(42)",
+          "icon": "fas fa-book-open",
+          "order": 2
+        },
+        "multiple_libraries": {
+          "name": "Multiple Libraries",
+          "file": "examples/includes_tutorial/includes_03_multiple_libraries.clsp",
+          "description": "Combining multiple libraries",
+          "solutionArgs": "(42)",
+          "icon": "fas fa-books",
+          "order": 3
+        }
+      }
+    },
+    "curry": {
+      "name": "🍛 Curry",
+      "description": "Data solidification in contracts with curry",
+      "level": 5,
+      "icon": "fas fa-layer-group",
+      "examples": {
+        "curry_understanding": {
+          "name": "Curry - Data Solidification",
+          "file": "examples/curry_module/curry_understanding.clsp",
+          "description": "How curry transforms parameters into immutable contract data",
+          "solutionArgs": "(7)",
+          "curryArgs": [
+            "'add'",
+            "10"
+          ],
+          "icon": "fas fa-lock",
+          "order": 1
+        }
+      }
+    },
+    "cryptography": {
+      "name": "🔐 Cryptography",
+      "description": "Basic cryptographic functions",
+      "level": 6,
+      "icon": "fas fa-lock",
+      "examples": {
+        "sha256": {
+          "name": "SHA256",
+          "file": "examples/cryptography/sha256.clsp",
+          "description": "SHA256 hashing (like MD5/SHA in other languages)",
+          "solutionArgs": "('hello world')",
+          "icon": "fas fa-key",
+          "order": 1
+        },
+        "keccak256": {
+          "name": "Keccak256",
+          "file": "examples/cryptography/keccak256.clsp",
+          "description": "Keccak256 hashing for Ethereum",
+          "solutionArgs": "('test data')",
+          "icon": "fas fa-ethereum",
+          "order": 2
+        },
+        "secp256k1_verify": {
+          "name": "SECP256K1 Verify",
+          "file": "examples/cryptography/secp256k1_verify.clsp",
+          "description": "Complete flow: message → keccak256 hash → verify Ethereum-style signature",
+          "solutionArgs": "(0x036434a27472961981385127ce0fdadce785868edb6f16bdae4b050d9e7e204fbc 'Message to sign' 0xd1cf8b5a315bc5cb1fae7d14df1b9323571f45e115e8da0cd386d58a14de1ba7 0x3445377bb17e05babd81eca42dcd7bd9320a3e0fd593dcdff78308d2bb5d037066b902c38f90566f4c38d536644cb44e15974cf5f7662862ce5e7ab42db0f85e)",
+          "icon": "fas fa-signature",
+          "order": 3
+        },
+        "secp256r1_verify": {
+          "name": "SECP256R1 Verify",
+          "file": "examples/cryptography/secp256r1_verify.clsp",
+          "description": "Complete flow: message → hash → verify NIST P-256 signature",
+          "solutionArgs": "(0x0271da9eab11a797719ef1eb506405121ab5ba7981664c5312381199fdd65e003d 'Message to sign' 0x81ba1802fbe31e89054894da19815929b81b7cc02d7dd4e21968d9383cc0bfbe8d2a80df2ff38e342419194adec2d94532ea6bcca9655cac329d5d23f277fd2d)",
+          "icon": "fas fa-signature",
+          "order": 4
+        },
+        "bls_verify": {
+          "name": "BLS Verify",
+          "file": "examples/cryptography/bls_verify.clsp",
+          "description": "Complete flow: message → hash → verify Chia-native BLS signature",
+          "solutionArgs": "(0x88ae83c1777027b3df993a126f625e648a59408521539ddbc03ae116b382a11143bf987aa74f7989dfb599df30823a8a 'Message to sign' 0x98c12d3a2b0ea259cccb1cc92e2b2b113cd517744ca2699990da26580858e0c1d2f9f67c67ed58ca97dc1e8997d2dd0905a884e9cd2578946a6c8bf880703fcb9c0cf72d7940e14fde895787109f24585cb4b5afef67329dfe36a30909d52c0f)",
+          "icon": "fas fa-key",
+          "order": 5
+        },
+        "sha256tree": {
+          "name": "SHA256 Tree",
+          "file": "examples/cryptography/sha256tree.clsp",
+          "description": "Hash complex data structures and lists",
+          "solutionArgs": "((1 2 (3 4) 5))",
+          "icon": "fas fa-tree",
+          "order": 6
+        }
+      }
+    },
+    "blockchain": {
+      "name": "⛓️ Blockchain",
+      "description": "Smart contracts and blockchain primitives",
+      "level": 7,
+      "icon": "fas fa-link",
+      "examples": {
+        "condition_codes": {
+          "name": "Condition Codes",
+          "file": "examples/blockchain/condition_codes.clsp",
+          "description": "Fundamental blockchain condition codes",
+          "solutionArgs": "(0x123456789abcdef 1000000000000 'Hello Blockchain')",
+          "icon": "fas fa-code",
+          "order": 1
+        },
+        "all_condition_codes": {
+          "name": "Complete Condition Reference",
+          "file": "examples/blockchain/all_condition_codes.clsp",
+          "description": "Comprehensive reference of all Chia condition codes",
+          "solutionArgs": "(0x123456789abcdef 1000000000000 'Complete Demo' 0x88ae83c1777027b3df993a126f625e648a59408521539ddbc03ae116b382a11143bf987aa74f7989dfb599df30823a8a 0xabcdef1234567890 1640995200 100000 0x0000000000000000 1640995200 100000)",
+          "icon": "fas fa-list-alt",
+          "order": 1.5
+        },
+        "password_protection": {
+          "name": "Password Protection",
+          "file": "examples/blockchain/password_protection.clsp",
+          "description": "Simple password-protected coin",
+          "solutionArgs": "('secret123' 0x123456789abcdef 1000000000000)",
+          "icon": "fas fa-lock",
+          "order": 2
+        },
+        "piggybank": {
+          "name": "Piggybank",
+          "file": "examples/blockchain/piggybank.clsp",
+          "description": "Time-locked savings account",
+          "solutionArgs": "(3600 0x123456789abcdef 1000000000000)",
+          "icon": "fas fa-piggy-bank",
+          "order": 3
+        },
+        "inner_puzzles": {
+          "name": "Inner Puzzles",
+          "file": "examples/blockchain/inner_puzzles.clsp",
+          "description": "Composable puzzle architecture",
+          "solutionArgs": "((51 0x987654321fedcba 500000000000))",
+          "curryArgs": [
+            "0x123456789abcdef",
+            "2"
+          ],
+          "icon": "fas fa-puzzle-piece",
+          "order": 4
+        },
+        "condition_morphing": {
+          "name": "Condition Morphing",
+          "file": "examples/blockchain/condition_morphing.clsp",
+          "description": "Auto-fee enforcement for transactions",
+          "solutionArgs": "((51 0x123456789abcdef 1000000000000))",
+          "curryArgs": [
+            "2"
+          ],
+          "icon": "fas fa-exchange-alt",
+          "order": 5
+        },
+        "announcements": {
+          "name": "Announcements",
+          "file": "examples/blockchain/announcements.clsp",
+          "description": "Coordinating multiple coin spends",
+          "solutionArgs": "(1 'test_message' 0x123456789abcdef 1000000000000)",
+          "icon": "fas fa-bullhorn",
+          "order": 6
+        }
+      }
+    },
+    "includes": {
+      "name": "📚 Libraries (.clib)",
+      "description": "Reusable code libraries and utilities",
+      "level": 10,
+      "icon": "fas fa-code-branch",
+      "examples": {
+        "math_helpers": {
+          "name": "Math Helpers (.clib)",
+          "file": "examples/includes/math_helpers.clib",
+          "description": "Mathematical functions library",
+          "solutionArgs": "()",
+          "isLibrary": true,
+          "libraryType": "clib",
+          "icon": "fas fa-calculator",
+          "order": 1
+        },
+        "validation_helpers": {
+          "name": "Validation Helpers (.clib)",
+          "file": "examples/includes/validation_helpers.clib",
+          "description": "Data validation functions",
+          "solutionArgs": "()",
+          "isLibrary": true,
+          "libraryType": "clib",
+          "icon": "fas fa-check-circle",
+          "order": 2
+        },
+        "list_utils": {
+          "name": "List Utils (.clib)",
+          "file": "examples/includes/list_utils.clib",
+          "description": "List manipulation utilities",
+          "solutionArgs": "()",
+          "isLibrary": true,
+          "libraryType": "clib",
+          "icon": "fas fa-list",
+          "order": 3
+        },
+        "string_utils": {
+          "name": "String Utils (.clib)",
+          "file": "examples/includes/string_utils.clib",
+          "description": "String processing utilities",
+          "solutionArgs": "()",
+          "isLibrary": true,
+          "libraryType": "clib",
+          "icon": "fas fa-quote-left",
+          "order": 4
+        },
+        "simple_math": {
+          "name": "Simple Math (.clib)",
+          "file": "examples/includes/simple_math.clib",
+          "description": "Basic math functions for tutorials",
+          "solutionArgs": "()",
+          "isLibrary": true,
+          "libraryType": "clib",
+          "icon": "fas fa-plus",
+          "order": 5
+        },
+        "simple_validation": {
+          "name": "Simple Validation (.clib)",
+          "file": "examples/includes/simple_validation.clib",
+          "description": "Basic validation functions",
+          "solutionArgs": "()",
+          "isLibrary": true,
+          "libraryType": "clib",
+          "icon": "fas fa-shield-alt",
+          "order": 6
+        },
+        "condition_codes": {
+          "name": "Condition Codes (.clib)",
+          "file": "examples/includes/condition_codes.clib",
+          "description": "Chia blockchain condition opcodes",
+          "solutionArgs": "()",
+          "isLibrary": true,
+          "libraryType": "clib",
+          "icon": "fas fa-code",
+          "order": 7
+        },
+        "hello": {
+          "name": "Hello (.txt)",
+          "file": "examples/includes/hello.txt",
+          "description": "Simple hello world text file",
+          "solutionArgs": "()",
+          "isLibrary": true,
+          "libraryType": "txt",
+          "icon": "fas fa-file-alt",
+          "order": 8
+        }
+      }
+    }
+  }
+}

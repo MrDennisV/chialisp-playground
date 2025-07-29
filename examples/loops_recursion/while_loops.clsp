@@ -1,0 +1,55 @@
+;; While Loop Equivalents - How to simulate while loops with recursion
+;; Learn how ChiaLisp replaces while loops with conditional recursion
+
+(mod (n)
+  (include *standard-cl-24*)
+  
+  ;; Equivalent to: while(x > 0) { x = x / 2; count++ }
+  (defun halve_until_zero (x count)
+    (if (> x 0)
+      (halve_until_zero (/ x 2) (+ count 1)) ; Continue while x > 0
+      count))                                ; Stop when x <= 0, return count
+  
+  ;; Equivalent to: while(x < target) { x = x * 2 }
+  (defun double_until_target (x target)
+    (if (> target x)
+      (double_until_target (* x 2) target)   ; Continue while x < target
+      x))                                    ; Stop when x >= target, return x
+  
+  
+  ;; Equivalent to: while(condition) { collect valid items }
+  (defun collect_while_positive (lst)
+    (if (not lst)
+      ()                                     ; Stop when list empty
+      (if (> (f lst) 0)
+        (c (f lst) (collect_while_positive (r lst))) ; Continue if positive
+        ())))                                        ; Stop at first non-positive
+  
+  ;; Equivalent to: while(attempts < max && not found) { search }
+  (defun find_value (lst target attempts max_attempts)
+    (if (= attempts max_attempts)
+      "Max attempts reached"               ; Stop when max attempts
+      (if (not lst)
+        "Not found"                        ; Stop when list empty
+        (if (= (f lst) target)
+          "Found!"                         ; Stop when found
+          (find_value (r lst) target (+ attempts 1) max_attempts))))) ; Continue searching
+  
+  ;; Equivalent to: x = 10; while(x > 1) { x = x - 1; sum += x }
+  (defun sum_countdown (x sum)
+    (if (> x 1)
+      (sum_countdown (- x 1) (+ sum (- x 1))) ; Continue while x > 1
+      sum))                                   ; Stop when x <= 1, return sum
+  
+  (list
+    (list "Input n:" n)
+    (list "Halve until <=0, count steps:" (halve_until_zero n 0))
+    (list "Double until >=100:" (double_until_target n 100))
+    (list "Collect while positive:" (collect_while_positive (list 3 2 1 -1 4)))
+    (list "Find 3 in (1,2,3,4), max 5 attempts:" (find_value (list 1 2 3 4) 3 0 5))
+    (list "Sum countdown from n:" (sum_countdown n 0))
+    (list "Pattern:" "while(condition) becomes if(condition) + recursive call")
+    (list "Key:" "Condition becomes if test, body becomes recursive call")
+    (list "Stop:" "When condition false, return result")
+  )
+)

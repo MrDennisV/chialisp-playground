@@ -1,0 +1,34 @@
+;; Step Next/Step Over Debugging
+;; Practice using step next/step over with multiple function calls
+;; ⚠️ DEBUGGING LIMITATION: Step operations may be inaccurate with macros.
+;; Macros are expanded during compilation and don't maintain precise source location mapping.
+;; You may notice:
+;; - Steps jumping to unexpected locations  
+;; - Breakpoints not hitting exactly where expected
+;; - Some macro-generated code showing as "*macros*" in stack traces
+;; This is a known limitation pending future compiler improvements.
+
+(mod (a)
+  (include *standard-cl-24*)
+  
+  ;; Simple math function
+  (defun add-five (num)
+    (+ num 5))
+  
+  ;; Another simple function
+  (defun multiply-two (num)
+    (* num 2))
+  
+  ;; Third function
+  (defun subtract-one (num)
+    (- num 1))
+  
+  ;; Main execution with multiple sequential calls
+  (list 
+    (list "Original:" a)
+    (list "Step 1:" (add-five a))
+    (list "Step 2:" (multiply-two (add-five a)))
+    (list "Step 3:" (subtract-one (multiply-two (add-five a))))
+    (list "Final:" (add-five (subtract-one (multiply-two (add-five a)))))
+    (list "Another call:" (multiply-two a))
+    (list "Last call:" (subtract-one a))))

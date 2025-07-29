@@ -1,0 +1,26 @@
+;; Using Multiple Libraries
+;; Combine functions from different .clib files
+
+(mod (number)
+  (include *standard-cl-24*)
+  
+  ;; Include multiple libraries
+  (include "includes/simple_math.clib")      ; Math functions
+  (include "includes/simple_validation.clib") ; Validation functions
+  
+  ;; Now we can use functions from both libraries
+  (list
+    (list "Input:" number)
+    (list "Math operations:")
+    (list "Square:" (square number))
+    (list "Absolute:" (absolute number))
+    (list "Is even:" (is_even number))
+    (list "Validations:")
+    (list "Is positive:" (is_positive number))
+    (list "Classification:" (classify_number number))
+    (list "In range 1-100:" (is_in_range number 1 100))
+    (list "Combined logic:")
+    (list "Positive AND even:" (logand (is_positive number) (is_even number)))
+    (list "Absolute square:" (square (absolute number)))
+    (list "Libraries:" "simple_math.clib + simple_validation.clib"))
+)

@@ -1,0 +1,31 @@
+;; Bitwise XOR - Toggle bits and find differences
+;; Learn logxor for bit manipulation
+(mod (number1 number2)
+  (include *standard-cl-24*)
+  
+  ;; logxor performs bitwise XOR: bits are 1 if different, 0 if same
+  ;; Useful for toggling bits, encryption, and finding differences
+  
+  (list
+    (list "Input A:" number1)
+    (list "Input B:" number2)
+    (list "A XOR B:" (logxor number1 number2))
+    (list "5 XOR 3:" (logxor 5 3))
+    (list "8 XOR 8:" (logxor 8 8))
+    (list "Toggle Bit 0:" (logxor number1 1))
+    (list "Toggle Bit 1:" (logxor number1 2))
+    (list "Toggle Bit 2:" (logxor number1 4))
+    (list "Toggle Twice:" (logxor (logxor number1 1) 1))
+    (list "XOR with Self:" (logxor number1 number1))
+    (list "XOR with 0:" (logxor number1 0))
+    (list "Simple Encrypt:" (logxor number1 number2))
+    (list "Decrypt Back:" (logxor (logxor number1 number2) number2))
+    (list "Self Inverse:" "A XOR A = 0")
+    (list "Identity:" "A XOR 0 = A")
+    (list "Commutative:" "A XOR B = B XOR A")
+    (list "Binary Logic:" "Different bits = 1, same = 0")
+    (list "Concept:" "Toggle bits, find differences")
+    (list "Use Cases:" "Encryption, toggle flags, compare")
+    (list "Similar To:" "Bitwise XOR (^) in other languages")
+  )
+)
