@@ -19,7 +19,7 @@
   
   ;; Execute inner puzzle and add mandatory fee
   (c
-    ;; Add mandatory fee of 10 million mojos (0.01 XCH)
+    ;; Add mandatory fee of 10 million mojos (0.00001 XCH)
     (list RESERVE_FEE 10000000)
     
     ;; Include all conditions from inner puzzle
