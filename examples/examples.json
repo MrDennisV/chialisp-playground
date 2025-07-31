@@ -516,7 +516,10 @@
           "name": "Password Protection",
           "file": "examples/blockchain/password_protection.clsp",
           "description": "Simple password-protected coin",
-          "solutionArgs": "('secret123' 0x123456789abcdef 1000000000000)",
+          "curryArgs": [
+            "'secret123'"
+          ],
+          "solutionArgs": "(0x123456789abcdef 1000000000000)",
           "icon": "fas fa-lock",
           "order": 2
         },
@@ -524,7 +527,10 @@
           "name": "Piggybank",
           "file": "examples/blockchain/piggybank.clsp",
           "description": "Time-locked savings account",
-          "solutionArgs": "(3600 0x123456789abcdef 1000000000000)",
+          "curryArgs": [
+            "3600"
+          ],
+          "solutionArgs": "(0x123456789abcdef 1000000000000)",
           "icon": "fas fa-piggy-bank",
           "order": 3
         },
