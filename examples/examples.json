@@ -652,6 +652,16 @@
           "libraryType": "txt",
           "icon": "fas fa-file-alt",
           "order": 8
+        },
+        "sha256tree": {
+          "name": "SHA256 Tree (.clib)",
+          "file": "examples/includes/sha256tree.clib",
+          "description": "SHA256 tree hashing for complex data structures",
+          "solutionArgs": "()",
+          "isLibrary": true,
+          "libraryType": "clib",
+          "icon": "fas fa-tree",
+          "order": 9
         }
       }
     }
