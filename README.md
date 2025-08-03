@@ -42,7 +42,7 @@ Want to run it locally or contribute?
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/chialisp-playground.git
+git clone https://github.com/MrDennisV/chialisp-playground.git
 cd chialisp-playground
 
 # Start the server
