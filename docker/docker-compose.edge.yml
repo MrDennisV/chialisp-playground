@@ -1,0 +1,18 @@
+# Attach to the shared `edge` reverse proxy (chia-gaming-edge / Caddy): drop the
+# host port, join the `edge` network, declare the route via labels. Caddy
+# terminates TLS and routes chialisp.mrdennis.dev to nginx.
+#
+#   docker compose -f docker/docker-compose.yml -f docker/docker-compose.edge.yml up -d
+services:
+  web:
+    ports: !reset []
+    networks:
+      - default
+      - edge
+    labels:
+      caddy: chialisp.mrdennis.dev
+      caddy.reverse_proxy: '{{upstreams 80}}'
+
+networks:
+  edge:
+    external: true
