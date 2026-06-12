@@ -2,10 +2,7 @@
 #
 #   docker compose -f docker/docker-compose.yml up --build
 #
-# In production, stack the edge overlay on top — it drops the host port and the
-# shared Caddy edge (chia-gaming-edge) routes chialisp.mrdennis.dev to nginx:
-#
-#   docker compose -f docker/docker-compose.yml -f docker/docker-compose.edge.yml up -d
+# In production, stack docker-compose.edge.yml to run behind the shared Caddy edge.
 name: chialisp-playground
 
 services:
