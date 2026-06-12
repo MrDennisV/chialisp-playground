@@ -1,0 +1,16 @@
+# ChiaLisp playground: one nginx serving the static site.
+#
+#   docker compose -f docker/docker-compose.yml up --build
+#
+# In production, stack docker-compose.edge.yml to run behind the shared Caddy edge.
+name: chialisp-playground
+
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: chialisp-playground:latest
+    ports:
+      - '${PUBLIC_PORT:-8082}:80'
+    restart: unless-stopped

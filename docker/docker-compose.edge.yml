@@ -1,0 +1,15 @@
+# Run behind the shared Caddy edge instead of publishing a host port: join the
+# external `edge` network and declare the route via labels.
+services:
+  web:
+    ports: !reset []
+    networks:
+      - default
+      - edge
+    labels:
+      caddy: chialisp.mrdennis.dev
+      caddy.reverse_proxy: '{{upstreams 80}}'
+
+networks:
+  edge:
+    external: true
