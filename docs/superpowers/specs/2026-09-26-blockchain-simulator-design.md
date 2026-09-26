@@ -64,7 +64,8 @@ The feature lives inside the existing layout and reuses its components and theme
 ![Send modal](assets/2026-09-26-blockchain-simulator/send-modal.png)
 
 - **From:** Faucet or any wallet. The hint under it says what signs the transaction ("Signed with Alice's key · 10 XCH confirmed", or that the faucet creates new coins).
-- **To:** a `txch1…` address or a `0x` puzzle hash. Shortcut chips below it: every other wallet, plus the current editor file tagged "this puzzle".
+- **To:** a `txch1…` or `xch1…` address, or a `0x` puzzle hash. Shortcut chips below it: every other wallet, plus the current editor file tagged "this puzzle".
+- A pasted `xch1…` (mainnet) address is accepted and decoded to its puzzle hash, with a notice: "Mainnet address — nothing is sent on mainnet; the simulator only uses its puzzle hash (the same one as txch1…)". The same puzzle hash behind both prefixes is itself a lesson.
 - **Amount** and **Fee** in XCH. The fee is disabled for the faucet. Default fee: 0.0001.
 - **Live summary** of the transaction before it is sent:
 
@@ -213,7 +214,10 @@ Everything below runs in `npm test` (Node, no browser), loading the real SDK thr
 
 Each test must be seen to fail against a broken implementation before it is accepted, e.g. skip the `passTime`, farm without the tick, or drop the change output.
 
-## Decisions for review
+## Decisions
+
+- **Mainnet addresses (decided):** the playground only ever *displays* `txch` addresses, because its keys are derived from public names and funds sent to them on a real network could be taken by anyone. Pasted `xch1…` input is accepted with the notice described under Send modal.
+
+## Open for review
 
 1. **UI end-to-end tests.** The service tests above cover the behaviour. Driving the Chain view in a browser (Playwright) would also cover rendering and wiring, but it adds a dev dependency and browser downloads to a project that has none. Proposed: add it as a separate `npm run test:ui`, not part of `npm test`.
-2. **Mainnet prefix.** Addresses use `txch` only. Accepting `xch1…` input (decoded to a puzzle hash) makes pasting real addresses possible, which the warning discourages. Proposed: reject `xch1…` with a message.
