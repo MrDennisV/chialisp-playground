@@ -11,7 +11,7 @@
 A web-based interactive environment where you can learn ChiaLisp through hands-on examples. Perfect for blockchain developers, beginners wanting to understand Chia's smart contract language, and educators teaching blockchain programming concepts.
 
 **Key Features:**
-- 50+ practical examples with explanations
+- 70 practical examples with explanations
 - VS Code-like editor with syntax highlighting
 - Instant code compilation and execution
 - Progressive difficulty levels from basics to advanced
@@ -19,11 +19,12 @@ A web-based interactive environment where you can learn ChiaLisp through hands-o
 
 ## What You Can Learn
 
-**50+ hands-on examples covering:**
+**70 hands-on examples covering:**
 - 🌱 **Fundamentals** - Variables, data types, basic operations
-- 🔧 **Functions** - Creating reusable code, parameters, recursion  
-- 🔐 **Cryptography** - Hash functions, digital signatures, BLS verification
-- ⛓️ **Blockchain** - Conditions, smart coins, puzzles, announcements
+- 🔧 **Functions** - Creating reusable code, higher-order functions, recursion, sorting  
+- 🔐 **Cryptography** - Hash functions, digital signatures, BLS verification, Merkle proofs, coin IDs
+- 🎲 **Fair Play** - Commit-reveal, shared randomness, verifiable shuffles
+- ⛓️ **Blockchain** - Conditions, signature-locked coins, time locks, HTLCs, announcements
 - 🚀 **Modern ChiaLisp** - Macros, advanced patterns, optimization
 
 From beginner "Hello World" to advanced blockchain smart contracts.

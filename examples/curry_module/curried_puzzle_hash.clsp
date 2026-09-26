@@ -1,0 +1,85 @@
+;; Curried Puzzle Hash - Know a coin's address before it exists
+;; Learn to compute the hash of a curried puzzle from hashes alone
+
+(mod (program param1 param2)
+  (include *standard-cl-24*)
+  (include "includes/sha256tree.clib")
+
+  ;; Currying wraps a program with fixed parameters:
+  ;;
+  ;;   (a (q . PROGRAM) (c (q . param1) (c (q . param2) 1)))
+  ;;
+  ;; A coin's puzzle hash is the sha256tree of that whole structure.
+  ;; Puzzles often need the puzzle hash of ANOTHER curried puzzle (e.g. to
+  ;; recreate themselves with new state). Rebuilding the full program costs a
+  ;; lot, so instead we combine the HASHES using the sha256tree rules:
+  ;;
+  ;;   atom  -> sha256(1, atom)
+  ;;   pair  -> sha256(2, hash(first), hash(rest))
+  ;;
+  ;; The default program (16 2 5) is compiled CLVM for "add my two
+  ;; arguments" (16 is the + opcode), so the curried version returns 30.
+
+  ;; ---------- way 1: build the curried program, then hash it ----------
+
+  (defun build_environment (params)
+    (if params
+      (list 4 (c 1 (f params)) (build_environment (r params)))
+      1
+    )
+  )
+
+  (defun curry (program params)
+    (list 2 (c 1 program) (build_environment params))
+  )
+
+  ;; ---------- way 2: work with hashes only ----------
+  ;; defconst (not defconstant) runs the sha256 at compile time
+
+  (defconst NIL_HASH (sha256 1))
+  (defconst QUOTE_HASH (sha256 1 1))
+  (defconst APPLY_HASH (sha256 1 2))
+  (defconst CONS_HASH (sha256 1 4))
+  (defconst ONE_HASH (sha256 1 1))
+
+  ;; hash of a 2-item list (op x y): pair(op, pair(x, pair(y, nil)))
+  (defun hash_of_call (op_hash x_hash y_hash)
+    (sha256 2 op_hash (sha256 2 x_hash (sha256 2 y_hash NIL_HASH)))
+  )
+
+  ;; hash of (q . value)
+  (defun hash_of_quoted (value_hash)
+    (sha256 2 QUOTE_HASH value_hash)
+  )
+
+  (defun hash_of_environment (param_hashes)
+    (if param_hashes
+      (hash_of_call CONS_HASH
+        (hash_of_quoted (f param_hashes))
+        (hash_of_environment (r param_hashes)))
+      ONE_HASH
+    )
+  )
+
+  (defun curried_puzzle_hash (program_hash param_hashes)
+    (hash_of_call APPLY_HASH
+      (hash_of_quoted program_hash)
+      (hash_of_environment param_hashes))
+  )
+
+  (assign
+    curried (curry program (list param1 param2))
+    from_program (sha256tree curried)
+    from_hashes (curried_puzzle_hash (sha256tree program)
+                  (list (sha256tree param1) (sha256tree param2)))
+
+    (list
+      (list "Original program:" program)
+      (list "Curried program:" curried)
+      (list "Running it gives:" (a curried ()))
+      (list "Puzzle hash (full program):" from_program)
+      (list "Puzzle hash (hashes only):" from_hashes)
+      (list "Same result:" (= from_program from_hashes))
+    )
+  )
+)

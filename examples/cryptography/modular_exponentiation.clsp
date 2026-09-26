@@ -1,0 +1,56 @@
+;; Modular Exponentiation - Big powers, small cost
+;; Learn square-and-multiply and cheap modular inverse checks
+
+(mod (base exponent modulus)
+  (include *standard-cl-24*)
+
+  ;; Computing base^exponent directly creates enormous numbers.
+  ;; Square-and-multiply keeps every step below the modulus and needs
+  ;; only log2(exponent) steps:
+  ;;
+  ;;   exponent is odd  -> result = result * base   (mod m)
+  ;;   always           -> base   = base * base     (mod m)
+  ;;                       exponent = exponent / 2
+
+  (defun mod_of (n m)
+    (r (divmod n m))
+  )
+
+  (defun power_loop (base exponent modulus result)
+    (if exponent
+      (power_loop
+        (mod_of (* base base) modulus)
+        (lsh exponent -1)
+        modulus
+        (if (logand exponent 1) (mod_of (* result base) modulus) result)
+      )
+      result
+    )
+  )
+
+  (defun mod_pow (base exponent modulus)
+    (power_loop (mod_of base modulus) exponent modulus 1)
+  )
+
+  ;; Fermat's little theorem: for a prime p, k^(p-2) mod p is the inverse of k.
+  ;; Finding an inverse is expensive, but CHECKING one is a single multiply:
+  ;; let the user supply it off-chain and only verify it on-chain.
+  (defun is_inverse (k k_inverse p)
+    (= (mod_of (* k k_inverse) p) 1)
+  )
+
+  (assign
+    result (mod_pow base exponent modulus)
+    inverse (mod_pow base (- modulus 2) modulus)
+
+    (list
+      (list "Computation:" (list base "^" exponent "mod" modulus))
+      (list "Square-and-multiply:" result)
+      (list "Built-in modpow operator:" (modpow base exponent modulus))
+      (list "Both agree:" (= result (modpow base exponent modulus)))
+      (list "Inverse of base (Fermat):" inverse)
+      (list "base * inverse mod p = 1:" (is_inverse base inverse modulus))
+      (list "Wrong inverse rejected:" (is_inverse base (+ inverse 1) modulus))
+    )
+  )
+)

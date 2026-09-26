@@ -1,0 +1,35 @@
+;; Coin ID - How every Chia coin gets its unique name
+;; Learn to compute and validate a coin ID from its three parts
+
+(mod (parent_coin_id puzzle_hash amount)
+  (include *standard-cl-24*)
+
+  ;; A Chia coin is just three values:
+  ;;   parent_coin_id  - the coin that created it (32 bytes)
+  ;;   puzzle_hash     - hash of the program that locks it (32 bytes)
+  ;;   amount          - value in mojos (1 XCH = 1,000,000,000,000 mojos)
+  ;;
+  ;;   coin_id = sha256(parent_coin_id + puzzle_hash + amount)
+  ;;
+  ;; Change ANY part and you get a different coin. Puzzles use this to
+  ;; prove facts about coins, e.g. with ASSERT_MY_COIN_ID or announcements.
+
+  (defun calculate_coin_id (parent puzzle_hash amount)
+    (if (all (= (strlen parent) 32) (= (strlen puzzle_hash) 32) (> amount -1))
+      (sha256 parent puzzle_hash amount)
+      (x "parent and puzzle hash must be 32 bytes, amount >= 0")
+    )
+  )
+
+  (assign
+    coin_id (calculate_coin_id parent_coin_id puzzle_hash amount)
+
+    (list
+      (list "Coin ID:" coin_id)
+      (list "Built-in coinid operator:" (coinid parent_coin_id puzzle_hash amount))
+      (list "Matches:" (= coin_id (coinid parent_coin_id puzzle_hash amount)))
+      (list "Same coin, 1 mojo more:" (calculate_coin_id parent_coin_id puzzle_hash (+ amount 1)))
+      (list "Child of this coin:" (calculate_coin_id coin_id puzzle_hash amount))
+    )
+  )
+)

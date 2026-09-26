@@ -1,0 +1,41 @@
+;; Hash Time-Locked Contract (HTLC) - The atomic swap building block
+;; Learn to lock funds behind a secret AND a deadline
+
+(mod (RECEIVER_PUZZLE_HASH SENDER_PUZZLE_HASH SECRET_HASH TIMEOUT_SECONDS amount secret)
+  (include *standard-cl-24*)
+  (include "includes/condition_codes.clib")
+
+  ;; Two ways to spend this coin:
+  ;;
+  ;;   CLAIM:  the receiver reveals the secret whose sha256 is SECRET_HASH,
+  ;;           before TIMEOUT_SECONDS have passed  -> funds go to the receiver
+  ;;   REFUND: after TIMEOUT_SECONDS, nobody claimed -> funds go back to the sender
+  ;;
+  ;; Atomic swap: Alice locks XCH with this puzzle, Bob locks another asset
+  ;; with the SAME SECRET_HASH. When Alice claims Bob's coin she must reveal
+  ;; the secret on-chain, and Bob uses it to claim hers. Either both trades
+  ;; happen or, after the timeout, both refund.
+  ;;
+  ;; The destinations are fixed by the curried puzzle hashes, so revealing
+  ;; the secret can't redirect the money to someone else.
+  ;;
+  ;; Run with secret = () to see the refund path.
+
+  (if secret
+    (if (= (sha256 secret) SECRET_HASH)
+      (list
+        (list CREATE_COIN RECEIVER_PUZZLE_HASH amount)
+        (list ASSERT_BEFORE_SECONDS_RELATIVE TIMEOUT_SECONDS)
+        (list ASSERT_MY_AMOUNT amount)
+        (list REMARK "claimed with secret")
+      )
+      (x "wrong secret")
+    )
+    (list
+      (list CREATE_COIN SENDER_PUZZLE_HASH amount)
+      (list ASSERT_SECONDS_RELATIVE TIMEOUT_SECONDS)
+      (list ASSERT_MY_AMOUNT amount)
+      (list REMARK "refunded after timeout")
+    )
+  )
+)

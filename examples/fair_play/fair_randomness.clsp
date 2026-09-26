@@ -1,0 +1,50 @@
+;; Fair Randomness - Coin flips and dice nobody can rig
+;; Learn how two players combine secrets into one random number
+
+(mod (seed_a seed_b)
+  (include *standard-cl-24*)
+
+  ;; Blockchains are deterministic: there is no random() function.
+  ;; Fair randomness comes from COMBINING secrets from both players:
+  ;;
+  ;;   random = sha256(seed_a + seed_b)
+  ;;
+  ;; If either player picks their seed honestly at random, the result is
+  ;; random too. Use it together with commit-reveal: player A commits to
+  ;; seed_a first, so A can't change it after seeing seed_b.
+
+  ;; sha256 returns 32 bytes. Taking the last byte gives a number 0..255,
+  ;; and its lowest bit is a fair 0/1 coin flip.
+  (defun coin_flip (random)
+    (logand 1 (substr random 31 32))
+  )
+
+  ;; Remainder of the division gives a value in 0..(n-1).
+  ;; CLVM uses floor division, so the remainder is never negative
+  ;; even though a 32-byte hash can read as a negative number.
+  (defun roll (random sides)
+    (+ 1 (r (divmod random sides)))
+  )
+
+  ;; Need several dice? Derive one sub-seed per die: sha256(random, i)
+  (defun roll_many (random sides count)
+    (if count
+      (c (roll (sha256 random count) sides) (roll_many random sides (- count 1)))
+      ()
+    )
+  )
+
+  (assign
+    random (sha256 seed_a seed_b)
+
+    (list
+      (list "Combined random value:" random)
+      (list "Coin flip (0 or 1):" (coin_flip random))
+      (list "Winner:" (if (coin_flip random) "Player B" "Player A"))
+      (list "Six-sided die:" (roll random 6))
+      (list "Percentile roll (1-100):" (roll random 100))
+      (list "Five dice:" (roll_many random 6 5))
+      (list "Tip:" "Change either seed and every result changes")
+    )
+  )
+)

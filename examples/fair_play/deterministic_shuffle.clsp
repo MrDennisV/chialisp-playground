@@ -1,0 +1,61 @@
+;; Deterministic Shuffle - Fisher-Yates driven by a hash
+;; Learn to shuffle a list so anyone can re-check the result
+
+(mod (seed size)
+  (include *standard-cl-24*)
+
+  ;; A shuffle on-chain must be REPRODUCIBLE: same seed -> same order,
+  ;; so every node (and every player) can verify it independently.
+  ;;
+  ;; Fisher-Yates idea: pick a random remaining element, take it out,
+  ;; repeat with what is left. The "random" pick comes from sha256(seed, step).
+
+  ;; (0 1 2 ... n-1)
+  (defun range (from to)
+    (if (= from to)
+      ()
+      (c from (range (+ from 1) to))
+    )
+  )
+
+  ;; Returns (picked_element . list_without_it)
+  (defun remove_nth (lst n)
+    (if n
+      (assign (picked . rest) (remove_nth (r lst) (- n 1))
+        (c picked (c (f lst) rest))
+      )
+      lst
+    )
+  )
+
+  (defun shuffle_inner (remaining count seed)
+    (if count
+      (assign
+        index (r (divmod (sha256 seed count) count))
+        (picked . rest) (remove_nth remaining index)
+        (c picked (shuffle_inner rest (- count 1) seed))
+      )
+      ()
+    )
+  )
+
+  (defun shuffle (items seed)
+    (shuffle_inner items (list_length items) seed)
+  )
+
+  (defun list_length (lst)
+    (if lst (+ 1 (list_length (r lst))) 0)
+  )
+
+  (assign
+    deck (range 0 size)
+
+    (list
+      (list "Original:" deck)
+      (list "Shuffled:" (shuffle deck seed))
+      (list "Same seed again:" (shuffle deck seed))
+      (list "Different seed:" (shuffle deck (sha256 seed "next round")))
+      (list "Works with any data:" (shuffle (list "alice" "bob" "carol" "dave") seed))
+    )
+  )
+)

@@ -3,7 +3,7 @@
     "version": "4.0.0",
     "title": "ChiaLisp Academy",
     "description": "Learn ChiaLisp step by step - From basics to advanced with pedagogical progression",
-    "lastUpdated": "2025-01-17"
+    "lastUpdated": "2026-09-26"
   },
   "welcome": {
     "name": "🎓 Welcome",
@@ -203,6 +203,14 @@
           "solutionArgs": "(5 'square')",
           "icon": "fas fa-play-circle",
           "order": 4
+        },
+        "higher_order_functions": {
+          "name": "Higher-Order Functions",
+          "file": "examples/functions/higher_order_functions.clsp",
+          "description": "map, filter, partition and fold with lambdas (like Array.map/filter/reduce)",
+          "solutionArgs": "((1 2 3 4 5 6) 10)",
+          "icon": "fas fa-project-diagram",
+          "order": 5
         }
       }
     },
@@ -243,6 +251,22 @@
           "solutionArgs": "((1 2 3 4 5))",
           "icon": "fas fa-list",
           "order": 4
+        },
+        "list_manipulation": {
+          "name": "Advanced List Operations",
+          "file": "examples/loops_recursion/list_manipulation.clsp",
+          "description": "Length, indexing and combining multiple lists",
+          "solutionArgs": "((1 2 3) (4 5 6))",
+          "icon": "fas fa-stream",
+          "order": 5
+        },
+        "merge_sort": {
+          "name": "Merge Sort",
+          "file": "examples/loops_recursion/merge_sort.clsp",
+          "description": "Divide-and-conquer sorting with a custom comparator",
+          "solutionArgs": "((42 7 19 3 88 25 61))",
+          "icon": "fas fa-sort-amount-up",
+          "order": 6
         }
       }
     },
@@ -281,7 +305,7 @@
           "file": "examples/modern_chialisp/lambda_functions.clsp",
           "description": "Anonymous functions with closures",
           "solutionArgs": "((1 -2 3 -4 5))",
-          "icon": "fas fa-function",
+          "icon": "fas fa-code",
           "order": 4
         },
         "defmac_basics": {
@@ -409,7 +433,7 @@
           "file": "examples/includes_tutorial/includes_03_multiple_libraries.clsp",
           "description": "Combining multiple libraries",
           "solutionArgs": "(42)",
-          "icon": "fas fa-books",
+          "icon": "fas fa-book",
           "order": 3
         }
       }
@@ -431,6 +455,14 @@
           ],
           "icon": "fas fa-lock",
           "order": 1
+        },
+        "curried_puzzle_hash": {
+          "name": "Curried Puzzle Hash",
+          "file": "examples/curry_module/curried_puzzle_hash.clsp",
+          "description": "Compute the puzzle hash of a curried program from hashes alone",
+          "solutionArgs": "((16 2 5) 10 20)",
+          "icon": "fas fa-hashtag",
+          "order": 2
         }
       }
     },
@@ -487,6 +519,62 @@
           "solutionArgs": "((1 2 (3 4) 5))",
           "icon": "fas fa-tree",
           "order": 6
+        },
+        "merkle_proof": {
+          "name": "Merkle Proofs",
+          "file": "examples/cryptography/merkle_proof.clsp",
+          "description": "Commit to many values with one root, prove membership with a few hashes",
+          "solutionArgs": "(('alice' 'bob' 'carol' 'dave' 'erin') 2)",
+          "icon": "fas fa-sitemap",
+          "order": 7
+        },
+        "modular_exponentiation": {
+          "name": "Modular Exponentiation",
+          "file": "examples/cryptography/modular_exponentiation.clsp",
+          "description": "Square-and-multiply, modpow and cheap modular inverse checks",
+          "solutionArgs": "(7 1000 1000000007)",
+          "icon": "fas fa-superscript",
+          "order": 8
+        },
+        "coin_id": {
+          "name": "Coin ID",
+          "file": "examples/cryptography/coin_id.clsp",
+          "description": "How a coin ID is derived from parent, puzzle hash and amount",
+          "solutionArgs": "(0xe47125968b3b71049fbc4802d1e40a71ea1359decfabacf70b34588037d4ff0c 0x81bae876b70513c9decc608eed549977a81afa1c2b6b4080aec256339e792e0f 1750000000000)",
+          "icon": "fas fa-fingerprint",
+          "order": 9
+        }
+      }
+    },
+    "fair_play": {
+      "name": "🎲 Fair Play & Randomness",
+      "description": "Commit-reveal, shared randomness and verifiable shuffles",
+      "level": 6.5,
+      "icon": "fas fa-dice",
+      "examples": {
+        "commit_reveal": {
+          "name": "Commit-Reveal",
+          "file": "examples/fair_play/commit_reveal.clsp",
+          "description": "Lock in a hidden choice now, reveal and verify it later",
+          "solutionArgs": "(0xe47125968b3b71049fbc4802d1e40a71ea1359decfabacf70b34588037d4ff0c 'rock')",
+          "icon": "fas fa-eye-slash",
+          "order": 1
+        },
+        "fair_randomness": {
+          "name": "Fair Randomness",
+          "file": "examples/fair_play/fair_randomness.clsp",
+          "description": "Coin flips and dice from two players' combined seeds",
+          "solutionArgs": "('alice-secret' 'bob-secret')",
+          "icon": "fas fa-dice-six",
+          "order": 2
+        },
+        "deterministic_shuffle": {
+          "name": "Deterministic Shuffle",
+          "file": "examples/fair_play/deterministic_shuffle.clsp",
+          "description": "Fisher-Yates shuffle anyone can re-check from the seed",
+          "solutionArgs": "('game-42' 10)",
+          "icon": "fas fa-random",
+          "order": 3
         }
       }
     },
@@ -564,6 +652,31 @@
           "solutionArgs": "(1 'test_message' 0x123456789abcdef 1000000000000)",
           "icon": "fas fa-bullhorn",
           "order": 6
+        },
+        "signature_locked_coin": {
+          "name": "Signature-Locked Coin",
+          "file": "examples/blockchain/signature_locked_coin.clsp",
+          "description": "Only the owner of a public key can spend (AGG_SIG_ME)",
+          "curryArgs": [
+            "0x88ae83c1777027b3df993a126f625e648a59408521539ddbc03ae116b382a11143bf987aa74f7989dfb599df30823a8a"
+          ],
+          "solutionArgs": "(((51 0xb5c755aaab1038b3d5627bbde7f47ca80c5f5c0481c6d33f04139d07aa1530e7 1000000000000) (52 50000000)))",
+          "icon": "fas fa-key",
+          "order": 7
+        },
+        "hash_time_locked_contract": {
+          "name": "Hash Time-Locked Contract",
+          "file": "examples/blockchain/hash_time_locked_contract.clsp",
+          "description": "Claim with a secret before the deadline, or refund after (atomic swaps)",
+          "curryArgs": [
+            "0x81bae876b70513c9decc608eed549977a81afa1c2b6b4080aec256339e792e0f",
+            "0x0a367b92cf0b037dfd89960ee832d56f7fc151681bb41e53690e776f5786998a",
+            "0x0a6f6ba2b3d588383eed272dd5baac9c46fa83978787878c4ff28ccc4d68278a",
+            "3600"
+          ],
+          "solutionArgs": "(1000000000000 'swap-secret-42')",
+          "icon": "fas fa-hourglass-half",
+          "order": 8
         }
       }
     },
