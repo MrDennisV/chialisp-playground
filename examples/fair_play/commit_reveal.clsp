@@ -1,0 +1,48 @@
+;; Commit-Reveal - Lock in a choice without showing it
+;; Learn the pattern behind fair two-player moves, sealed bids and hidden votes
+
+(mod (salt move)
+  (include *standard-cl-24*)
+
+  ;; The problem: if Alice shows her move first, Bob can pick a winning answer.
+  ;; The fix: Alice publishes only a COMMITMENT (a hash) first, and reveals later.
+  ;;
+  ;; 1. Commit:  commitment = sha256(salt + move)   -> published now
+  ;; 2. Reveal:  Alice shows salt and move          -> published later
+  ;; 3. Verify:  anyone recomputes the hash and compares
+  ;;
+  ;; Why the salt? Without it, "rock" always hashes to the same value,
+  ;; so Bob could hash "rock", "paper", "scissors" and see which one matches.
+  ;; A random 32-byte salt makes the commitment impossible to guess.
+
+  (defun commit (salt move)
+    (sha256 salt move)
+  )
+
+  ;; On-chain check: a valid reveal must reproduce the exact commitment
+  (defun verify_reveal (commitment salt move)
+    (= (sha256 salt move) commitment)
+  )
+
+  ;; Strict version: reject bad input by failing the whole spend
+  (defun require_reveal (commitment salt move)
+    (if (all (= (strlen salt) 32) (verify_reveal commitment salt move))
+      move
+      (x "reveal does not match commitment")
+    )
+  )
+
+  (assign
+    commitment (commit salt move)
+
+    (list
+      (list "Step 1 - Commitment:" commitment)
+      (list "Step 2 - Revealed move:" move)
+      (list "Step 3 - Honest reveal valid:" (verify_reveal commitment salt move))
+      (list "Cheat - change the move:" (verify_reveal commitment salt "paper"))
+      (list "Cheat - change the salt:" (verify_reveal commitment (sha256 "other salt") move))
+      (list "Strict check accepts:" (require_reveal commitment salt move))
+      (list "Tip:" "Change the move in the arguments and watch the commitment change")
+    )
+  )
+)

@@ -11,7 +11,7 @@
 A web-based interactive environment where you can learn ChiaLisp through hands-on examples. Perfect for blockchain developers, beginners wanting to understand Chia's smart contract language, and educators teaching blockchain programming concepts.
 
 **Key Features:**
-- 50+ practical examples with explanations
+- 70 practical examples with explanations
 - VS Code-like editor with syntax highlighting
 - Instant code compilation and execution
 - Progressive difficulty levels from basics to advanced
@@ -19,11 +19,12 @@ A web-based interactive environment where you can learn ChiaLisp through hands-o
 
 ## What You Can Learn
 
-**50+ hands-on examples covering:**
+**70 hands-on examples covering:**
 - 🌱 **Fundamentals** - Variables, data types, basic operations
-- 🔧 **Functions** - Creating reusable code, parameters, recursion  
-- 🔐 **Cryptography** - Hash functions, digital signatures, BLS verification
-- ⛓️ **Blockchain** - Conditions, smart coins, puzzles, announcements
+- 🔧 **Functions** - Creating reusable code, higher-order functions, recursion, sorting  
+- 🔐 **Cryptography** - Hash functions, digital signatures, BLS verification, Merkle proofs, coin IDs
+- 🎲 **Fair Play** - Commit-reveal, shared randomness, verifiable shuffles
+- ⛓️ **Blockchain** - Conditions, signature-locked coins, time locks, HTLCs, announcements
 - 🚀 **Modern ChiaLisp** - Macros, advanced patterns, optimization
 
 From beginner "Hello World" to advanced blockchain smart contracts.
@@ -59,6 +60,17 @@ python -m http.server 8080
 1. Create your `.clsp` file in the appropriate `examples/` subdirectory
 2. Add entry to `examples/examples.json` with metadata
 3. Include description and suggested solution arguments
+4. Run `npm test` to check that it compiles and runs with those arguments
+
+## Running Tests
+
+The tests run the playground's real compiler and runner (the same WASM the site uses) in Node, no browser needed. Node 22+ is required; there is nothing to install.
+
+```bash
+npm test
+```
+
+They check that every example in `examples.json` exists, compiles and runs with its default arguments, that no `.clsp` file is left unlisted, and that curried parameters, includes and error reporting behave correctly.
 
 ## Built With
 

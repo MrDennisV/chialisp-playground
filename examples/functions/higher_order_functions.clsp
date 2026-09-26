@@ -1,0 +1,77 @@
+;; Higher-Order Functions - Functions that take functions
+;; Learn map, filter, partition and fold with lambdas
+
+(mod (numbers factor)
+  (include *standard-cl-24*)
+
+  ;; In ChiaLisp a function is just a program (data), so you can pass it
+  ;; around and call it later with the apply operator: (a function arguments)
+  ;;
+  ;; Write the loop ONCE, reuse it with any behaviour you plug in.
+
+  (defun map (fn lst)
+    (if lst
+      (c (a fn (list (f lst))) (map fn (r lst)))
+      ()
+    )
+  )
+
+  ;; Like map, but the function also receives the position
+  (defun map_indexed_inner (fn lst index)
+    (if lst
+      (c (a fn (list (f lst) index)) (map_indexed_inner fn (r lst) (+ index 1)))
+      ()
+    )
+  )
+
+  (defun map_indexed (fn lst)
+    (map_indexed_inner fn lst 0)
+  )
+
+  (defun filter (keep lst)
+    (if lst
+      (if (a keep (list (f lst)))
+        (c (f lst) (filter keep (r lst)))
+        (filter keep (r lst))
+      )
+      ()
+    )
+  )
+
+  ;; Split into (matching . not_matching) in a single pass
+  (defun partition (test lst)
+    (if lst
+      (assign (yes . no) (partition test (r lst))
+        (if (a test (list (f lst)))
+          (c (c (f lst) yes) no)
+          (c yes (c (f lst) no))
+        )
+      )
+      (c () ())
+    )
+  )
+
+  ;; Fold (reduce): combine every item into one accumulated value
+  (defun fold (fn accumulator lst)
+    (if lst
+      (fold fn (a fn (list accumulator (f lst))) (r lst))
+      accumulator
+    )
+  )
+
+  (list
+    (list "Input:" numbers)
+    (list "map square:" (map (lambda (n) (* n n)) numbers))
+    ;; (& factor) captures a variable from the surrounding scope (a closure)
+    (list "map times factor:" (map (lambda ((& factor) n) (* n factor)) numbers))
+    (list "map with index:" (map_indexed (lambda (n i) (list i n)) numbers))
+    (list "filter > 3:" (filter (lambda (n) (> n 3)) numbers))
+    (list "partition even/odd:" (partition (lambda (n) (not (logand n 1))) numbers))
+    (list "fold sum:" (fold (lambda (acc n) (+ acc n)) 0 numbers))
+    (list "fold max:" (fold (lambda (acc n) (if (> n acc) n acc)) 0 numbers))
+    (list "pipeline (odd -> square -> sum):"
+      (fold (lambda (acc n) (+ acc n)) 0
+        (map (lambda (n) (* n n))
+          (filter (lambda (n) (logand n 1)) numbers))))
+  )
+)

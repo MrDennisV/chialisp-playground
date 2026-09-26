@@ -1,0 +1,58 @@
+;; Merge Sort - Sort anything with a comparator
+;; Learn divide-and-conquer recursion and pluggable comparison functions
+
+(mod (numbers)
+  (include *standard-cl-24*)
+
+  ;; Merge sort:
+  ;;   1. Split the list into two halves
+  ;;   2. Sort each half (recursively)
+  ;;   3. Merge the two sorted halves
+  ;;
+  ;; It takes O(n log n) steps, which matters on-chain where every step costs.
+  ;; The comparator is a function (less x y), so one sort handles any order.
+
+  ;; Deal items alternately into two piles: (a b c d e) -> ((a c e) . (b d))
+  (defun split (lst)
+    (if lst
+      (assign (left . right) (split (r lst))
+        (c (c (f lst) right) left)
+      )
+      (c () ())
+    )
+  )
+
+  (defun merge (less left right)
+    (if (not left)
+      right
+      (if (not right)
+        left
+        (if (a less (list (f right) (f left)))
+          (c (f right) (merge less left (r right)))
+          (c (f left) (merge less (r left) right))
+        )
+      )
+    )
+  )
+
+  (defun sort (less lst)
+    (if (all lst (r lst))
+      (assign (left . right) (split lst)
+        (merge less (sort less left) (sort less right))
+      )
+      lst
+    )
+  )
+
+  (list
+    (list "Input:" numbers)
+    (list "Ascending:" (sort (lambda (x y) (> y x)) numbers))
+    (list "Descending:" (sort (lambda (x y) (> x y)) numbers))
+    (list "By last digit:"
+      (sort (lambda (x y) (> (r (divmod y 10)) (r (divmod x 10)))) numbers))
+    (list "Records, highest score first:"
+      (sort (lambda (x y) (> (f (r x)) (f (r y))))
+        (list (list "carol" 72) (list "alice" 95) (list "bob" 88))))
+    (list "Tip:" "The comparator decides the order - the sort itself never changes")
+  )
+)

@@ -1,0 +1,11 @@
+{
+  "name": "chialisp-playground",
+  "private": true,
+  "description": "Interactive ChiaLisp learning playground",
+  "scripts": {
+    "test": "node --test \"tests/**/*.test.mjs\""
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

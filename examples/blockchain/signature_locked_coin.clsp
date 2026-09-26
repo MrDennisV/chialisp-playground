@@ -1,0 +1,28 @@
+;; Signature-Locked Coin - Only the key owner can spend
+;; Learn AGG_SIG_ME, the idea behind Chia's standard wallet coin
+
+(mod (PUBLIC_KEY conditions)
+  (include *standard-cl-24*)
+  (include "includes/condition_codes.clib")
+  (include "includes/sha256tree.clib")
+
+  ;; PUBLIC_KEY is curried in: it becomes part of the coin's puzzle hash.
+  ;; The spender passes any conditions they want (send XCH, pay a fee...),
+  ;; and the puzzle adds one more requirement:
+  ;;
+  ;;   AGG_SIG_ME PUBLIC_KEY sha256tree(conditions)
+  ;;
+  ;; "The owner of PUBLIC_KEY must sign exactly these conditions."
+  ;; The network checks the signature. Change a single condition and the
+  ;; signature no longer matches, so nobody can redirect the funds.
+  ;;
+  ;; AGG_SIG_ME also mixes in this coin's ID and the network, so a signature
+  ;; can't be replayed on another coin or on testnet.
+  ;;
+  ;; Run it: the Examples Parser panel decodes the output into named conditions.
+
+  (c
+    (list AGG_SIG_ME PUBLIC_KEY (sha256tree conditions))
+    conditions
+  )
+)

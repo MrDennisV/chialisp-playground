@@ -94,13 +94,15 @@ class CompilationService {
                 executableHex = curryResult.hex;
                 curriedPuzzleHash = curryResult.hash;
             } catch (curryError) {
-                console.warn('Curry failed during execution:', curryError);
+                // don't fall back to running the uncurried program: it would silently get the wrong arguments
+                throw new Error(`Invalid curried parameters: ${curryError.message}`);
             }
         }
 
+        // executableHex is already curried above; passing the curry params again would curry twice
         const runResult = await this.debuggerInstance.run(
             executableHex,
-            runParams.curriedParams || '',
+            '',
             runParams.solutionParams || '()'
         );
 
@@ -294,4 +296,9 @@ class CompilationService {
             modal.show();
         });
     }
+}
+
+// Node (tests) only; in the browser these files are plain <script> tags
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = CompilationService;
 }

@@ -1,0 +1,104 @@
+;; Merkle Proofs - Prove one item is in a big set
+;; Learn to commit to many values with ONE hash and reveal them one at a time
+
+(mod (items index)
+  (include *standard-cl-24*)
+
+  ;; A Merkle tree hashes items in pairs, level by level, until one ROOT is left:
+  ;;
+  ;;                 root
+  ;;           /            \
+  ;;       h(AB)            h(CD)
+  ;;      /     \          /     \
+  ;;    h(A)   h(B)      h(C)   h(D)
+  ;;
+  ;; Publish only the root. Later, to prove "C is in the set", show C plus the
+  ;; SIBLINGS on its path: h(D) and h(AB). That's log2(n) hashes, not n items.
+
+  ;; ---------- building (usually done off-chain) ----------
+
+  (defun hash_leaves (items)
+    (if items
+      (c (sha256 (f items)) (hash_leaves (r items)))
+      ()
+    )
+  )
+
+  ;; Hash neighbours together. An odd node at the end is paired with itself.
+  (defun next_level (nodes)
+    (if nodes
+      (if (r nodes)
+        (c (sha256 (f nodes) (f (r nodes))) (next_level (r (r nodes))))
+        (list (sha256 (f nodes) (f nodes)))
+      )
+      ()
+    )
+  )
+
+  (defun root_of (nodes)
+    (if (r nodes)
+      (root_of (next_level nodes))
+      (f nodes)
+    )
+  )
+
+  (defun nth (lst n)
+    (if n (nth (r lst) (- n 1)) (f lst))
+  )
+
+  ;; Sibling of position i is i XOR 1 (the node next to it in its pair)
+  (defun sibling (nodes position)
+    (assign
+      pair_position (logxor position 1)
+      (if (> (list_length nodes) pair_position)
+        (nth nodes pair_position)
+        (nth nodes position)
+      )
+    )
+  )
+
+  (defun list_length (lst)
+    (if lst (+ 1 (list_length (r lst))) 0)
+  )
+
+  (defun make_proof (nodes position)
+    (if (r nodes)
+      (c (sibling nodes position) (make_proof (next_level nodes) (lsh position -1)))
+      ()
+    )
+  )
+
+  ;; ---------- verifying (this is the on-chain part) ----------
+  ;; The lowest bit of position says whether we are the left or right child.
+
+  (defun verify (leaf_hash proof position root)
+    (if proof
+      (verify
+        (if (logand position 1)
+          (sha256 (f proof) leaf_hash)
+          (sha256 leaf_hash (f proof))
+        )
+        (r proof)
+        (lsh position -1)
+        root
+      )
+      (= leaf_hash root)
+    )
+  )
+
+  (assign
+    leaves (hash_leaves items)
+    root (root_of leaves)
+    proof (make_proof leaves index)
+    item (nth items index)
+
+    (list
+      (list "Merkle root:" root)
+      (list "Proving item:" item)
+      (list "Proof (sibling hashes):" proof)
+      (list "Proof valid:" (verify (sha256 item) proof index root))
+      (list "Fake item with same proof:" (verify (sha256 "mallory") proof index root))
+      (list "Right item, wrong position:" (verify (sha256 item) proof (+ index 1) root))
+    )
+  )
+)
