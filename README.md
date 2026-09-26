@@ -60,6 +60,17 @@ python -m http.server 8080
 1. Create your `.clsp` file in the appropriate `examples/` subdirectory
 2. Add entry to `examples/examples.json` with metadata
 3. Include description and suggested solution arguments
+4. Run `npm test` to check that it compiles and runs with those arguments
+
+## Running Tests
+
+The tests run the playground's real compiler and runner (the same WASM the site uses) in Node, no browser needed. Node 22+ is required; there is nothing to install.
+
+```bash
+npm test
+```
+
+They check that every example in `examples.json` exists, compiles and runs with its default arguments, that no `.clsp` file is left unlisted, and that curried parameters, includes and error reporting behave correctly.
 
 ## Built With
 

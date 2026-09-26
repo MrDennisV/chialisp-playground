@@ -19,31 +19,35 @@ class Debugger {
     }
 
     /**
-     * Initialize the debugger 
-     * @param {string} wasmPath 
+     * Initialize the debugger
      */
-    async initialize(wasmPath = 'js/vscode-chialisp-lsp') {
+    async initialize() {
         try {
-            
-            const wasmModule = await import(`/${wasmPath}/clvm_tools_lsp.js?v=${Date.now()}`);
-            await wasmModule.default(`/${wasmPath}/clvm_tools_lsp_bg.wasm`);
-            
-            this.wasmModules = {
-                create_dbg_service: wasmModule.create_dbg_service,
-                dbg_service_handle_msg: wasmModule.dbg_service_handle_msg,
-                destroy_dbg_service: wasmModule.destroy_dbg_service,
-                compile: wasmModule.compile,
-                run: wasmModule.run,
-                curry: wasmModule.curry 
-            };
-            
-            this.state.isInitialized = true;
+            const cacheBust = String(Date.now());
+            const { WasmLoader } = await import(`/js/WasmLoader.js?v=${cacheBust}`);
+            this.useWasmModule(await WasmLoader.initialize({ cacheBust }));
             return true;
-            
+
         } catch (error) {
             console.error('❌ Error loading debugger WASM:', error);
             throw new Error(`Failed to initialize debugger WASM: ${error.message}`);
         }
+    }
+
+    /**
+     * Wire up an already-initialized clvm_tools_lsp module (from WasmLoader)
+     * @param {Object} wasmModule
+     */
+    useWasmModule(wasmModule) {
+        this.wasmModules = {
+            create_dbg_service: wasmModule.create_dbg_service,
+            dbg_service_handle_msg: wasmModule.dbg_service_handle_msg,
+            destroy_dbg_service: wasmModule.destroy_dbg_service,
+            compile: wasmModule.compile,
+            run: wasmModule.run,
+            curry: wasmModule.curry
+        };
+        this.state.isInitialized = true;
     }
 
     /**
@@ -1343,4 +1347,10 @@ class Debugger {
         return opMap[opCode] || `op_${opCode}`;
     }
 
+}
+
+
+// Node (tests) only; in the browser these files are plain <script> tags
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = Debugger;
 }

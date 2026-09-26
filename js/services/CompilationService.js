@@ -297,3 +297,8 @@ class CompilationService {
         });
     }
 }
+
+// Node (tests) only; in the browser these files are plain <script> tags
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = CompilationService;
+}
