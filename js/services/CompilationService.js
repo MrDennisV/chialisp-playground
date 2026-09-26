@@ -94,7 +94,8 @@ class CompilationService {
                 executableHex = curryResult.hex;
                 curriedPuzzleHash = curryResult.hash;
             } catch (curryError) {
-                console.warn('Curry failed during execution:', curryError);
+                // don't fall back to running the uncurried program: it would silently get the wrong arguments
+                throw new Error(`Invalid curried parameters: ${curryError.message}`);
             }
         }
 
