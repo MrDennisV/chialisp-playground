@@ -98,9 +98,10 @@ class CompilationService {
             }
         }
 
+        // executableHex is already curried above; passing the curry params again would curry twice
         const runResult = await this.debuggerInstance.run(
             executableHex,
-            runParams.curriedParams || '',
+            '',
             runParams.solutionParams || '()'
         );
 
