@@ -220,7 +220,4 @@ Each test must be seen to fail against a broken implementation before it is acce
 ## Decisions
 
 - **Mainnet addresses (decided):** the playground only ever *displays* `txch` addresses, because its keys are derived from public names and funds sent to them on a real network could be taken by anyone. Pasted `xch1…` input is accepted with the notice described under Send modal.
-
-## Open for review
-
-1. **UI end-to-end tests.** The service tests above cover the behaviour. Driving the Chain view in a browser (Playwright) would also cover rendering and wiring, but it adds a dev dependency and browser downloads to a project that has none. Proposed: add it as a separate `npm run test:ui`, not part of `npm test`.
+- **UI end-to-end tests (decided):** Playwright tests drive the Chain view as a user does (Start, Send, Next, reload and restore, Reset) under a separate `npm run test:ui`. Playwright is a dev dependency used only there; `npm test` stays dependency-free and browser-free.
