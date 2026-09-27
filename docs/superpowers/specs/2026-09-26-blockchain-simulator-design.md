@@ -138,7 +138,7 @@ Reset asks for confirmation in a modal. It discards every block, coin and transa
 ### Coin tracking
 
 - `sim.coinState(id)` provides created and spent heights, and `sim.children(id)` provides the coins a spend created.
-- The playground keeps a small index from puzzle hash to coin ids, filled whenever it creates a coin: faucet, payment, change and tick. That index answers "which coins belong to this address"; the simulator stays the source of truth for their state.
+- The playground keeps a small index from puzzle hash to coin ids, filled with every faucet coin and every child of a confirmed spend (payment and change). That index answers "which coins belong to this address"; the simulator stays the source of truth for their state. The internal tick coin is never indexed.
 
 ## Architecture
 
@@ -190,14 +190,14 @@ The simulator exposes no way to serialize its state. `clone()` shares state inst
   - `durability: 'strict'` transactions;
   - a **generation counter** written in the same transaction. If another tab committed since this tab loaded, the write is rejected; this tab stops producing blocks and shows "This chain changed in another tab — reload to continue". Last-writer-wins is never allowed to silently discard a chain.
   - a best-effort save on `pagehide`.
-- UI preferences are stored in the same record: hidden wallets, removed watched addresses, expanded coin lists and the last selected view.
+- Hidden wallets and removed watched addresses are entries in the action log. UI preferences (which coin lists are expanded) are stored in the same record.
 
 ### Error handling
 
 - **The SDK fails to load:** the Chain view shows the error and a Retry button. The rest of the playground is unaffected.
 - **Replay fails** (e.g. a future SDK changes validation): the view says the saved chain can't be restored and offers **Reset** or **Download saved log**. The stored log is never deleted automatically.
 - **Storage is unavailable** (private mode, quota): the chain keeps working in memory, with a one-line notice that it won't survive a reload.
-- **A block is rejected by the simulator:** this can't happen from Phase 1 UI actions, because faucet and standard spends are built by the playground. If it does, the offending transaction is dropped from the mempool with the simulator's error shown in the feed, and the block is farmed without it.
+- **A block is rejected by the simulator:** this can't happen from Phase 1 UI actions, because faucet and standard spends are built by the playground. If it does, the spends in that block are dropped with the simulator's error shown in the feed, and the block is farmed with its faucet coins and the tick only. A failed `spendCoins` leaves the simulator untouched (verified).
 
 ## Testing
 
