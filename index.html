@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css">
     <link rel="stylesheet" href="css/playground.css">
+    <link rel="stylesheet" href="css/chain.css">
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
 </head>
 <body>
@@ -30,6 +31,9 @@
                     </button>
                     <button class="activity-btn" id="debugViewBtn" title="Run and Debug" data-view="debug">
                         <i class="fas fa-bug"></i>
+                    </button>
+                    <button class="activity-btn" id="chainViewBtn" title="Blockchain Simulator" data-view="chain">
+                        <i class="fas fa-cubes"></i>
                     </button>
                 </div>
                 <div class="activity-actions">
@@ -158,6 +162,37 @@
                         </div>
                     </div>
                 </div>
+            <div class="sidebar-view" id="chainView">
+                    <div class="sidebar-header">
+                        <span><i class="fas fa-cubes me-2"></i><span class="sidebar-header-text">BLOCKCHAIN SIMULATOR</span></span>
+                        <span class="chain-header-actions">
+                            <span class="chain-network-badge">simulated</span>
+                            <button class="chain-icon-btn chain-reset-btn" id="chainResetBtn" title="Reset the chain" aria-label="Reset the chain"><i class="fas fa-undo"></i></button>
+                        </span>
+                    </div>
+                    <div class="sidebar-toolbar">
+                        <div class="toolbar-group">
+                            <button class="sidebar-btn sidebar-btn-success" id="chainStartBtn" title="Start producing blocks"><i class="fas fa-play"></i><span>Start</span></button>
+                            <button class="sidebar-btn sidebar-btn-warning" id="chainPauseBtn" title="Pause block production" disabled><i class="fas fa-pause"></i><span>Pause</span></button>
+                            <button class="sidebar-btn sidebar-btn-primary" id="chainNextBtn" title="Farm one block"><i class="fas fa-step-forward"></i><span>Next</span></button>
+                        </div>
+                    </div>
+                    <div class="debug-sidebar-content chain-content" id="chainContent">
+                        <div class="chain-status" id="chainStatus" role="status" aria-label="Chain status"></div>
+                        <div class="chain-notices" id="chainNotices"></div>
+                        <div class="debug-output chain-card">
+                            <h6><span>Wallets</span><button class="chain-link-btn" id="chainNewWalletBtn"><i class="fas fa-plus"></i> New</button></h6>
+                            <div id="chainWallets"></div>
+                            <div id="chainNewWallet"></div>
+                        </div>
+                        <button class="open-file-btn chain-send-open" id="chainSendOpenBtn"><i class="fas fa-paper-plane me-2"></i>Send XCH</button>
+                        <div class="debug-output chain-card" id="chainOtherCard" hidden>
+                            <h6><span>Other addresses</span></h6>
+                            <div id="chainOther"></div>
+                        </div>
+                        <div class="chain-warning"><i class="fas fa-exclamation-triangle"></i> Simulated keys derived from public names. Anyone can compute them &mdash; never send real funds to these addresses.</div>
+                    </div>
+                </div>
             </div>
             
             <div class="main-content">
@@ -203,6 +238,10 @@
                             <i class="fas fa-graduation-cap me-1"></i>
                             EXAMPLES PARSER
                         </div>
+                        <div class="panel-tab" data-panel="chain">
+                            <i class="fas fa-cubes me-1"></i>
+                            CHAIN <span class="chain-tab-badge" id="chainTabBadge"></span>
+                        </div>
                         <div class="panel-actions">
                             <button class="clear-output-btn" onclick="playground?.clearOutput()" title="Clear Output">
                                 <i class="fas fa-trash"></i>
@@ -218,6 +257,10 @@
                             <div id="output-editor" style="width: 100%; height: 100%; min-height: 200px;"></div>
                         </div>
                         
+                        <div class="panel-section" id="chainPanel">
+                            <div class="chain-feed" id="chainFeed"><div class="chain-feed-empty">Open the Chain view to start the simulator.</div></div>
+                        </div>
+
                         <div class="panel-section" id="educationalPanel">
                             <div id="educational-output" class="educational-output">
                             </div>
@@ -229,6 +272,67 @@
         </div>
     </main>
     
+    <div class="modal fade" id="chainSendModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-paper-plane me-2"></i>Send XCH</h5>
+                    <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal"></button>
+                </div>
+                <form id="chainSendForm" autocomplete="off">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="chainFrom" class="form-label">From</label>
+                            <select class="form-select bg-dark text-white" id="chainFrom"></select>
+                            <div class="form-text text-muted" id="chainFromHint"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="chainTo" class="form-label">To</label>
+                            <input type="text" class="form-control bg-dark text-white chain-mono-input" id="chainTo" placeholder="txch1… or 0x puzzle hash" spellcheck="false">
+                            <div class="chain-to-shortcuts" id="chainToShortcuts"></div>
+                            <div class="chain-mainnet-notice" id="chainMainnetNotice" hidden><i class="fas fa-info-circle me-1"></i>Mainnet address — nothing is sent on mainnet; the simulator only uses its puzzle hash (the same one as txch1…)</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label for="chainAmount" class="form-label">Amount (XCH)</label>
+                                <input type="text" inputmode="decimal" class="form-control bg-dark text-white chain-mono-input" id="chainAmount" value="1">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label for="chainFee" class="form-label">Fee (XCH)</label>
+                                <input type="text" inputmode="decimal" class="form-control bg-dark text-white chain-mono-input" id="chainFee" value="0.0001">
+                            </div>
+                        </div>
+                        <div class="chain-send-summary" id="chainSendSummary"></div>
+                        <div class="chain-send-error" id="chainSendError" role="alert"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal"><i class="fas fa-times me-1"></i>Cancel</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane me-1"></i>Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="chainResetModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-undo me-2"></i>Reset the chain?</h5>
+                    <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    Every block, coin and transaction is discarded and the chain starts again at block #1, with Alice and Bob funded with 10 XCH each.
+                    <div class="form-text text-muted mt-2">Wallets you created come back empty: their keys come from their names.</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal"><i class="fas fa-times me-1"></i>Cancel</button>
+                    <button type="button" class="btn btn-danger" id="chainResetConfirmBtn"><i class="fas fa-undo me-1"></i>Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="argsModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content bg-dark">
@@ -424,6 +528,9 @@
             </span>
         </div>
         <div class="status-right">
+            <span class="status-item chain-status-item" id="statusBarChain" title="Blockchain simulator">
+                <i class="fas fa-cubes"></i> <span>Chain</span>
+            </span>
             <span class="status-item" id="statusBarPosition">
                 Ln 1, Col 1
             </span>
@@ -443,5 +550,6 @@
     <script src="js/services/ExamplesService.js"></script>
     <script src="js/services/DebugService.js"></script>
     <script src="js/ChialispPlayground.js"></script>
+    <script type="module" src="js/chain/boot.js"></script>
 </body>
 </html>

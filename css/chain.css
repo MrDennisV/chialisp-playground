@@ -1,0 +1,410 @@
+/* Blockchain simulator view. Reuses the playground's theme tokens and debug-panel look. */
+
+.chain-network-badge {
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    color: var(--vscode-warning);
+    border: 1px solid rgba(255, 152, 0, 0.45);
+    border-radius: 3px;
+    padding: 1px 5px;
+}
+
+.chain-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chain-card h6 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ---------- status ---------- */
+
+.chain-status {
+    background: var(--vscode-editor);
+    border: 1px solid var(--vscode-border);
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--vscode-text);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    row-gap: 6px;
+}
+
+.chain-state {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}
+
+.chain-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--vscode-text-muted);
+}
+
+.chain-state.running .chain-dot {
+    background: var(--vscode-success);
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.6);
+    animation: chain-pulse 1.6s infinite;
+}
+
+.chain-state.paused .chain-dot { background: var(--vscode-warning); }
+
+@keyframes chain-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.6); }
+    70% { box-shadow: 0 0 0 6px rgba(76, 175, 80, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+}
+
+.chain-height {
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    text-align: right;
+}
+
+.chain-height.bump { animation: chain-bump 0.45s ease-out; }
+
+@keyframes chain-bump {
+    0% { color: var(--vscode-success); transform: translateY(-2px); }
+    100% { color: #fff; transform: none; }
+}
+
+.chain-meta {
+    color: var(--vscode-text-muted);
+    font-size: 11px;
+}
+
+.chain-meta b {
+    color: var(--vscode-text);
+    font-weight: 500;
+}
+
+.chain-meta.right { text-align: right; }
+
+.chain-mempool-count { color: var(--vscode-warning) !important; }
+
+/* ---------- wallets ---------- */
+
+.chain-wallet {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--vscode-border);
+    font-size: 12px;
+}
+
+.chain-wallet:last-child { border-bottom: none; }
+
+.chain-wallet-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.chain-wallet-name {
+    color: #fff;
+    font-weight: 600;
+}
+
+.chain-balance {
+    font-family: 'Consolas', 'Monaco', monospace;
+    color: var(--vscode-success);
+}
+
+.chain-balance.pending::after {
+    content: ' ⏳';
+    font-size: 10px;
+}
+
+.chain-mono {
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 11px;
+    color: var(--vscode-text-muted);
+}
+
+.chain-icon-btn {
+    background: none;
+    border: none;
+    color: var(--vscode-text-muted);
+    padding: 0 3px;
+    cursor: pointer;
+    font-size: 10px;
+}
+
+.chain-icon-btn:hover { color: var(--vscode-accent); }
+
+.chain-wallet-ids {
+    display: flex;
+    gap: 10px;
+    margin-top: 3px;
+    flex-wrap: wrap;
+}
+
+.chain-coins-toggle {
+    background: none;
+    border: none;
+    color: var(--vscode-text-muted);
+    font-size: 11px;
+    padding: 4px 0 0;
+    cursor: pointer;
+}
+
+.chain-coins-toggle:hover { color: var(--vscode-text); }
+
+.chain-coins {
+    margin-top: 4px;
+    border-left: 2px solid var(--vscode-border);
+    padding-left: 8px;
+}
+
+.chain-coin {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 8px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 11px;
+    padding: 2px 0;
+    color: var(--vscode-text);
+}
+
+.chain-coin .confirmed { color: var(--vscode-success); }
+.chain-coin .pending { color: var(--vscode-warning); }
+.chain-coin.spending { opacity: 0.5; text-decoration: line-through; }
+
+/* ---------- send ---------- */
+
+.chain-link-btn {
+    background: none;
+    border: none;
+    color: var(--vscode-accent);
+    font-size: 11px;
+    padding: 0;
+    cursor: pointer;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 500;
+}
+
+.chain-link-btn:hover { text-decoration: underline; }
+
+.chain-send-error {
+    color: var(--vscode-error);
+    min-height: 14px;
+}
+
+.chain-tag {
+    font-size: 9px;
+    border-radius: 3px;
+    padding: 1px 5px;
+    margin-left: 6px;
+    vertical-align: middle;
+    background: rgba(0, 122, 204, 0.18);
+    color: #4fb3ff;
+    font-weight: 500;
+}
+
+.chain-warning {
+    font-size: 10px;
+    color: var(--vscode-text-muted);
+    line-height: 1.4;
+    padding: 0 2px;
+}
+
+.chain-warning i { color: var(--vscode-warning); margin-right: 3px; }
+
+/* ---------- bottom panel feed ---------- */
+
+.chain-feed {
+    height: 100%;
+    overflow-y: auto;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 12px;
+    padding: 6px 0;
+    background: var(--vscode-panel);
+}
+
+.chain-feed-empty {
+    color: var(--vscode-text-muted);
+    padding: 12px 16px;
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+}
+
+.chain-block {
+    display: grid;
+    grid-template-columns: 70px 90px 1fr;
+    gap: 10px;
+    padding: 4px 16px;
+    border-left: 3px solid transparent;
+}
+
+.chain-block:hover { background: rgba(255, 255, 255, 0.03); }
+
+.chain-block.new { animation: chain-flash 1.2s ease-out; }
+
+@keyframes chain-flash {
+    0% { background: rgba(76, 175, 80, 0.18); border-left-color: var(--vscode-success); }
+    100% { background: transparent; border-left-color: transparent; }
+}
+
+.chain-block.pending {
+    color: var(--vscode-warning);
+    font-style: italic;
+}
+
+.chain-block-num { color: #fff; font-weight: 600; }
+.chain-block.pending .chain-block-num { color: var(--vscode-warning); }
+.chain-block-time { color: var(--vscode-text-muted); }
+.chain-block-empty { color: #5a5a5a; }
+
+.chain-tx { color: var(--vscode-text); }
+.chain-tx + .chain-tx { margin-top: 2px; }
+.chain-tx .amt { color: var(--vscode-success); }
+.chain-tx .fee { color: var(--vscode-text-muted); }
+.chain-tx .who { color: #4fb3ff; }
+
+.chain-tab-badge {
+    display: none;
+    background: var(--vscode-warning);
+    color: #000;
+    border-radius: 8px;
+    font-size: 9px;
+    padding: 0 5px;
+    margin-left: 4px;
+    font-weight: 700;
+}
+
+.chain-tab-badge.show { display: inline-block; }
+
+.chain-status-item.running i { color: #9dffa4; }
+
+/* ---------- layout fixes ---------- */
+
+.chain-content > * { flex-shrink: 0; }
+
+.chain-meta-wide { grid-column: 1 / -1; }
+
+#chainPanel { padding: 0; white-space: normal; }
+
+.chain-send-open { width: 100%; }
+
+.chain-wallet-send {
+    margin-left: 6px;
+    font-size: 10px;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.chain-wallet:hover .chain-wallet-send { opacity: 1; }
+
+/* ---------- send modal ---------- */
+
+.chain-mono-input { font-family: 'Consolas', 'Monaco', monospace; font-size: 13px; }
+
+.chain-to-shortcuts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.chain-chip {
+    background: var(--vscode-tab);
+    border: 1px solid var(--vscode-border);
+    color: var(--vscode-text);
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.chain-chip:hover { border-color: var(--vscode-accent); }
+
+.chain-chip-puzzle i { color: #4fb3ff; margin-right: 3px; }
+
+.chain-chip .muted,
+.chain-send-summary .muted { color: var(--vscode-text-muted); font-size: 11px; }
+
+.chain-send-summary {
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--vscode-text);
+    background: var(--vscode-bg);
+    border: 1px solid var(--vscode-border);
+    border-radius: 4px;
+    padding: 8px 12px;
+}
+
+.chain-send-summary:empty { display: none; }
+.chain-send-summary b { color: var(--vscode-success); font-weight: 500; }
+.chain-send-summary .who { color: #4fb3ff; }
+
+.chain-send-error { color: var(--vscode-error); font-size: 12px; margin-top: 8px; }
+
+/* ---------- reset / remove ---------- */
+
+.chain-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.chain-reset-btn { font-size: 11px; }
+.chain-reset-btn:hover { color: var(--vscode-error) !important; }
+
+.chain-wallet-remove {
+    margin-left: 2px;
+    font-size: 10px;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.chain-wallet:hover .chain-wallet-remove { opacity: 1; }
+.chain-wallet-remove:hover { color: var(--vscode-error) !important; }
+
+.chain-restored {
+    font-size: 11px;
+    color: var(--vscode-text-muted);
+    background: rgba(0, 122, 204, 0.12);
+    border: 1px solid rgba(0, 122, 204, 0.35);
+    border-radius: 4px;
+    padding: 6px 10px;
+}
+
+.chain-notices:empty { display: none; }
+
+.chain-notice {
+    font-size: 11px;
+    border-radius: 4px;
+    padding: 6px 10px;
+    color: var(--vscode-text);
+    background: rgba(255, 152, 0, 0.12);
+    border: 1px solid rgba(255, 152, 0, 0.4);
+}
+
+.chain-notice.error {
+    background: rgba(244, 67, 54, 0.12);
+    border-color: rgba(244, 67, 54, 0.45);
+}
+
+.chain-notice button {
+    margin-top: 6px;
+    margin-right: 6px;
+}
+
+.chain-mainnet-notice {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #4fb3ff;
+}
+
+.chain-chip:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.chain-rejected { color: var(--vscode-error); }
