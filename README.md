@@ -72,6 +72,26 @@ npm test
 
 They check that every example in `examples.json` exists, compiles and runs with its default arguments, that no `.clsp` file is left unlisted, and that curried parameters, includes and error reporting behave correctly.
 
+## Blockchain Simulator
+
+The cubes icon opens a local simulated blockchain (Chia Wallet SDK simulator, in your browser):
+
+- **Start / Pause / Next** farm blocks. Each block adds 52 s of chain time, so time and height locks behave like on Chia.
+- **Wallets** Alice and Bob start with 10 XCH. Their keys come from their names, so their addresses never change. Create more with **+ New**.
+- **Send XCH** from the faucet or a wallet. Transactions wait in the mempool until the next block; the summary shows the coins spent, the change and the fee.
+- **this puzzle** sends to the address of the program open in the editor (with its curried parameters): that is how you lock XCH in a contract.
+- The chain is saved in your browser and restored, paused, when you come back. **Reset** starts over.
+
+Simulated keys are derived from public names: never send real funds to these addresses.
+
+UI tests drive the simulator in a real browser:
+
+```bash
+npm install
+npx playwright install chromium
+npm run test:ui
+```
+
 ## Built With
 
 - **[Monaco Editor](https://microsoft.github.io/monaco-editor/)** - VS Code editor in the browser
