@@ -28,7 +28,10 @@ Success means a learner can, without leaving the browser:
 
 **Not in Phase 1**
 
-- Spending coins locked by the user's own puzzles, the spend bundle builder, the bundle inspector, "debug this spend" (Phase 2).
+- Spending coins locked by the user's own puzzles, the spend bundle builder, the bundle inspector, "debug this spend" (Phase 2, designed separately). Phase 1 only has to leave room for it:
+  - The chain log records, for every puzzle hash sent to through "this puzzle", the file, curried parameters and compiled program: the puzzle reveal Phase 2 needs to spend those coins.
+  - Direction discussed so far: a single-coin "Spend…" action on contract coins, and a Bundle Builder for dependent spends, backed by a `.bundle.json` file next to the `.clsp` files, where spends reference each other (`$sender.coin_id`, `$sender.children[0]`).
+  - Known issue for then: `examples/blockchain/announcements.clsp` asserts the bare message, but `ASSERT_COIN_ANNOUNCEMENT` expects `sha256(coin_id + message)`, so it will fail once spends are validated.
 - Guided scenarios per example (Phase 3).
 - Exporting or sharing a chain (the persisted action log makes it possible later).
 
