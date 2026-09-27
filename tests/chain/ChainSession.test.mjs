@@ -57,19 +57,47 @@ test('a reload restores height, balances, hidden wallets and the pending mempool
     assert.deepEqual(coinIds(restored), coinIds(session));
 });
 
-test('reset returns to genesis and is what a reload then sees', async () => {
+test('reset returns to genesis, keeps created wallets empty, and is what a reload then sees', async () => {
     const persistence = new MemoryChainPersistence();
     const { session } = await openSession({ persistence });
     session.next();
     session.next();
-    session.createWallet('Dave');
+    const dave = session.createWallet('Dave');
+    session.send({ from: 'Alice', to: dave.address, amount: parseXch('3'), fee: 0n });
+    session.next();
     session.reset();
     await session.flush();
     assert.equal(session.chain.height, 1);
-    assert.deepEqual(session.wallets.visible.map((w) => w.name), ['Alice', 'Bob']);
+    assert.deepEqual(session.wallets.visible.map((w) => w.name), ['Alice', 'Bob', 'Dave']);
+    assert.equal(session.wallets.balanceOf(dave.puzzleHashHex), 0n);
 
     const { session: reloaded } = await openSession({ persistence });
     assert.equal(reloaded.chain.height, 1);
+    assert.deepEqual(reloaded.wallets.visible.map((w) => w.name), ['Alice', 'Bob', 'Dave']);
+});
+
+test('a send to "this puzzle" records its source only when the send succeeds', async () => {
+    const { session } = await openSession();
+    const puzzle = { puzzleHashHex: 'ab'.repeat(32), label: 'piggybank.clsp', source: { file: 'examples/blockchain/piggybank.clsp', curriedParams: '(3600)', compiledHex: 'ff01' } };
+
+    assert.throws(() => session.send({ from: 'Alice', to: '0x' + puzzle.puzzleHashHex, amount: null, fee: 0n, puzzle }), /Enter an amount/);
+    assert.deepEqual(session.wallets.watched, []);
+    assert.equal(session.log.entries.some((e) => e.type === 'watch'), false);
+
+    session.send({ from: 'Alice', to: '0x' + puzzle.puzzleHashHex, amount: parseXch('2'), fee: 0n, puzzle });
+    assert.deepEqual(session.wallets.watched.map((w) => [w.label, w.source?.file]), [['piggybank.clsp', 'examples/blockchain/piggybank.clsp']]);
+});
+
+test('a puzzle source is never attached to a different destination', async () => {
+    const { session } = await openSession();
+    const puzzle = { puzzleHashHex: 'ab'.repeat(32), label: 'b.clsp', source: { file: 'b.clsp', curriedParams: '', compiledHex: 'ff01' } };
+    const other = 'cd'.repeat(32);
+
+    session.send({ from: 'Alice', to: '0x' + other, amount: parseXch('1'), fee: 0n, puzzle });
+
+    const [watched] = session.wallets.watched;
+    assert.equal(watched.puzzleHashHex, other);
+    assert.equal(watched.source, null);
 });
 
 test('a chain changed by another tab stops this tab from farming', async () => {

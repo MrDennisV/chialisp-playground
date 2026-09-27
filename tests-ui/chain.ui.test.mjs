@@ -123,6 +123,34 @@ test('clicking the cubes icon while the playground is still loading opens the Ch
     await context.close();
 });
 
+test('reopening Send starts clean instead of reusing the last destination', async () => {
+    const { page, context } = await openChain();
+    await page.getByRole('button', { name: 'Send from Alice' }).click();
+    await page.locator('#chainToShortcuts').getByRole('button', { name: 'Bob' }).click();
+    await page.locator('#chainSendModal').getByRole('button', { name: 'Cancel' }).click();
+    await page.locator('#chainSendModal').waitFor({ state: 'hidden' });
+
+    await page.getByRole('button', { name: 'Send from Bob' }).click();
+    assert.equal(await page.getByLabel('To', { exact: true }).inputValue(), '');
+    await page.locator('#chainSendModal').getByRole('button', { name: 'Send' }).click();
+    assert.doesNotMatch(await page.locator('#chainSendError').innerText(), /Sending to yourself/);
+    await context.close();
+});
+
+test('the new wallet name survives blocks being farmed while you type', async () => {
+    const { page, context } = await openChain();
+    await page.getByRole('button', { name: 'New' }).click();
+    await page.getByLabel('New wallet name').fill('Carol');
+    await page.getByRole('button', { name: 'Start' }).click();
+    await chainStatus(page).getByText('Block #3', { exact: true }).waitFor({ timeout: 10_000 });
+
+    assert.equal(await page.getByLabel('New wallet name').inputValue(), 'Carol');
+    await page.getByLabel('New wallet name').press('Enter');
+    await page.getByRole('button', { name: 'Pause' }).click();
+    await page.locator('#chainWallets .chain-wallet', { hasText: 'Carol' }).waitFor();
+    await context.close();
+});
+
 test('removing a wallet and re-creating it by name brings its coins back', async () => {
     const { page, context } = await openChain();
     await page.getByRole('button', { name: 'Remove Bob' }).click();

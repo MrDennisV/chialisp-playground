@@ -15,6 +15,13 @@ const duration = (seconds) => {
 };
 const STATE_LABEL = { stopped: 'Stopped', running: 'Running', paused: 'Paused' };
 
+export const FEED_LIMIT = 200;
+
+/** Newest first, capped so a chain left running for hours still renders instantly */
+export function feedBlocks(blocks) {
+    return blocks.slice(-FEED_LIMIT).reverse();
+}
+
 /** Renders the simulator from ChainSession state and forwards user actions to it. No chain logic here. */
 export class ChainView {
     constructor({ root = document, resolvePuzzle }) {
@@ -22,8 +29,8 @@ export class ChainView {
         this.resolvePuzzle = resolvePuzzle;
         this.session = null;
         this.lastHeight = null;
-        this.addingWallet = false;
         this.puzzleChip = null;
+        this.pendingPuzzle = false;
         this.pendingLabel = null;
         this.sendModal = null;
         this.resetModal = null;
@@ -116,22 +123,27 @@ export class ChainView {
             const open = prefs.expanded.includes(w.key);
             return `<div class="chain-wallet">
                 <div class="chain-wallet-top">
-                    <span class="chain-wallet-name">${escapeHtml(w.name)}<button class="chain-icon-btn chain-wallet-send" data-send-from="${w.key}" title="Send from ${escapeHtml(w.name)}" aria-label="Send from ${escapeHtml(w.name)}"><i class="fas fa-paper-plane"></i></button><button class="chain-icon-btn chain-wallet-remove" data-remove-wallet="${w.key}" title="Remove from panel (coins stay on chain)" aria-label="Remove ${escapeHtml(w.name)}"><i class="fas fa-times"></i></button></span>
+                    <span class="chain-wallet-name">${escapeHtml(w.name)}<button class="chain-icon-btn chain-wallet-send" data-send-from="${escapeHtml(w.key)}" title="Send from ${escapeHtml(w.name)}" aria-label="Send from ${escapeHtml(w.name)}"><i class="fas fa-paper-plane"></i></button><button class="chain-icon-btn chain-wallet-remove" data-remove-wallet="${escapeHtml(w.key)}" title="Remove from panel (coins stay on chain)" aria-label="Remove ${escapeHtml(w.name)}"><i class="fas fa-times"></i></button></span>
                     <span class="chain-balance ${hasPending ? 'pending' : ''}">${formatXch(wallets.balanceOf(w.puzzleHashHex))} XCH</span>
                 </div>
                 <div class="chain-wallet-ids">
                     <span class="chain-mono">${short(w.address, 9, 4)}<button class="chain-icon-btn" data-copy="${w.address}" title="Copy address" aria-label="Copy ${escapeHtml(w.name)}'s address"><i class="far fa-copy"></i></button></span>
                     <span class="chain-mono">pk ${short('0x' + w.publicKeyHex, 6, 4)}<button class="chain-icon-btn" data-copy="0x${w.publicKeyHex}" title="Copy public key" aria-label="Copy ${escapeHtml(w.name)}'s public key"><i class="far fa-copy"></i></button></span>
                 </div>
-                <button class="chain-coins-toggle" data-toggle="${w.key}"><i class="fas fa-chevron-${open ? 'down' : 'right'}"></i> Coins (${coins.length})</button>
+                <button class="chain-coins-toggle" data-toggle="${escapeHtml(w.key)}"><i class="fas fa-chevron-${open ? 'down' : 'right'}"></i> Coins (${coins.length})</button>
                 ${open ? `<div class="chain-coins">${this.coinRows(coins)}</div>` : ''}
             </div>`;
         });
-        if (this.addingWallet) {
-            rows.push('<div class="chain-wallet"><form id="chainNewWalletForm"><input class="form-control form-control-sm bg-dark text-white" id="chainNewWalletName" placeholder="Name, e.g. Carol" aria-label="New wallet name"><div class="chain-send-error" id="chainNewWalletError"></div></form></div>');
-        }
         this.$('chainWallets').innerHTML = rows.join('');
-        if (this.addingWallet) this.$('chainNewWalletName').focus();
+    }
+
+    showNewWalletForm() {
+        this.$('chainNewWallet').innerHTML = '<div class="chain-wallet"><form id="chainNewWalletForm"><input class="form-control form-control-sm bg-dark text-white" id="chainNewWalletName" placeholder="Name, e.g. Carol" aria-label="New wallet name"><div class="chain-send-error" id="chainNewWalletError"></div></form></div>';
+        this.$('chainNewWalletName').focus();
+    }
+
+    hideNewWalletForm() {
+        this.$('chainNewWallet').innerHTML = '';
     }
 
     renderOthers() {
@@ -161,7 +173,7 @@ export class ChainView {
         const pending = chain.mempool.length
             ? `<div class="chain-block pending"><span class="chain-block-num">mempool</span><span class="chain-block-time">next block</span><div>${chain.mempool.map((tx) => this.txLine(tx)).join('')}</div></div>`
             : '';
-        const blocks = [...chain.blocks].reverse().map((block) => {
+        const blocks = feedBlocks(chain.blocks).map((block) => {
             const txs = block.txs.map((tx) => this.txLine(tx)).join('');
             const rejected = block.rejected.map(({ tx, error }) => `<div class="chain-tx chain-rejected">✕ ${escapeHtml(tx.from)} → ${escapeHtml(this.session.wallets.labelFor(tx.toPuzzleHashHex))} rejected: ${escapeHtml(error)}</div>`).join('');
             return `<div class="chain-block ${block.height === newest && this.session.running ? 'new' : ''}">
@@ -170,7 +182,9 @@ export class ChainView {
                 <div>${txs || rejected ? txs + rejected : '<span class="chain-block-empty">empty block</span>'}</div>
             </div>`;
         });
-        this.$('chainFeed').innerHTML = pending + blocks.join('');
+        const older = chain.blocks.length - FEED_LIMIT;
+        const olderNote = older > 0 ? `<div class="chain-feed-empty">… ${older} older blocks</div>` : '';
+        this.$('chainFeed').innerHTML = pending + blocks.join('') + olderNote;
     }
 
     // ---------- send modal ----------
@@ -178,10 +192,12 @@ export class ChainView {
     async openSend(fromKey = FAUCET) {
         const { wallets } = this.session;
         const from = this.$('chainFrom');
-        from.innerHTML = [`<option value="${FAUCET}">${FAUCET}</option>`, ...wallets.visible.map((w) => `<option value="${w.key}">${escapeHtml(w.name)}</option>`)].join('');
+        from.innerHTML = [`<option value="${FAUCET}">${FAUCET}</option>`, ...wallets.visible.map((w) => `<option value="${escapeHtml(w.key)}">${escapeHtml(w.name)}</option>`)].join('');
         from.value = fromKey;
         this.$('chainSendError').textContent = '';
+        this.$('chainTo').value = '';
         this.pendingLabel = null;
+        this.pendingPuzzle = false;
         this.puzzleChip = await this.resolvePuzzle();
         this.renderShortcuts();
         this.renderSummary();
@@ -255,10 +271,10 @@ export class ChainView {
         event.preventDefault();
         const form = this.readForm();
         try {
-            if (this.pendingPuzzle) {
-                this.session.watchPuzzle({ puzzleHashHex: this.puzzleChip.puzzleHashHex, label: this.puzzleChip.name, source: this.puzzleChip.source });
-            }
-            this.session.send(form);
+            const puzzle = this.pendingPuzzle
+                ? { puzzleHashHex: this.puzzleChip.puzzleHashHex, label: this.puzzleChip.name, source: this.puzzleChip.source }
+                : null;
+            this.session.send({ ...form, puzzle });
             this.pendingPuzzle = false;
             this.sendModal.hide();
         } catch (error) {
@@ -286,10 +302,7 @@ export class ChainView {
             this.pendingLabel = this.pendingPuzzle ? this.puzzleChip.name : null;
             this.renderSummary();
         });
-        this.$('chainNewWalletBtn').addEventListener('click', () => {
-            this.addingWallet = true;
-            this.renderWallets();
-        });
+        this.$('chainNewWalletBtn').addEventListener('click', () => this.showNewWalletForm());
         this.$('chainResetBtn').addEventListener('click', () => this.openReset());
         this.$('chainResetConfirmBtn').addEventListener('click', () => {
             this.resetModal.hide();
@@ -303,14 +316,12 @@ export class ChainView {
             e.preventDefault();
             const name = this.$('chainNewWalletName').value;
             if (!name.trim()) {
-                this.addingWallet = false;
-                this.renderWallets();
+                this.hideNewWalletForm();
                 return;
             }
             try {
                 this.session.createWallet(name);
-                this.addingWallet = false;
-                this.renderWallets();
+                this.hideNewWalletForm();
             } catch (error) {
                 this.$('chainNewWalletError').textContent = error.message;
             }

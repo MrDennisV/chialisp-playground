@@ -72,6 +72,14 @@ test('rejects sends the wallet cannot make, with messages a learner understands'
     assert.throws(send({ to: 'nope' }), /Enter a txch1… or xch1… address, or a 0x puzzle hash/);
 });
 
+test('amounts above what a coin can hold are rejected before anything is submitted', () => {
+    const { wallets, bob } = fundedChain();
+    const huge = 20_000_000n * MOJOS_PER_XCH;
+    assert.throws(() => wallets.buildFaucet({ to: bob.address, amount: huge }), /Amount too large: at most 18446744.073709551615 XCH/);
+    assert.throws(() => wallets.previewSend({ from: 'Alice', to: bob.address, amount: huge, fee: 0n }), /Amount too large/);
+    assert.throws(() => wallets.previewSend({ from: 'Alice', to: bob.address, amount: 1n, fee: huge }), /Fee too large/);
+});
+
 test('a pasted mainnet address pays the same puzzle hash and is flagged', () => {
     const { chain, wallets, bob } = fundedChain();
     const mainnet = new sdk.Address(sdk.fromHex(bob.puzzleHashHex), 'xch').encode();
@@ -99,6 +107,14 @@ test('wallet names are unique, non-empty and cannot be Faucet', () => {
     assert.throws(() => wallets.create('   '), /Enter a name/);
     assert.throws(() => wallets.create('faucet'), /Faucet is reserved/);
     assert.equal(wallets.create('carol').name, 'Carol');
+});
+
+test('wallet names use letters, numbers, spaces, - or _ and at most 24 characters', () => {
+    const { wallets } = fundedChain();
+    for (const bad of ['x" data-copy="PWNED', '<b>', 'a'.repeat(25), 'semi;colon']) {
+        assert.throws(() => wallets.create(bad), /Use letters, numbers, spaces, - or _ \(max 24\)/, bad);
+    }
+    assert.equal(wallets.create('María-José 2').name, 'María-José 2');
 });
 
 test('watched addresses carry a label and show their coins', () => {

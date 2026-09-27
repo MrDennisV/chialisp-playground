@@ -114,6 +114,7 @@ export class ChainSession {
     }
 
     reset() {
+        const created = this.wallets.visible.map((w) => w.name).filter((name) => !GENESIS_WALLETS.includes(name));
         this.pause();
         this.replayError = null;
         this.savedData = null;
@@ -121,13 +122,16 @@ export class ChainSession {
         this.writer.stopped = this.conflict;
         this.fresh();
         this.genesis();
+        for (const name of created) this.createWallet(name);
         this.emit();
     }
 
-    send({ from, to, amount, fee }) {
+    /** `puzzle` ({ puzzleHashHex, label, source }) is the editor program the user picked; its source is kept only if the send pays it */
+    send({ from, to, amount, fee, puzzle = null }) {
         const tx = from === FAUCET ? this.wallets.buildFaucet({ to, amount }) : this.wallets.buildSend({ from, to, amount, fee });
         const isKnown = this.wallets.find(this.wallets.labelFor(tx.toPuzzleHashHex)) || this.wallets.watched.some((w) => w.puzzleHashHex === tx.toPuzzleHashHex);
-        if (!isKnown) this.watchPuzzle({ puzzleHashHex: tx.toPuzzleHashHex, label: this.wallets.labelFor(tx.toPuzzleHashHex), source: null });
+        if (puzzle && puzzle.puzzleHashHex === tx.toPuzzleHashHex) this.watchPuzzle(puzzle);
+        else if (!isKnown) this.watchPuzzle({ puzzleHashHex: tx.toPuzzleHashHex, label: this.wallets.labelFor(tx.toPuzzleHashHex), source: null });
         this.submit(tx);
         return tx;
     }

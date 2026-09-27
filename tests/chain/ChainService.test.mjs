@@ -129,6 +129,19 @@ test('a rejected block keeps its faucet coins, drops the spends and keeps farmin
     assert.equal(chain.farmBlock().height, block.height + 1);
 });
 
+test('a faucet coin the simulator refuses is reported, and the rest of the block still confirms', () => {
+    const chain = new ChainService({ sdk });
+    chain.submit(faucet('aa'.repeat(32), 2n ** 64n));
+    chain.submit(faucet('bb'.repeat(32), 5n));
+
+    const block = chain.farmBlock();
+
+    assert.equal(block.rejected.length, 1);
+    assert.equal(block.txs.length, 1);
+    assert.equal(chain.coinsByPuzzleHash('bb'.repeat(32))[0].amount, 5n);
+    assert.deepEqual(chain.coinsByPuzzleHash('aa'.repeat(32)), []);
+});
+
 test('coin spend records rebuild the same coin', () => {
     const chain = new ChainService({ sdk });
     chain.submit(faucet(ANYONE(), 2n));

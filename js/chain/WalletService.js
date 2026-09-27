@@ -1,11 +1,18 @@
 import { walletKeys, parseDestination, encodeAddress } from './keys.js';
 import { toCoinSpendRecord } from './ChainService.js';
-import { formatXch } from './units.js';
+import { formatXch, MAX_MOJOS } from './units.js';
 
 export const FAUCET = 'Faucet';
 
 const displayName = (name) => name.charAt(0).toUpperCase() + name.slice(1);
 const shortAddress = (address) => `${address.slice(0, 10)}…${address.slice(-4)}`;
+const WALLET_NAME = /^[\p{L}\p{N} _-]{1,24}$/u;
+
+function assertAmount(amount) {
+    if (amount === null || amount === undefined) throw new Error('Enter an amount like 1.5');
+    if (amount <= 0n) throw new Error('Amount must be greater than 0');
+    if (amount > MAX_MOJOS) throw new Error(`Amount too large: at most ${formatXch(MAX_MOJOS)} XCH`);
+}
 
 export class WalletService {
     constructor({ sdk, chain }) {
@@ -32,6 +39,7 @@ export class WalletService {
         const clean = String(name).trim();
         const key = clean.toLowerCase();
         if (!clean) throw new Error('Enter a name');
+        if (!WALLET_NAME.test(clean)) throw new Error('Use letters, numbers, spaces, - or _ (max 24)');
         if (key === FAUCET.toLowerCase()) throw new Error(`${FAUCET} is reserved`);
         const existing = this.wallets.find((w) => w.key === key);
         if (existing) throw new Error(`${existing.name} already exists`);
@@ -87,9 +95,9 @@ export class WalletService {
     previewSend({ from, to, amount, fee }) {
         const wallet = this.find(from);
         if (!wallet) throw new Error(`Unknown wallet ${from}`);
-        if (amount === null || amount === undefined) throw new Error('Enter an amount like 1.5');
+        assertAmount(amount);
         if (fee === null || fee === undefined) throw new Error('Enter a fee like 0.0001');
-        if (amount <= 0n) throw new Error('Amount must be greater than 0');
+        if (fee > MAX_MOJOS) throw new Error(`Fee too large: at most ${formatXch(MAX_MOJOS)} XCH`);
         const { puzzleHashHex: toPuzzleHashHex, mainnet } = parseDestination(this.sdk, to);
         if (toPuzzleHashHex === wallet.puzzleHashHex) throw new Error('Sending to yourself? Pick another address');
 
@@ -144,8 +152,7 @@ export class WalletService {
     }
 
     buildFaucet({ to, amount }) {
-        if (amount === null || amount === undefined) throw new Error('Enter an amount like 1.5');
-        if (amount <= 0n) throw new Error('Amount must be greater than 0');
+        assertAmount(amount);
         const { puzzleHashHex, mainnet } = parseDestination(this.sdk, to);
         return { ...this.faucetTx(puzzleHashHex, amount), mainnet };
     }

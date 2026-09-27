@@ -1,5 +1,8 @@
 export const MOJOS_PER_XCH = 1_000_000_000_000n;
 
+/** Coin amounts are u64 mojos on Chia */
+export const MAX_MOJOS = 2n ** 64n - 1n;
+
 const XCH_AMOUNT = /^(\d+)(?:[.,](\d{1,12}))?$/;
 
 /** "1.5" or "1,5" → mojos; null for anything that isn't a non-negative amount with at most 12 decimals */

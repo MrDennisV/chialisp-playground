@@ -69,22 +69,30 @@ export class ChainService {
         const spends = txs.filter((tx) => tx.kind === 'spend');
 
         // newCoin applies immediately, so faucet coins belong to this block whatever happens to the spends
-        for (const tx of faucets) this.indexCoin(this.sim.newCoin(this.sdk.fromHex(tx.puzzleHashHex), tx.amount));
+        const rejected = [];
+        const createdFaucets = [];
+        for (const tx of faucets) {
+            try {
+                this.indexCoin(this.sim.newCoin(this.sdk.fromHex(tx.puzzleHashHex), tx.amount));
+                createdFaucets.push(tx);
+            } catch (error) {
+                rejected.push({ tx, error: cleanError(error) });
+            }
+        }
 
         let included = spends;
-        let rejected = [];
         try {
             this.spendWithTick(spends);
         } catch (error) {
             // a failed spendCoins leaves the simulator untouched, so the block is farmed without the spends
-            rejected = spends.map((tx) => ({ tx, error: cleanError(error) }));
+            rejected.push(...spends.map((tx) => ({ tx, error: cleanError(error) })));
             included = [];
             this.spendWithTick([]);
         }
         this.indexChildren(included);
         this.sim.passTime(BigInt(BLOCK_SECONDS));
 
-        const block = { height: this.height, seconds: this.chainSeconds, txs: [...faucets, ...included], rejected };
+        const block = { height: this.height, seconds: this.chainSeconds, txs: [...createdFaucets, ...included], rejected };
         this.history.push(block);
         this.emit();
         return block;
