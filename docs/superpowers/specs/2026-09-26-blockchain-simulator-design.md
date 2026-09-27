@@ -50,7 +50,7 @@ The feature lives inside the existing layout and reuses its components and theme
   - `Block #N`, which briefly highlights when it changes;
   - chain time since genesis;
   - mempool count;
-  - "3s per block · each block +52s";
+  - "3s per block · each block ≈18.75s";
   - after a reload, a notice: "Restored N blocks from your last session · paused".
 - **Wallets card:** one row per wallet:
   - name and confirmed balance (⏳ while it has pending coins);
@@ -105,7 +105,8 @@ Reset asks for confirmation in a modal. It discards every block, coin and transa
 
 - The simulator forms a block only when a spend is submitted, and an empty spend bundle is rejected (`InvalidSpendBundle`). Each block therefore includes a **tick coin**: puzzle `1` (it returns its solution as conditions), which spends itself and recreates itself with one mojo. Verified: `ASSERT_HEIGHT_RELATIVE 3` fails at +1 and +2 and passes at exactly +3.
 - Every block includes the tick spend plus every bundle in the mempool, all in one `spendCoins` call. Verified: independent bundles can be combined into one block.
-- After each block the chain clock advances **52 s** (`passTime`), the average Chia transaction block time. `ASSERT_SECONDS_*` and `ASSERT_HEIGHT_*` then behave realistically.
+- After each block the chain clock advances an average of **18.75 s**, Chia's block time (4,608 blocks a day). `passTime` only takes whole seconds, so blocks alternate 19, 19, 19 and 18 s: every four blocks add exactly 75 s. Height and seconds locks then line up as on mainnet (one hour is 192 blocks either way).
+- Why not 52 s: that is the average gap between Chia *transaction* blocks (about one block in three carries transactions). Every simulated block can carry transactions, so using 52 s would make time run about 2.8 times too fast relative to height.
 - Running mode farms a block every **3 s** of real time. Pause stops the timer. Next farms exactly one block, whether paused or running.
 - Height comes from `sim.height()`.
 
@@ -204,7 +205,7 @@ The simulator exposes no way to serialize its state. `clone()` shares state inst
 Everything below runs in `npm test` (Node, no browser), loading the real SDK through `WasmLoader` and using `MemoryChainPersistence`. No simulator or service is mocked.
 
 - **Height:** Next increments the height by exactly one. A coin with `ASSERT_HEIGHT_RELATIVE n` is rejected before `n` blocks and accepted at `n`.
-- **Time:** each block advances 52 s. A coin with `ASSERT_SECONDS_RELATIVE 104` needs two blocks.
+- **Time:** four blocks advance 75 s and 4,608 blocks advance exactly one day. A coin with `ASSERT_SECONDS_RELATIVE 38` is rejected after one block (19 s) and accepted after two (38 s).
 - **Mempool:** a faucet send is pending until the next block, then confirmed at that height. Several sends in the mempool confirm in the same block.
 - **Wallets:** Alice's address is identical across two fresh chains. A send spends the selected coins and creates the payment, the change and the fee exactly. Overspending and sending to yourself are rejected with their messages. A coin already pending can't be selected twice.
 - **Remove and restore:** hiding a wallet and re-creating it by name restores it with its coins.

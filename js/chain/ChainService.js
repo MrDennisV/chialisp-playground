@@ -1,4 +1,9 @@
-export const BLOCK_SECONDS = 52;
+/**
+ * Chia makes a block every 18.75 s on average (4,608 a day). passTime only takes whole seconds,
+ * so blocks alternate 19, 19, 19, 18: every four blocks add exactly 75 s.
+ */
+export const AVERAGE_BLOCK_SECONDS = 18.75;
+const BLOCK_SECONDS_CYCLE = [19, 19, 19, 18];
 
 const TICK_AMOUNT = 1n;
 
@@ -33,6 +38,7 @@ export class ChainService {
         this.coinIdsByPuzzleHash = new Map();
         this.listeners = new Set();
         this.nextTxId = 1;
+        this.elapsedSeconds = 0;
     }
 
     get height() {
@@ -40,7 +46,7 @@ export class ChainService {
     }
 
     get chainSeconds() {
-        return this.height * BLOCK_SECONDS;
+        return this.elapsedSeconds;
     }
 
     get mempool() {
@@ -90,7 +96,9 @@ export class ChainService {
             this.spendWithTick([]);
         }
         this.indexChildren(included);
-        this.sim.passTime(BigInt(BLOCK_SECONDS));
+        const seconds = BLOCK_SECONDS_CYCLE[(this.history.length) % BLOCK_SECONDS_CYCLE.length];
+        this.sim.passTime(BigInt(seconds));
+        this.elapsedSeconds += seconds;
 
         const block = { height: this.height, seconds: this.chainSeconds, txs: [...createdFaucets, ...included], rejected };
         this.history.push(block);

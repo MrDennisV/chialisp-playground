@@ -76,7 +76,7 @@ They check that every example in `examples.json` exists, compiles and runs with 
 
 The cubes icon opens a local simulated blockchain (Chia Wallet SDK simulator, in your browser):
 
-- **Start / Pause / Next** farm blocks. Each block adds 52 s of chain time, so time and height locks behave like on Chia.
+- **Start / Pause / Next** farm blocks. Each block adds 18.75 s of chain time on average, Chia's block time, so time and height locks line up like on mainnet (4,608 blocks = 1 day).
 - **Wallets** Alice and Bob start with 10 XCH. Their keys come from their names, so their addresses never change. Create more with **+ New**.
 - **Send XCH** from the faucet or a wallet. Transactions wait in the mempool until the next block; the summary shows the coins spent, the change and the fee.
 - **this puzzle** sends to the address of the program open in the editor (with its curried parameters): that is how you lock XCH in a contract.

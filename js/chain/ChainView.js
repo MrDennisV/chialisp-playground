@@ -2,7 +2,7 @@ import { formatXch, parseXch } from './units.js';
 import { parseDestination } from './keys.js';
 import { FAUCET } from './WalletService.js';
 import { BLOCK_INTERVAL_MS } from './ChainSession.js';
-import { BLOCK_SECONDS } from './ChainService.js';
+import { AVERAGE_BLOCK_SECONDS } from './ChainService.js';
 
 const escapeHtml = (text) => String(text).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const short = (text, head = 8, tail = 4) => `${text.slice(0, head)}…${text.slice(-tail)}`;
@@ -80,7 +80,7 @@ export class ChainView {
             <div class="chain-height ${bumped ? 'bump' : ''}">Block #${chain.height}</div>
             <div class="chain-meta">Chain time <b>+${duration(chain.chainSeconds)}</b></div>
             <div class="chain-meta right">Mempool <b class="${chain.mempool.length ? 'chain-mempool-count' : ''}">${chain.mempool.length}</b></div>
-            <div class="chain-meta chain-meta-wide">${BLOCK_INTERVAL_MS / 1000}s per block · each block +${BLOCK_SECONDS}s</div>
+            <div class="chain-meta chain-meta-wide">${BLOCK_INTERVAL_MS / 1000}s per block · each block ≈${AVERAGE_BLOCK_SECONDS}s</div>
             ${session.restoredBlocks ? `<div class="chain-meta-wide chain-restored"><i class="fas fa-history me-1"></i>Restored ${session.restoredBlocks} blocks from your last session · paused</div>` : ''}`;
         this.$('chainStartBtn').disabled = session.running || session.conflict;
         this.$('chainPauseBtn').disabled = !session.running;

@@ -1,7 +1,7 @@
 import { test, before } from 'node:test';
 import assert from 'node:assert/strict';
 import { loadSdk } from '../helpers/chain.mjs';
-import { ChainService, BLOCK_SECONDS, toCoinSpendRecord } from '../../js/chain/ChainService.js';
+import { ChainService, toCoinSpendRecord } from '../../js/chain/ChainService.js';
 
 let sdk;
 before(async () => {
@@ -36,7 +36,7 @@ test('Next farms exactly one block and advances chain time', () => {
     chain.farmBlock();
     chain.farmBlock();
     assert.equal(chain.height, 2);
-    assert.equal(chain.chainSeconds, 2 * BLOCK_SECONDS);
+    assert.equal(chain.chainSeconds, 38);
     assert.deepEqual(chain.blocks.map((b) => b.height), [1, 2]);
 });
 
@@ -101,15 +101,28 @@ test('coins created by a confirmed spend are listed under their puzzle hash', ()
     assert.equal(child.spentBlock, null);
 });
 
-test('every block advances the relative clock by 52 seconds', () => {
+test('four blocks advance the chain clock 75 seconds, the 18.75 s Chia average', () => {
+    const chain = new ChainService({ sdk });
+    for (let i = 0; i < 4; i++) chain.farmBlock();
+    assert.equal(chain.chainSeconds, 75);
+    assert.deepEqual(chain.blocks.map((b) => b.seconds), [19, 38, 57, 75]);
+});
+
+test('a day of chain time is 4,608 blocks, as on Chia', () => {
+    const chain = new ChainService({ sdk });
+    for (let i = 0; i < 4608; i++) chain.farmBlock();
+    assert.equal(chain.chainSeconds, 86_400);
+});
+
+test('relative seconds locks follow the block clock', () => {
     const chain = new ChainService({ sdk });
     chain.submit(faucet(ANYONE(), 9n));
     chain.farmBlock();
     const [coin] = chain.coinsByPuzzleHash(ANYONE());
 
-    chain.submit(assertingCoinSpend(chain, coin.id, 80, 2 * BLOCK_SECONDS)); // ASSERT_SECONDS_RELATIVE 104
+    chain.submit(assertingCoinSpend(chain, coin.id, 80, 38)); // ASSERT_SECONDS_RELATIVE 38 = two blocks (19 + 19)
     assert.equal(chain.farmBlock().rejected.length, 1);
-    chain.submit(assertingCoinSpend(chain, coin.id, 80, 2 * BLOCK_SECONDS));
+    chain.submit(assertingCoinSpend(chain, coin.id, 80, 38));
     assert.equal(chain.farmBlock().rejected.length, 0);
 });
 
